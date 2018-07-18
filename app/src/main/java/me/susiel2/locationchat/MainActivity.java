@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         state_spinner = findViewById(R.id.state_spinner);
-        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, states);
-        state_spinner.setPrompt("Location");
-        //stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
 
 
