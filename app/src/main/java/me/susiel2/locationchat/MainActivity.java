@@ -1,21 +1,15 @@
 package me.susiel2.locationchat;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         hamburger = findViewById(R.id.iv_hamburger);
-        drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.activity_main);
         navList = findViewById(R.id.drawer);
         navList.setAdapter(adapter);
         navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -45,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         super.onDrawerClosed(drawerView);
                     }
                 });
-                drawer.closeDrawer(navList);
+                drawer.closeDrawer(Gravity.LEFT);
             }
         });
 
@@ -55,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if (drawer.isDrawerOpen(navList)) {
-                    drawer.closeDrawer(navList);
+                if (drawer.isDrawerOpen(Gravity.LEFT)) {
+                    drawer.closeDrawer(Gravity.LEFT);
                 } else {
-                    drawer.openDrawer(navList);
+                    drawer.openDrawer(Gravity.LEFT);
                 }
             }
         });
