@@ -10,11 +10,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-<<<<<<< HEAD
 import android.widget.Spinner;
 import android.widget.Toast;
-=======
->>>>>>> 326d0e59512a3ceb0761c3fa57f72fe74d259f62
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
 //        hamburger = findViewById(R.id.iv_hamburger);
 //
 //        hamburger.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-=======
         hamburger = findViewById(R.id.iv_hamburger);
 
         hamburger.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
->>>>>>> 326d0e59512a3ceb0761c3fa57f72fe74d259f62
 
 //        dl.addDrawerListener(t);
 //        t.syncState();
