@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +14,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import me.susiel2.locationchat.model.Chat;
+import me.susiel2.locationchat.model.ChatAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,21 +33,26 @@ public class MainActivity extends AppCompatActivity {
     public ListView navList;
     public Spinner state_spinner;
 
+    private RecyclerView rv_chats;
+    private ArrayList<Chat> chats;
+    private ChatAdapter chatAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
-
         state_spinner = findViewById(R.id.state_spinner);
-        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, states);
-        stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item, states);
+        state_spinner.setPrompt("Location");
+        //stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         state_spinner.setAdapter(stateAdapter);
 
 
         hamburger = findViewById(R.id.iv_hamburger);
         drawer = findViewById(R.id.activity_main);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
         navList.setAdapter(adapter);
         navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -56,19 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        hamburger = findViewById(R.id.iv_hamburger);
-//
-//        hamburger.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                if (drawer.isDrawerOpen(navList)) {
-//                    drawer.closeDrawer(navList);
-//                } else {
-//                    drawer.openDrawer(navList);
-//                }
-//            }
-//        });
+
         hamburger = findViewById(R.id.iv_hamburger);
 
         hamburger.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +82,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        rv_chats = findViewById(R.id.rv_chats);
+        chats = new ArrayList<>();
+        chatAdapter = new ChatAdapter(chats);
+
+        rv_chats.setAdapter(chatAdapter);
+        rv_chats.setLayoutManager(new LinearLayoutManager(this));
 
 //        dl.addDrawerListener(t);
 //        t.syncState();

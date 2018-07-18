@@ -108,6 +108,7 @@
 
         <Spinner
             android:id="@+id/state_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="240dp"
             android:layout_height="50dp"
             android:background="#FFF"/>

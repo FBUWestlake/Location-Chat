@@ -18,7 +18,7 @@
         tools:layout_editor_absoluteY="73dp" />
 
     <EditText
-        android:id="@+id/chatName"
+        android:id="@+id/et_chatName"
         android:layout_width="240dp"
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
@@ -31,8 +31,17 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <Spinner
-        android:id="@+id/category_spinner"
+        android:id="@+id/spinner_category"
         android:layout_width="284dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+
+    <Button
+        android:id="@+id/btn_newChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="194dp"
+        android:text="Create New Chat" />
 </RelativeLayout>
