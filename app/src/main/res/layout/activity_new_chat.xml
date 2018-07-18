@@ -31,7 +31,7 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/category_spinner"
         android:layout_width="284dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />

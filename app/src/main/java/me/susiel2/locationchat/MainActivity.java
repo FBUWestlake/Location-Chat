@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,8 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageView hamburger;
     private NavigationView nv;
     final String[] data = {"Help", "About", "Log Out"};
+    final String[] states = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN",
+            "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SC", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
     public DrawerLayout drawer;
     public ListView navList;
+    public Spinner state_spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
+
+        state_spinner = findViewById(R.id.state_spinner);
+        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, states);
+        stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state_spinner.setAdapter(stateAdapter);
+
+
         hamburger = findViewById(R.id.iv_hamburger);
         drawer = findViewById(R.id.drawer_layout);
         navList = findViewById(R.id.drawer);
@@ -49,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        hamburger = findViewById(R.id.iv_hamburger);
-
-        hamburger.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (drawer.isDrawerOpen(navList)) {
-                    drawer.closeDrawer(navList);
-                } else {
-                    drawer.openDrawer(navList);
-                }
-            }
-        });
+//        hamburger = findViewById(R.id.iv_hamburger);
+//
+//        hamburger.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                if (drawer.isDrawerOpen(navList)) {
+//                    drawer.closeDrawer(navList);
+//                } else {
+//                    drawer.openDrawer(navList);
+//                }
+//            }
+//        });
 
 //        dl.addDrawerListener(t);
 //        t.syncState();

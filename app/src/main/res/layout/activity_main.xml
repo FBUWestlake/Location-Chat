@@ -78,18 +78,47 @@
         android:layout_gravity="start"
         android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/instagram_user_outline_24"/>
-    <ListView
-        android:id="@+id/drawer"
-        android:layout_width="240dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="start"
-        android:background="#FFF"
-        android:choiceMode="singleChoice"/>
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            app:srcCompat="@drawable/instagram_user_outline_24"/>
+
+        <EditText
+            android:id="@+id/full_name"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:inputType="text"
+            android:text="Full Name"
+            android:background="#FFF"
+            android:textColor="@android:color/black"/>
+
+        <EditText
+            android:id="@+id/display_name"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:inputType="text"
+            android:text="Display Name"
+            android:background="#FFF"
+            android:textColor="@android:color/black"/>
+
+        <Spinner
+            android:id="@+id/state_spinner"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:background="#FFF"/>
+        <ListView
+            android:id="@+id/drawer"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="start"
+            android:background="#FFF"
+            android:choiceMode="singleChoice"/>
 
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
