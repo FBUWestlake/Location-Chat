@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import me.susiel2.locationchat.R;
@@ -40,6 +42,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         viewHolder.tv_chat_name.setText(chat.getName());
         viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()));
         // TODO - Glide for image.
+        // Glide for image.
+        Glide.with(context).load(chat.getChatImage()).into(viewHolder.iv_chat_image);
     }
 
     @Override
