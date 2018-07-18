@@ -1,23 +1,25 @@
 package me.susiel2.locationchat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
 
     //private DrawerLayout dl;
     private ImageView hamburger;
+    private ImageView plusButton;
     private NavigationView nv;
     final String[] data = {"Help", "About", "Log Out"};
     final String[] states = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN",
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         hamburger = findViewById(R.id.iv_hamburger);
+        plusButton = findViewById(R.id.iv_addChat);
         drawer = findViewById(R.id.activity_main);
         navList = findViewById(R.id.drawer);
         navList.setAdapter(adapter);
@@ -69,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-        hamburger = findViewById(R.id.iv_hamburger);
 
         hamburger.setOnClickListener(new View.OnClickListener() {
 
@@ -80,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     drawer.openDrawer(Gravity.LEFT);
                 }
+            }
+        });
+
+        plusButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, SearchExistingActivity.class);
+                startActivity(i);
             }
         });
 
