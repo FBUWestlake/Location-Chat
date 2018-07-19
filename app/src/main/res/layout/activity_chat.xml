@@ -78,7 +78,16 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:orientation="vertical">
-
+        
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:textOn="Notifications On"
+            android:textOff="Notifications Off"
+            android:layout_gravity="right"
+            android:background="#FFF" />
+        
         <ImageView
             android:id="@+id/groupImagePic"
             android:layout_width="80dp"
