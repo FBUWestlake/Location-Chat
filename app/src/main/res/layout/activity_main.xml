@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorBlue"
+            android:minHeight="?attr/actionBarSize">
+
+
+            <ImageView
+                android:id="@+id/iv_hamburger"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentLeft="true"
+                app:srcCompat="@drawable/sharp_menu_black_18dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <EditText
+                android:id="@+id/appName"
+                android:layout_width="240dp"
+                android:layout_height="56dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:ems="10"
+                android:hint="Search"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="72dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <ImageView
+                android:id="@+id/iv_addChat"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                app:srcCompat="@android:drawable/ic_menu_add"
+                tools:layout_editor_absoluteX="328dp"
+                tools:layout_editor_absoluteY="0dp" />
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_chats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/toolbar" />
+
+    </RelativeLayout>
+
+    <!--<android.support.design.widget.NavigationView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:menu="@menu/activity_profile_drawer"-->
+        <!--android:layout_gravity="start"-->
+        <!--app:headerLayout="@layout/profile_header"-->
+        <!--android:id="@+id/drawer">-->
+
+    <!--</android.support.design.widget.NavigationView>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            app:srcCompat="@drawable/instagram_user_outline_24"/>
+
+        <EditText
+            android:id="@+id/full_name"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:inputType="text"
+            android:text="  Full Name"
+            android:background="#FFF"
+            android:textColor="@android:color/black"/>
+
+        <EditText
+            android:id="@+id/display_name"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:inputType="text"
+            android:text="  Display Name"
+            android:background="#FFF"
+            android:textColor="@android:color/black"/>
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="15dp"
+            android:background="#FFF"
+            android:text="   Location:"/>
+
+        <Spinner
+            android:id="@+id/state_spinner"
+            android:layout_width="240dp"
+            android:layout_height="50dp"
+            android:background="#FFF"/>
+        <ListView
+            android:id="@+id/drawer"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="start"
+            android:background="#FFF"
+            android:choiceMode="singleChoice"/>
+
+    </LinearLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -23,6 +23,19 @@
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".NewChatActivity" />
+        <activity
+            android:name=".SearchExistingActivity"
+            android:label="@string/title_activity_search_existing"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

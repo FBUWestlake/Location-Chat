@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewChatActivity">
+
+    <ImageView
+        android:id="@+id/iv_chatImage"
+        android:layout_width="171dp"
+        android:layout_height="140dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        app:srcCompat="@drawable/ic_menu_camera"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="73dp" />
+
+    <EditText
+        android:id="@+id/et_chatName"
+        android:layout_width="240dp"
+        android:layout_height="56dp"
+        android:layout_above="@+id/et_chatName"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Chat Name"
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <EditText
+        android:id="@+id/et_chatName"
+        android:layout_width="240dp"
+        android:layout_height="58dp"
+        android:layout_above="@+id/spinner_title"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Description"
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Spinner
+        android:id="@+id/spinner_category"
+        android:layout_width="254dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="181dp" />
+
+    <Button
+        android:id="@+id/btn_newChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="121dp"
+        android:text="Create New Chat" />
+
+    <TextView
+        android:id="@+id/spinner_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/spinner_category"
+        android:layout_alignStart="@+id/spinner_category"
+        android:text="Category" />
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:layout_below="@+id/iv_chatImage"
+        android:layout_centerHorizontal="true"
+        android:text="Button" />
+</RelativeLayout>

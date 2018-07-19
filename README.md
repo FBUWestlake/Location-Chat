@@ -1,8 +1,8 @@
-# Location-Chat
+# Bounce
 
 **Short description of your app**
 
-Our android app builds automatic messenger groups based on a user's location and interests. These location specific chat groups make it convenient to meet new people with similar interests. 
+Our Location Chat android app builds automatic messenger groups based on a user's location and interests. These location specific chat groups make it convenient to meet new people with similar interests. Users can “bounce” from place to place and gain local knowledge/information.
 
 It is easy to ask for recommendations in an area through a casual chat-based setting without the more serious commitment of a forum. 
 
