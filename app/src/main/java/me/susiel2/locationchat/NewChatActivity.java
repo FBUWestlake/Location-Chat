@@ -1,5 +1,6 @@
 package me.susiel2.locationchat;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import org.parceler.Parcels;
 
 import me.susiel2.locationchat.model.Chat;
 
@@ -51,7 +54,7 @@ public class NewChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Call create chat method.
                 createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
-                // Intents and such to connect with MainActivity
+                // Intents and such dependent on backend to connect with MainActivity
             }
         });
     }
