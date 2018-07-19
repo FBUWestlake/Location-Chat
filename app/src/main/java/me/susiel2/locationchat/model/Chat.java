@@ -1,5 +1,7 @@
 package me.susiel2.locationchat.model;
 
+import android.graphics.Bitmap;
+
 import org.parceler.Parcel;
 
 @Parcel
@@ -9,6 +11,7 @@ public class Chat {
     public String description;
     public int numberOfMembers;
     public String imageUrl;
+    public Bitmap bitmapImage;
     public String category;
 
     public Chat(){
@@ -16,11 +19,21 @@ public class Chat {
         numberOfMembers = 0;
         imageUrl = "";
         category = "";
+        description = "";
+        bitmapImage = null;
     }
 
     public Chat(String name, String chatImage, String description, String category, int numberOfMembers) {
         this.name = name;
         this.imageUrl = chatImage;
+        this.description = description;
+        this.category = category;
+        this.numberOfMembers = numberOfMembers;
+    }
+
+    public Chat(String name, Bitmap bitmapImage, String description, String category, int numberOfMembers) {
+        this.name = name;
+        this.bitmapImage = bitmapImage;
         this.description = description;
         this.category = category;
         this.numberOfMembers = numberOfMembers;
@@ -69,5 +82,13 @@ public class Chat {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Bitmap getBitmapImage() {
+        return bitmapImage;
+    }
+
+    public void setBitmapImage(Bitmap bitmapImage) {
+        this.bitmapImage = bitmapImage;
     }
 }

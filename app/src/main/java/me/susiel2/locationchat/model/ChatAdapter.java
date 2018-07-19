@@ -3,6 +3,7 @@ package me.susiel2.locationchat.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder viewHolder, int i) {
+        Log.d("chat adapter", String.valueOf(chats.size()));
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());

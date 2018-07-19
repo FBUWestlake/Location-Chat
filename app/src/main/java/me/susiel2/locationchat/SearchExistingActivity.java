@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import me.susiel2.locationchat.model.Chat;
@@ -65,10 +67,18 @@ public class SearchExistingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(SearchExistingActivity.this, NewChatActivity.class);
-                startActivity(i);
+                startActivityForResult(i, 25);
             }
         });
 
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 25 && requestCode == 25) {
+            //Chat chat = data.getParcelableExtra("chat");
+            setResult(25, data);
+            finish();
+        }
     }
 
 }

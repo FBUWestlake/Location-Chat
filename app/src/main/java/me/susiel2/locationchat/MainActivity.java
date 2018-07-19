@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, SearchExistingActivity.class);
-                startActivity(i);
+                startActivityForResult(i, 25);
             }
         });
         rv_chats = findViewById(R.id.rv_chats);
@@ -126,7 +129,24 @@ public class MainActivity extends AppCompatActivity {
         chats.add(mexicanFood);
         chats.add(acousticGuitar);
         chats.add(outdoorClimbing);
-        chatAdapter.notifyDataSetChanged();
+//        chatAdapter.notifyDataSetChanged();
+
+
+//        Intent intent = getIntent();
+//        Chat chat = (Chat) Parcels.unwrap(intent.getParcelableExtra("chat"));
+//        if (chat != null) {
+//            chats.add(0, chat);
+//            chatAdapter.notifyItemInserted(0);
+//            Log.d("inserted chat", chat.getName());
+//        } else {
+//            Log.d("not inserted", "nono");
+//        }
+
+//        Intent intent = getIntent();
+//        //Chat chat = (Chat) Parcels.unwrap(intent.getParcelableExtra("chat"));
+//        chats.add((Chat) Parcels.unwrap(intent.getParcelableExtra("chat")));
+//        chatAdapter.notifyDataSetChanged();
+//        rv_chats.scrollToPosition(0);
 
 //        item_chat = findViewById(R.id.item_chat);
 //        item_chat.setOnClickListener(new View.OnClickListener() {
@@ -174,4 +194,17 @@ public class MainActivity extends AppCompatActivity {
 //
 //        return super.onOptionsItemSelected(item);
 //    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 25 && requestCode == 25) {
+            Chat chat = (Chat) Parcels.unwrap(data.getParcelableExtra("chat"));
+            if (chat != null) {
+                chats.add(0, chat);
+                chatAdapter.notifyItemInserted(0);
+                Log.d("inserted chat", chat.getName());
+            } else {
+                Log.d("not inserted", "nono");
+            }
+        }
+    }
 }

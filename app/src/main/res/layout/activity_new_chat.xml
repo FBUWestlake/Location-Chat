@@ -18,10 +18,10 @@
         tools:layout_editor_absoluteY="73dp" />
 
     <EditText
-        android:id="@+id/et_chatName"
+        android:id="@+id/et_description"
         android:layout_width="240dp"
         android:layout_height="56dp"
-        android:layout_above="@+id/et_chatName"
+        android:layout_above="@+id/et_description"
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="text"
@@ -30,7 +30,7 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <EditText
-        android:id="@+id/et_chatName"
+        android:id="@+id/et_description"
         android:layout_width="240dp"
         android:layout_height="58dp"
         android:layout_above="@+id/spinner_title"

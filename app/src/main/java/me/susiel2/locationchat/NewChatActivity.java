@@ -16,8 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.bumptech.glide.Glide;
-
 import org.parceler.Parcels;
 
 import java.io.FileNotFoundException;
@@ -30,7 +28,9 @@ public class NewChatActivity extends AppCompatActivity {
     Button btn_upload;
     Button btn_newChat;
     ImageView iv_chatImage;
+    Bitmap bm_chatImage;
     EditText et_chatName;
+    EditText et_description;
     String selectedItemText;
     private Context context;
     public static final int GET_FROM_GALLERY = 3;
@@ -44,7 +44,8 @@ public class NewChatActivity extends AppCompatActivity {
 
         btn_newChat = findViewById(R.id.btn_newChat);
         btn_upload = findViewById(R.id.btn_upload);
-        et_chatName = findViewById(R.id.et_chatName);
+        et_chatName = findViewById(R.id.et_description);
+        et_description = findViewById(R.id.et_description);
 
         //TODO: allow user to upload image for chat group.
         iv_chatImage = findViewById(R.id.iv_chatImage);
@@ -71,10 +72,13 @@ public class NewChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Call create chat method.
-                createChat(et_chatName.getText().toString(), 0, "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", selectedItemText);
+                Chat chat = new Chat(et_chatName.getText().toString(), bm_chatImage, et_description.getText().toString(), selectedItemText, 0);
                 // Intents and such to connect with MainActivity
                 //createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
-                // Intents and such dependent on backend to connect with MainActivity
+                Intent intent = new Intent();
+                intent.putExtra("chat", Parcels.wrap(chat));
+                setResult(25, intent);
+                finish();
             }
         });
 
@@ -87,15 +91,17 @@ public class NewChatActivity extends AppCompatActivity {
         });
     }
 
-    public void createChat(String chatName, int numberOfMembers, String image, String category) {
-        final Chat newChat = new Chat();
-        newChat.setName(chatName);
-        newChat.setNumberOfMembers(numberOfMembers);
-        newChat.setImageUrl(image);
-        newChat.setCategory(category);
-
-        // Add to db.
-    }
+//    public Chat createChat(String chatName, Bitmap bitmap, String category, int numberOfMembers) {
+//        final Chat newChat = new Chat();
+//        newChat.setName(chatName);
+//        newChat.setNumberOfMembers(numberOfMembers);
+//        newChat.setBitmapImage(bitmap);
+//        newChat.setCategory(category);
+//
+//        return newChat;
+//
+//        // Add to db.
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -104,10 +110,9 @@ public class NewChatActivity extends AppCompatActivity {
         //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                iv_chatImage.setImageBitmap(bitmap);
+                bm_chatImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                iv_chatImage.setImageBitmap(bm_chatImage);
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
