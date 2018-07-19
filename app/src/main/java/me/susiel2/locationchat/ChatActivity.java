@@ -22,8 +22,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import me.susiel2.locationchat.model.Message;
-import me.susiel2.locationchat.model.MessageAdapter;
+import me.susiel2.locationchat.models.Message;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -38,7 +37,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private Button gear;
     private NavigationView nv2;
-    final String[] data2 = {"Chat Group Name", "Last Active Time", "Leave Group"};
+    final String[] data2 = {"Chat Group Name", "Notifications", "Leave Group"};
     public DrawerLayout drawer2;
     public ListView navList2;
 
@@ -177,12 +176,8 @@ public class ChatActivity extends AppCompatActivity {
 //                {
 //                    case R.id.nav_chat_name:
 //                        Toast.makeText(MainActivity.this, "Chat Name",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_active_time:
-//                        Toast.makeText(MainActivity.this, "Last Active Time",Toast.LENGTH_SHORT).show();
 //                    case R.id.nav_notifs:
 //                        Toast.makeText(MainActivity.this, "Notifications",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_see_members:
-//                        Toast.makeText(MainActivity.this, "See Members",Toast.LENGTH_SHORT).show();
 //                    case R.id.nav_leave_group:
 //                        Toast.makeText(MainActivity.this, "Leave Group",Toast.LENGTH_SHORT).show();
 //                    default:
