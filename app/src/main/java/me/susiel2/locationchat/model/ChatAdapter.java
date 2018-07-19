@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
@@ -42,8 +44,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         viewHolder.tv_chat_name.setText(chat.getName());
         viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()));
         // TODO - Glide for image.
-        // Glide for image.
-        Glide.with(context).load(chat.getChatImage()).into(viewHolder.iv_chat_image);
+        Glide.with(context).load(chat.getImageUrl()).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
+                .into(viewHolder.iv_chat_image);
     }
 
     @Override

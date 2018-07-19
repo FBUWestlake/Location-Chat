@@ -50,16 +50,17 @@ public class NewChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Call create chat method.
-                createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
+                createChat(et_chatName.getText().toString(), 0, "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", selectedItemText);
                 // Intents and such to connect with MainActivity
             }
         });
     }
 
-    public void createChat(String chatName, ImageView image, String category) {
+    public void createChat(String chatName, int numberOfMembers, String image, String category) {
         final Chat newChat = new Chat();
         newChat.setName(chatName);
-        newChat.setChatImage(image);
+        newChat.setNumberOfMembers(numberOfMembers);
+        newChat.setImageUrl(image);
         newChat.setCategory(category);
 
         // Add to db.

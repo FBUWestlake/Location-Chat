@@ -1,20 +1,25 @@
 package me.susiel2.locationchat.model;
 
-import android.widget.ImageView;
-
 public class Chat {
 
     private String name;
     private int numberOfMembers;
+    private String imageUrl;
+    private String category;
 
-    public Chat(String name, int numberOfMembers){
-        this.name = name;
-        this.numberOfMembers = numberOfMembers;
+    public Chat(){
+        name = "";
+        numberOfMembers = 0;
+        imageUrl = "";
+        category = "";
     }
 
-    // TODO - add field for image address
-    private ImageView chatImage;
-    private String category;
+    public Chat(String name, int numberOfMembers, String imageUrl, String category){
+        this.name = name;
+        this.numberOfMembers = numberOfMembers;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
 
     public String getName() {
         return name;
@@ -36,12 +41,12 @@ public class Chat {
         numberOfMembers++;
     }
 
-    public ImageView getChatImage() {
-        return chatImage;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setChatImage(ImageView chatImage) {
-        this.chatImage = chatImage;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getCategory() {
