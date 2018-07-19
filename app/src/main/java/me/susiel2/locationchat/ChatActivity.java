@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
+import me.susiel2.locationchat.model.MessageAdapter;
 
 public class ChatActivity extends AppCompatActivity {
 

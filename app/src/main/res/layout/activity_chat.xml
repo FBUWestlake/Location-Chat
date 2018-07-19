@@ -91,6 +91,7 @@
         <ImageView
             android:id="@+id/groupImagePic"
             android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="#FFF"
             android:layout_gravity="right"
             app:srcCompat="@drawable/ic_location_city"/>
