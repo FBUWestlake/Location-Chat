@@ -39,6 +39,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> chats;
     private ChatAdapter chatAdapter;
 
+    Chat mexicanFood = new Chat("Mexican Food", "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwj6s96P8qncAhUhn-AKHQenB7MQjRx6BAgBEAU&url=https%3A%2F%2Fleaf.nutrisystem.com%2Frecipes%2Fspicy-shrimp-quesadilla%2F&psig=AOvVaw3xyPlHU16R0OMbio5CkLzl&ust=1532045965345421",
+            "We love Mexican food!", "food", 400);
+
+    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwj18dLE8qncAhWCCTQIHenbC-cQjRx6BAgBEAU&url=https%3A%2F%2Fwww.musicradar.com%2Fnews%2Fmusikmesse-2018-martin-unveils-limited-edition-black-walnut-acoustic-guitars&psig=AOvVaw36-KsvOhIcDS6VXmfebmpq&ust=1532046068094533",
+            "For those who play and enjoy acoustic guitar", "music", 200);
+
+    Chat outdoorClimbing = new Chat("Outdoor Climbing", "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVoNTs8qncAhU-CTQIHah5B5cQjRx6BAgBEAU&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Frock-climbing&psig=AOvVaw1aKMZJa1MNkyK6W25wyGvc&ust=1532046154100005",
+            "outdoor climbing enthusiasts!", "outdoors", 350);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));
+
+        chats.add(mexicanFood);
+        chats.add(acousticGuitar);
+        chats.add(outdoorClimbing);
+        chatAdapter.notifyDataSetChanged();
+
 
 //        dl.addDrawerListener(t);
 //        t.syncState();
