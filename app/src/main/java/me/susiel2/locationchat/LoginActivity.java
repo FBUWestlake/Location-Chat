@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             //HomeActivity is the main screen of the app, where we want users to go after logging in
-            final Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(String username, String password) {
 
-        final Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
 

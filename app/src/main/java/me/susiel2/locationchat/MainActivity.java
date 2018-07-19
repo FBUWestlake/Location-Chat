@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawer;
     public ListView navList;
     public Spinner state_spinner;
+    public RelativeLayout item_chat;
 
     private RecyclerView rv_chats;
     private ArrayList<Chat> chats;
@@ -125,6 +127,16 @@ public class MainActivity extends AppCompatActivity {
         chats.add(acousticGuitar);
         chats.add(outdoorClimbing);
         chatAdapter.notifyDataSetChanged();
+
+//        item_chat = findViewById(R.id.item_chat);
+//        item_chat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
 
 
 //        dl.addDrawerListener(t);
