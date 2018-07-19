@@ -20,12 +20,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
+import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
-import me.susiel2.locationchat.model.MessageAdapter;
 
 public class ChatActivity extends AppCompatActivity {
+
+    Chat chat;
 
     RecyclerView rvMessages;
     MessageAdapter mAdapter;
@@ -38,7 +42,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private Button gear;
     private NavigationView nv2;
-    final String[] data2 = {"Chat Group Name", "Last Active Time", "Leave Group"};
+    final String[] data2 = {"Chat Group Name", "Leave Group"};
     public DrawerLayout drawer2;
     public ListView navList2;
 
@@ -53,6 +57,9 @@ public class ChatActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        final Message chatMessage = new Message(chat.getDescription(), chat.getName(), chat.getCategory(), chat.getImageUrl());
 
         messages = new ArrayList<Message>();
 
@@ -73,7 +80,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO - send the message typed into etMessage
                 // TEST - adding a test message to the adapter
-                messages.add(testMessage);
+                messages.add(chatMessage);
                 mAdapter.notifyDataSetChanged();
                 // END TEST
             }
@@ -102,8 +109,6 @@ public class ChatActivity extends AppCompatActivity {
                 drawer2.closeDrawer(Gravity.RIGHT);
             }
         });
-
-        //gear = findViewById(R.id.iv_gear);
 
         gear.setOnClickListener(new View.OnClickListener() {
 
@@ -142,8 +147,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        //gear = findViewById(R.id.iv_gear);
-
         gear.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -177,12 +180,8 @@ public class ChatActivity extends AppCompatActivity {
 //                {
 //                    case R.id.nav_chat_name:
 //                        Toast.makeText(MainActivity.this, "Chat Name",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_active_time:
-//                        Toast.makeText(MainActivity.this, "Last Active Time",Toast.LENGTH_SHORT).show();
 //                    case R.id.nav_notifs:
 //                        Toast.makeText(MainActivity.this, "Notifications",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_see_members:
-//                        Toast.makeText(MainActivity.this, "See Members",Toast.LENGTH_SHORT).show();
 //                    case R.id.nav_leave_group:
 //                        Toast.makeText(MainActivity.this, "Leave Group",Toast.LENGTH_SHORT).show();
 //                    default:

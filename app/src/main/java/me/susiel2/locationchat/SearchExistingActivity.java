@@ -43,7 +43,12 @@ public class SearchExistingActivity extends AppCompatActivity {
 
         rvChats = findViewById(R.id.rvExistingChats);
         chats = new ArrayList<Chat>();
-        adapter = new ChatAdapter(chats);
+        adapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
+            @Override
+            public void onChatClicked(int position) {
+                // TODO - add this chat to list of joined chats (or maybe bring up a screen that gives you details about the chat)
+            }
+        });
         btNewGroup = findViewById(R.id.btNewGroup);
 
         rvChats.setLayoutManager(new LinearLayoutManager(this));

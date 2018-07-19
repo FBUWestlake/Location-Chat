@@ -121,7 +121,14 @@ public class MainActivity extends AppCompatActivity {
         });
         rv_chats = findViewById(R.id.rv_chats);
         chats = new ArrayList<>();
-        chatAdapter = new ChatAdapter(chats);
+        chatAdapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
+            @Override
+            public void onChatClicked(int position) {
+                Intent i = new Intent(MainActivity.this, ChatActivity.class);
+                i.putExtra("chat", Parcels.wrap(chats.get(position)));
+                startActivity(i);
+            }
+        });
 
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));

@@ -78,13 +78,34 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:orientation="vertical">
-
-        <!--this belongs in header or right side nav bar <ImageView
+        
+        <ImageView
             android:id="@+id/groupImagePic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="240dp"
+            android:layout_height="160dp"
+            android:background="#FFF"
+            android:layout_gravity="right"
             app:srcCompat="@drawable/ic_location_city"/>
-        -->
+
+
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:textOn="Notifications On"
+            android:textOff="Notifications Off"
+            android:layout_gravity="right"
+            android:background="#FFF" />
+        
+        <ListView
+            android:id="@+id/drawer2"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:background="#FFF"
+            android:choiceMode="singleChoice"/>
+        
         <ListView
             android:id="@+id/drawer2"
             android:layout_width="240dp"

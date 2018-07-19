@@ -2,6 +2,7 @@ package me.susiel2.locationchat.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -22,9 +24,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
     private List<Chat> chats;
     private Context context;
+    private ClickListener listen;
 
-    public ChatAdapter(List<Chat> chatGroups) {
+    public ChatAdapter(List<Chat> chatGroups, ClickListener listen) {
         chats = chatGroups;
+        this.listen = listen;
     }
 
     @NonNull
@@ -34,7 +38,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View chatView = inflater.inflate(R.layout.item_chat, viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder(chatView);
+        ViewHolder viewHolder = new ViewHolder(chatView, listen);
         return viewHolder;
     }
 
@@ -55,17 +59,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         return chats.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView iv_chat_image;
         public TextView tv_chat_name;
         public TextView tvNumberOfMembers;
+        private WeakReference<ClickListener> listenerRef;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, ClickListener listener) {
             super(itemView);
+
+            listenerRef = new WeakReference<>(listener);
 
             iv_chat_image = itemView.findViewById(R.id.iv_chat_image);
             tv_chat_name = itemView.findViewById(R.id.tv_chat_name);
             tvNumberOfMembers = itemView.findViewById(R.id.tvNumberOfMembers);
+
+            tv_chat_name.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            listenerRef.get().onChatClicked(getAdapterPosition());
+        }
+
     }
+
+    public interface ClickListener {
+
+        void onChatClicked(int position);
+
+    }
+
 }
