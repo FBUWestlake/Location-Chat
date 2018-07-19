@@ -20,11 +20,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
-import me.susiel2.locationchat.models.Message;
+import me.susiel2.locationchat.model.Chat;
+import me.susiel2.locationchat.model.Message;
 
 public class ChatActivity extends AppCompatActivity {
+
+    Chat chat;
 
     RecyclerView rvMessages;
     MessageAdapter mAdapter;
@@ -53,6 +58,9 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        final Message chatMessage = new Message(chat.getDescription(), chat.getName(), chat.getCategory(), chat.getImageUrl());
+
         messages = new ArrayList<Message>();
 
         rvMessages = (RecyclerView) findViewById(R.id.recycler_chat);
@@ -72,7 +80,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO - send the message typed into etMessage
                 // TEST - adding a test message to the adapter
-                messages.add(testMessage);
+                messages.add(chatMessage);
                 mAdapter.notifyDataSetChanged();
                 // END TEST
             }
@@ -101,8 +109,6 @@ public class ChatActivity extends AppCompatActivity {
                 drawer2.closeDrawer(Gravity.RIGHT);
             }
         });
-
-        //gear = findViewById(R.id.iv_gear);
 
         gear.setOnClickListener(new View.OnClickListener() {
 
@@ -140,8 +146,6 @@ public class ChatActivity extends AppCompatActivity {
                 drawer2.closeDrawer(Gravity.RIGHT);
             }
         });
-
-        //gear = findViewById(R.id.iv_gear);
 
         gear.setOnClickListener(new View.OnClickListener() {
 
