@@ -63,7 +63,6 @@ public class NewChatActivity extends AppCompatActivity {
     }
 
     public void createChat(String chatName, int numberOfMembers, String image, String category) {
-    public void createChat(String chatName, String image, String category) {
         final Chat newChat = new Chat();
         newChat.setName(chatName);
         newChat.setNumberOfMembers(numberOfMembers);

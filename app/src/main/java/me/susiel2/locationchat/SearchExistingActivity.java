@@ -28,7 +28,7 @@ public class SearchExistingActivity extends AppCompatActivity {
     final String[] categories = {"All Categories", "Food", "Entertainment", "Work"};
 
     // Mock data
-    Chat mockChat = new Chat("Mock Chat", 400, "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", "Dogs");
+    Chat mockChat = new Chat("Mock Chat", "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", "This is a chat for hot dogs", "Dogs", 400);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
