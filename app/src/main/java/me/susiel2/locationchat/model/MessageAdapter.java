@@ -1,4 +1,4 @@
-package me.susiel2.locationchat;
+package me.susiel2.locationchat.model;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +14,10 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+<<<<<<< HEAD:app/src/main/java/me/susiel2/locationchat/MessageAdapter.java
+=======
+import me.susiel2.locationchat.R;
+>>>>>>> 2a1be21f33bf2e168be1ed359b2d610ec7f24205:app/src/main/java/me/susiel2/locationchat/model/MessageAdapter.java
 import me.susiel2.locationchat.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
