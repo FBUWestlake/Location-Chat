@@ -31,20 +31,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:text="Title goes here"
+                android:text="Bounce"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <ImageView
+            <Button
                 android:id="@+id/iv_gear"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/ic_settings_gear"
-                tools:layout_editor_absoluteX="328dp"
-                tools:layout_editor_absoluteY="0dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:background="@drawable/ic_settings_gear"
                 android:layout_alignParentRight="true" />
+
+            <!-- android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true" -->
+
+                <!--app:srcCompat="@drawable/ic_settings_gear"-->
+
 
         </android.support.v7.widget.Toolbar>
 
@@ -63,20 +66,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="right"
         android:orientation="vertical">
 
-        <ImageView
+        <!--this belongs in header or right side nav bar <ImageView
             android:id="@+id/groupImagePic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/help"/>
+            app:srcCompat="@drawable/ic_location_city"/>
+        -->
         <ListView
             android:id="@+id/drawer2"
             android:layout_width="240dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="end"
+            android:layout_gravity="right"
             android:background="#FFF"
             android:choiceMode="singleChoice"/>
 
