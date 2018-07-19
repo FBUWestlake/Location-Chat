@@ -8,11 +8,11 @@
 
     <ImageView
         android:id="@+id/iv_chatImage"
-        android:layout_width="66dp"
-        android:layout_height="63dp"
+        android:layout_width="171dp"
+        android:layout_height="140dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="121dp"
+        android:layout_marginTop="56dp"
         app:srcCompat="@drawable/ic_menu_camera"
         tools:layout_editor_absoluteX="159dp"
         tools:layout_editor_absoluteY="73dp" />
