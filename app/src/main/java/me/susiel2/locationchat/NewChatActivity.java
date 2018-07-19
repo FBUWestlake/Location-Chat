@@ -31,7 +31,8 @@ public class NewChatActivity extends AppCompatActivity {
 
         btn_newChat = findViewById(R.id.btn_newChat);
         et_chatName = findViewById(R.id.et_chatName);
-        iv_chatImage = findViewById(R.id.iv_chatImage);
+        //TODO: allow user to upload image for chat group.
+        //iv_chatImage = findViewById(R.id.iv_chatImage);
 
         Spinner spinner_category = findViewById(R.id.spinner_category);
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories);
@@ -53,13 +54,13 @@ public class NewChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Call create chat method.
-                createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
+                //createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
                 // Intents and such dependent on backend to connect with MainActivity
             }
         });
     }
 
-    public void createChat(String chatName, ImageView image, String category) {
+    public void createChat(String chatName, String image, String category) {
         final Chat newChat = new Chat();
         newChat.setName(chatName);
         newChat.setChatImage(image);

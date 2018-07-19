@@ -1,5 +1,7 @@
 package me.susiel2.locationchat.model;
 
+import android.widget.ImageView;
+
 import org.parceler.Parcel;
 
 @Parcel
@@ -10,14 +12,17 @@ public class Chat {
     private String description;
     private int numberOfMembers;
 
-    public Chat(String name, int numberOfMembers){
+    // TODO - add field for image address
+    private String category;
+
+    public Chat() {
+
+    }
+
+    public Chat(String name, int numberOfMembers) {
         this.name = name;
         this.numberOfMembers = numberOfMembers;
     }
-
-    // TODO - add field for image address
-    private String category;
-    private int numberOfMembers;
 
     public Chat(String name, String chatImage, String description, String category, int numberOfMembers) {
         this.name = name;
@@ -36,7 +41,6 @@ public class Chat {
         this.name = name;
     }
 
-    public String getChatImage() {
     public int getNumberOfMembers() {
         return numberOfMembers;
     }
@@ -49,6 +53,7 @@ public class Chat {
         numberOfMembers++;
     }
 
+    public String getChatImage() {
         return chatImage;
     }
 
@@ -70,13 +75,5 @@ public class Chat {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getNumberOfMembers() {
-        return numberOfMembers;
-    }
-
-    public void setNumberOfMembers(int numberOfMembers) {
-        this.numberOfMembers = numberOfMembers;
     }
 }
