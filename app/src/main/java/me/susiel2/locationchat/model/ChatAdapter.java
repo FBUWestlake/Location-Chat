@@ -40,6 +40,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());
+        viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()));
+        // TODO - Glide for image.
         // Glide for image.
         Glide.with(context).load(chat.getChatImage()).into(viewHolder.iv_chat_image);
     }
@@ -52,12 +54,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_chat_image;
         public TextView tv_chat_name;
+        public TextView tvNumberOfMembers;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             iv_chat_image = itemView.findViewById(R.id.iv_chat_image);
             tv_chat_name = itemView.findViewById(R.id.tv_chat_name);
+            tvNumberOfMembers = itemView.findViewById(R.id.tvNumberOfMembers);
         }
     }
 }

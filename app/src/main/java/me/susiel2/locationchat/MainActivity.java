@@ -1,5 +1,6 @@
 package me.susiel2.locationchat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -8,12 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     //private DrawerLayout dl;
     private ImageView hamburger;
+    private ImageView plusButton;
     private NavigationView nv;
     final String[] data = {"Help", "About", "Log Out"};
     final String[] states = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN",
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         hamburger = findViewById(R.id.iv_hamburger);
+        plusButton = findViewById(R.id.iv_addChat);
         drawer = findViewById(R.id.activity_main);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
@@ -66,8 +70,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        hamburger = findViewById(R.id.iv_hamburger);
+//        hamburger = findViewById(R.id.iv_hamburger);
+//
+//        hamburger.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                if (drawer.isDrawerOpen(navList)) {
+//                    drawer.closeDrawer(navList);
+//                } else {
+//                    drawer.openDrawer(navList);
+//                }
+//            }
+//        });
 
         hamburger.setOnClickListener(new View.OnClickListener() {
 
@@ -81,6 +96,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        plusButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, SearchExistingActivity.class);
+                startActivity(i);
+            }
+        });
         rv_chats = findViewById(R.id.rv_chats);
         chats = new ArrayList<>();
         chatAdapter = new ChatAdapter(chats);

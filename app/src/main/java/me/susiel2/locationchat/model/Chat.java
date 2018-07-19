@@ -4,9 +4,18 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Chat {
+
     private String name;
     private String chatImage;
     private String description;
+    private int numberOfMembers;
+
+    public Chat(String name, int numberOfMembers){
+        this.name = name;
+        this.numberOfMembers = numberOfMembers;
+    }
+
+    // TODO - add field for image address
     private String category;
     private int numberOfMembers;
 
@@ -28,6 +37,18 @@ public class Chat {
     }
 
     public String getChatImage() {
+    public int getNumberOfMembers() {
+        return numberOfMembers;
+    }
+
+    public void setNumberOfMembers(int numberOfMembers) {
+        this.numberOfMembers = numberOfMembers;
+    }
+
+    public void incrementNumberOfMembers(){
+        numberOfMembers++;
+    }
+
         return chatImage;
     }
 
