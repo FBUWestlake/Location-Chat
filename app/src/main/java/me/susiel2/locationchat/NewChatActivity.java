@@ -17,6 +17,7 @@ import me.susiel2.locationchat.model.Chat;
 
 public class NewChatActivity extends AppCompatActivity {
 
+    Button btn_upload;
     Button btn_newChat;
     ImageView iv_chatImage;
     EditText et_chatName;
@@ -30,7 +31,9 @@ public class NewChatActivity extends AppCompatActivity {
         final String[] categories = {"food", "outdoors", "sports", "art", "music", "tech", "beauty"};
 
         btn_newChat = findViewById(R.id.btn_newChat);
+        btn_upload = findViewById(R.id.btn_upload);
         et_chatName = findViewById(R.id.et_chatName);
+
         //TODO: allow user to upload image for chat group.
         //iv_chatImage = findViewById(R.id.iv_chatImage);
 
@@ -48,6 +51,8 @@ public class NewChatActivity extends AppCompatActivity {
 
             }
         });
+
+        //btn_upload.setOnClickListener(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);));
 
         btn_newChat.setOnClickListener(new View.OnClickListener() {
 
