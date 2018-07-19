@@ -39,13 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> chats;
     private ChatAdapter chatAdapter;
 
-    Chat mexicanFood = new Chat("Mexican Food", "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwj6s96P8qncAhUhn-AKHQenB7MQjRx6BAgBEAU&url=https%3A%2F%2Fleaf.nutrisystem.com%2Frecipes%2Fspicy-shrimp-quesadilla%2F&psig=AOvVaw3xyPlHU16R0OMbio5CkLzl&ust=1532045965345421",
+    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
             "We love Mexican food!", "food", 400);
 
-    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwj18dLE8qncAhWCCTQIHenbC-cQjRx6BAgBEAU&url=https%3A%2F%2Fwww.musicradar.com%2Fnews%2Fmusikmesse-2018-martin-unveils-limited-edition-black-walnut-acoustic-guitars&psig=AOvVaw36-KsvOhIcDS6VXmfebmpq&ust=1532046068094533",
+    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://cdn.mos.cms.futurecdn.net/oZr3irkSDKpSSjmFkpgP6K.jpg",
             "For those who play and enjoy acoustic guitar", "music", 200);
 
-    Chat outdoorClimbing = new Chat("Outdoor Climbing", "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiVoNTs8qncAhU-CTQIHah5B5cQjRx6BAgBEAU&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Frock-climbing&psig=AOvVaw1aKMZJa1MNkyK6W25wyGvc&ust=1532046154100005",
+    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
             "outdoor climbing enthusiasts!", "outdoors", 350);
 
 
