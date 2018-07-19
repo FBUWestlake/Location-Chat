@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,7 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageView ivLogo;
     TextView tvTitle;
 
-    private ImageView gear;
+    private Button gear;
     private NavigationView nv2;
     final String[] data2 = {"Chat Group Name", "Last Active Time", "Leave Group"};
     public DrawerLayout drawer2;
@@ -85,7 +86,7 @@ public class ChatActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data2);
         gear = findViewById(R.id.iv_gear);
-        drawer2 = findViewById(R.id.activity_main);
+        //drawer2 = findViewById(R.id.activity_chat);
         navList2 = findViewById(R.id.drawer2);
         navList2.setAdapter(adapter2);
         navList2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,7 +102,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        gear = findViewById(R.id.iv_gear);
+        //gear = findViewById(R.id.iv_gear);
 
         gear.setOnClickListener(new View.OnClickListener() {
 
@@ -122,12 +123,42 @@ public class ChatActivity extends AppCompatActivity {
 
         // TODO - open the settings menu
 
-        return;
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data2);
+        gear = findViewById(R.id.iv_gear);
+        //drawer2 = findViewById(R.id.activity_chat);
+        navList2 = findViewById(R.id.drawer2);
+        navList2.setAdapter(adapter2);
+        navList2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                drawer2.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                    }
+                });
+                drawer2.closeDrawer(Gravity.RIGHT);
+            }
+        });
+
+        //gear = findViewById(R.id.iv_gear);
+
+        gear.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (drawer2.isDrawerOpen(Gravity.RIGHT)) {
+                    drawer2.closeDrawer(Gravity.RIGHT);
+                } else {
+                    drawer2.openDrawer(Gravity.RIGHT);
+                }
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
