@@ -1,4 +1,4 @@
-package me.susiel2.locationchat.models;
+package me.susiel2.locationchat.model;
 
 public class Message {
 

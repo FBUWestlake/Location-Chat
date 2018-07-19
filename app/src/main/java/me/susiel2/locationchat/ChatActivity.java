@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import me.susiel2.locationchat.models.Message;
+import me.susiel2.locationchat.model.Message;
 
 public class ChatActivity extends AppCompatActivity {
 

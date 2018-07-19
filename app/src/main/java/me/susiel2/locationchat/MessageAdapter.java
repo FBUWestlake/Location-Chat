@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import me.susiel2.locationchat.models.Message;
+import me.susiel2.locationchat.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
