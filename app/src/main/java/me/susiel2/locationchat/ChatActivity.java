@@ -86,7 +86,7 @@ public class ChatActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data2);
         gear = findViewById(R.id.iv_gear);
-        //drawer2 = findViewById(R.id.activity_chat);
+        drawer2 = findViewById(R.id.activity_chat);
         navList2 = findViewById(R.id.drawer2);
         navList2.setAdapter(adapter2);
         navList2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
