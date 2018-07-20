@@ -23,6 +23,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
+import me.susiel2.locationchat.database.DatabaseHelper;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv_chats;
     private ArrayList<Chat> chats;
     private ChatAdapter chatAdapter;
+    DatabaseHelper usersDB;
 
     Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
             "We love Mexican food!", "food", 400);
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        usersDB = new DatabaseHelper(this);
 
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
@@ -86,20 +90,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        hamburger = findViewById(R.id.iv_hamburger);
-//
-//        hamburger.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                if (drawer.isDrawerOpen(navList)) {
-//                    drawer.closeDrawer(navList);
-//                } else {
-//                    drawer.openDrawer(navList);
-//                }
-//            }
-//        });
-
         hamburger.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -120,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, 25);
             }
         });
+
         rv_chats = findViewById(R.id.rv_chats);
         chats = new ArrayList<>();
         chatAdapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
