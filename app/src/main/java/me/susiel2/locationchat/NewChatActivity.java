@@ -100,10 +100,8 @@ public class NewChatActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-//                Chat chat = new Chat(et_chatName.getText().toString(), bm_resized, et_description.getText().toString(), selectedItemText, 0);
                 Chat chat = new Chat(et_chatName.getText().toString(), resizedFile, et_description.getText().toString(), selectedItemText, 0);
                 // Intents and such to connect with MainActivity
-                //createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
                 Intent intent = new Intent();
                 intent.putExtra("chat", Parcels.wrap(chat));
                 setResult(25, intent);
@@ -129,9 +127,6 @@ public class NewChatActivity extends AppCompatActivity {
             Uri selectedImage = data.getData();
             try {
                 bm_chatImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-//                Bitmap bm_resized = BitmapScaler.scaleToFitHeight(bm_chatImage, 75);
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//                bm_resized.compress(Bitmap.CompressFormat.JPEG, 5, bytes);
                 iv_chatImage.setImageBitmap(bm_chatImage);
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
