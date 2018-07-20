@@ -50,7 +50,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());
-        viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()));
+        viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()) + " members");
         // TODO - Glide for image.
         if (chat.getBitmapImage() == null) {
             Glide.with(context).load(chat.getImageUrl()).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
@@ -84,7 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             tv_chat_name = itemView.findViewById(R.id.tv_chat_name);
             tvNumberOfMembers = itemView.findViewById(R.id.tvNumberOfMembers);
 
-            tv_chat_name.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override

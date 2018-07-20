@@ -18,39 +18,45 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@color/colorBlue"
-            android:minHeight="?attr/actionBarSize">
+            android:minHeight="?attr/actionBarSize"
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/iv_hamburger"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentLeft="true"
+                    app:srcCompat="@drawable/sharp_menu_black_18dp"
+                    tools:layout_editor_absoluteX="0dp"
+                    tools:layout_editor_absoluteY="0dp" />
 
-            <ImageView
-                android:id="@+id/iv_hamburger"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentLeft="true"
-                app:srcCompat="@drawable/sharp_menu_black_18dp"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="0dp" />
+                <EditText
+                    android:id="@+id/appName"
+                    android:layout_width="240dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:ems="10"
+                    android:hint="Search"
+                    android:inputType="textPersonName"
+                    tools:layout_editor_absoluteX="72dp"
+                    tools:layout_editor_absoluteY="0dp" />
 
-            <EditText
-                android:id="@+id/appName"
-                android:layout_width="240dp"
-                android:layout_height="56dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:ems="10"
-                android:hint="Search"
-                android:inputType="textPersonName"
-                tools:layout_editor_absoluteX="72dp"
-                tools:layout_editor_absoluteY="0dp" />
+                <ImageView
+                    android:id="@+id/iv_addChat"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    app:srcCompat="@android:drawable/ic_menu_add"
+                    tools:layout_editor_absoluteX="328dp"
+                    tools:layout_editor_absoluteY="0dp" />
 
-            <ImageView
-                android:id="@+id/iv_addChat"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                app:srcCompat="@android:drawable/ic_menu_add"
-                tools:layout_editor_absoluteX="328dp"
-                tools:layout_editor_absoluteY="0dp" />
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
