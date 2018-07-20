@@ -59,8 +59,6 @@ public class SearchExistingActivity extends AppCompatActivity {
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
 
-        // TODO - populateExistingChats();
-
         // Mock data
         chats.add(mockChat);
         chats.add(mockChat);

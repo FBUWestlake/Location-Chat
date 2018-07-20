@@ -1,6 +1,7 @@
 package me.susiel2.locationchat;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -136,35 +137,7 @@ public class MainActivity extends AppCompatActivity {
         chats.add(mexicanFood);
         chats.add(acousticGuitar);
         chats.add(outdoorClimbing);
-//        chatAdapter.notifyDataSetChanged();
-
-
-//        Intent intent = getIntent();
-//        Chat chat = (Chat) Parcels.unwrap(intent.getParcelableExtra("chat"));
-//        if (chat != null) {
-//            chats.add(0, chat);
-//            chatAdapter.notifyItemInserted(0);
-//            Log.d("inserted chat", chat.getName());
-//        } else {
-//            Log.d("not inserted", "nono");
-//        }
-
-//        Intent intent = getIntent();
-//        //Chat chat = (Chat) Parcels.unwrap(intent.getParcelableExtra("chat"));
-//        chats.add((Chat) Parcels.unwrap(intent.getParcelableExtra("chat")));
-//        chatAdapter.notifyDataSetChanged();
-//        rv_chats.scrollToPosition(0);
-
-//        item_chat = findViewById(R.id.item_chat);
-//        item_chat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
-
+        chatAdapter.notifyDataSetChanged();
 
 //        dl.addDrawerListener(t);
 //        t.syncState();
@@ -206,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == 25 && requestCode == 25) {
             Chat chat = (Chat) Parcels.unwrap(data.getParcelableExtra("chat"));
             if (chat != null) {
+                //chat.setBitmapImage(BitmapFactory.decode
                 chats.add(0, chat);
                 chatAdapter.notifyItemInserted(0);
                 Log.d("inserted chat", chat.getName());

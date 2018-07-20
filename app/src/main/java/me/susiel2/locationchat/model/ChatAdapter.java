@@ -1,6 +1,7 @@
 package me.susiel2.locationchat.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -50,8 +52,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         viewHolder.tv_chat_name.setText(chat.getName());
         viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()));
         // TODO - Glide for image.
-        Glide.with(context).load(chat.getImageUrl()).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
-                .into(viewHolder.iv_chat_image);
+        if (chat.getBitmapImage() == null) {
+            Glide.with(context).load(chat.getImageUrl()).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
+                    .into(viewHolder.iv_chat_image);
+        } else {
+            Log.d("bitmap", "got here");
+            Bitmap bm_resized = BitmapScaler.scaleToFitWidth(chat.getBitmapImage(), 500);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+            viewHolder.iv_chat_image.setImageBitmap(bm_resized);
+        }
     }
 
     @Override

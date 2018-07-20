@@ -18,9 +18,12 @@ import android.widget.Spinner;
 
 import org.parceler.Parcels;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import me.susiel2.locationchat.model.BitmapScaler;
 import me.susiel2.locationchat.model.Chat;
 
 public class NewChatActivity extends AppCompatActivity {
@@ -44,8 +47,8 @@ public class NewChatActivity extends AppCompatActivity {
 
         btn_newChat = findViewById(R.id.btn_newChat);
         btn_upload = findViewById(R.id.btn_upload);
-        et_chatName = findViewById(R.id.et_description);
-        et_description = findViewById(R.id.et_description);
+        et_chatName = findViewById(R.id.et_chatName);
+        et_description = findViewById(R.id.et_chatName);
 
         //TODO: allow user to upload image for chat group.
         iv_chatImage = findViewById(R.id.iv_chatImage);
@@ -72,7 +75,31 @@ public class NewChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Call create chat method.
-                Chat chat = new Chat(et_chatName.getText().toString(), bm_chatImage, et_description.getText().toString(), selectedItemText, 0);
+                Bitmap bm_resized = BitmapScaler.scaleToFitWidth(bm_chatImage, 10);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+//                bm_resized = getPhotoFileUri("_resized");
+//                try {
+//                    bm_resized.createNewFile();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                FileOutputStream fos = null;
+//                try {
+//                    fos = new FileOutputStream(resizedFile);
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//// Write the bytes of the bitmap to file
+//                try {
+//                    fos.write(bytes.toByteArray());
+//                    fos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+                Chat chat = new Chat(et_chatName.getText().toString(), bm_resized, et_description.getText().toString(), selectedItemText, 0);
                 // Intents and such to connect with MainActivity
                 //createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
                 Intent intent = new Intent();
@@ -91,18 +118,6 @@ public class NewChatActivity extends AppCompatActivity {
         });
     }
 
-//    public Chat createChat(String chatName, Bitmap bitmap, String category, int numberOfMembers) {
-//        final Chat newChat = new Chat();
-//        newChat.setName(chatName);
-//        newChat.setNumberOfMembers(numberOfMembers);
-//        newChat.setBitmapImage(bitmap);
-//        newChat.setCategory(category);
-//
-//        return newChat;
-//
-//        // Add to db.
-//    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -112,6 +127,9 @@ public class NewChatActivity extends AppCompatActivity {
             Uri selectedImage = data.getData();
             try {
                 bm_chatImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+//                Bitmap bm_resized = BitmapScaler.scaleToFitHeight(bm_chatImage, 75);
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                bm_resized.compress(Bitmap.CompressFormat.JPEG, 5, bytes);
                 iv_chatImage.setImageBitmap(bm_chatImage);
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
