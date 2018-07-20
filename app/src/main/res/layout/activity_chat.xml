@@ -96,21 +96,7 @@
             android:textOff="Notifications Off"
             android:layout_gravity="right"
             android:background="#FFF" />
-        
-        <ImageView
-            android:id="@+id/groupImagePic"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="#FFF"
-        <ListView
-            android:id="@+id/drawer2"
-            android:layout_width="240dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:background="#FFF"
-            android:choiceMode="singleChoice"/>
-        
+
         <ListView
             android:id="@+id/drawer2"
             android:layout_width="240dp"
