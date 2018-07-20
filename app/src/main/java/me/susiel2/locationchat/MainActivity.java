@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == 25 && requestCode == 25) {
             Chat chat = (Chat) Parcels.unwrap(data.getParcelableExtra("chat"));
             if (chat != null) {
-                //chat.setBitmapImage(BitmapFactory.decode
+                chat.setBitmapImage(BitmapFactory.decodeFile(chat.getImageFile().toString()));
                 chats.add(0, chat);
                 chatAdapter.notifyItemInserted(0);
                 Log.d("inserted chat", chat.getName());

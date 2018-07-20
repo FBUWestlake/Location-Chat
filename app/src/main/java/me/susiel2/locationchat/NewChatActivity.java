@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +21,7 @@ import android.widget.Spinner;
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,6 +40,9 @@ public class NewChatActivity extends AppCompatActivity {
     String selectedItemText;
     private Context context;
     public static final int GET_FROM_GALLERY = 3;
+    public final String APP_TAG = "MyCustomApp";
+    public String photoFileName = "photo.jpg";
+    File resizedFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,31 +81,27 @@ public class NewChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Call create chat method.
-                Bitmap bm_resized = BitmapScaler.scaleToFitWidth(bm_chatImage, 10);
+                Bitmap bm_resized = BitmapScaler.scaleToFitWidth(bm_chatImage, 500);
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
-//                bm_resized = getPhotoFileUri("_resized");
-//                try {
-//                    bm_resized.createNewFile();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                FileOutputStream fos = null;
-//                try {
-//                    fos = new FileOutputStream(resizedFile);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//// Write the bytes of the bitmap to file
-//                try {
-//                    fos.write(bytes.toByteArray());
-//                    fos.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                resizedFile = getPhotoFileUri(photoFileName + "_resized");
+                try {
+                    resizedFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                FileOutputStream fos;
+                try {
+                    fos = new FileOutputStream(resizedFile);
+                    fos.write(bytes.toByteArray());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                Chat chat = new Chat(et_chatName.getText().toString(), bm_resized, et_description.getText().toString(), selectedItemText, 0);
+//                Chat chat = new Chat(et_chatName.getText().toString(), bm_resized, et_description.getText().toString(), selectedItemText, 0);
+                Chat chat = new Chat(et_chatName.getText().toString(), resizedFile, et_description.getText().toString(), selectedItemText, 0);
                 // Intents and such to connect with MainActivity
                 //createChat(et_chatName.getText().toString(), iv_chatImage, selectedItemText);
                 Intent intent = new Intent();
@@ -139,5 +141,22 @@ public class NewChatActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(APP_TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
     }
 }

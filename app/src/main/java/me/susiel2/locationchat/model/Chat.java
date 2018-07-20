@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import org.parceler.Parcel;
 
+import java.io.File;
+
 @Parcel
 public class Chat {
 
@@ -13,6 +15,7 @@ public class Chat {
     public String imageUrl;
     public Bitmap bitmapImage;
     public String category;
+    public File imageFile;
 
     public Chat(){
         name = "";
@@ -34,6 +37,14 @@ public class Chat {
     public Chat(String name, Bitmap bitmapImage, String description, String category, int numberOfMembers) {
         this.name = name;
         this.bitmapImage = bitmapImage;
+        this.description = description;
+        this.category = category;
+        this.numberOfMembers = numberOfMembers;
+    }
+
+    public Chat(String name, File imageFile, String description, String category, int numberOfMembers) {
+        this.name = name;
+        this.imageFile = imageFile;
         this.description = description;
         this.category = category;
         this.numberOfMembers = numberOfMembers;
@@ -90,5 +101,13 @@ public class Chat {
 
     public void setBitmapImage(Bitmap bitmapImage) {
         this.bitmapImage = bitmapImage;
+    }
+
+    public File getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(File image) {
+        this.imageFile = imageFile;
     }
 }
