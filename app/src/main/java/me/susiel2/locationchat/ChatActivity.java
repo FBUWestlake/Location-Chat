@@ -87,8 +87,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // TODO - get chat title and image from Intent
-        tvTitle.setText("Title goes here" /* TODO - title goes here */);
+        tvTitle.setText(chat.getName());
         // TODO - set ivLogo to bitmap from chat image
         Drawable logo = getResources().getDrawable(R.drawable.pepsi_logo);
         ivLogo.setImageDrawable(logo);
