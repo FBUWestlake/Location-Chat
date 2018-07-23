@@ -20,7 +20,8 @@
             android:background="@color/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:contentInsetLeft="0dp"
-            android:contentInsetStart="0dp">
+            android:contentInsetStart="0dp"
+            android:layout_alignParentLeft="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -94,6 +95,7 @@
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:background="#FFF"
+            android:paddingTop="16dp"
             app:srcCompat="@drawable/instagram_user_outline_24"/>
 
         <EditText
