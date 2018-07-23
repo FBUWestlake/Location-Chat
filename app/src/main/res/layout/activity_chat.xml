@@ -88,28 +88,66 @@
             app:srcCompat="@drawable/ic_location_city"/>
 
 
-        <ToggleButton
+        <LinearLayout
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="13.5dp"
+            android:paddingBottom="13.5dp"
+            android:paddingLeft="20dp"
+            android:layout_gravity="right"
+
+            android:paddingRight="0dp"
+
+            android:gravity="start"
+            android:background="#FFF"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Notifications"
+                android:textColor="#1b1d1d"
+                android:textSize="16sp"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch_notifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="0"
+                android:gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="#FFF"
+            android:text="Do not disturb"
+            android:textColor="#1b1d1d" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/notificationSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:layout_gravity="end"
+            android:gravity="end" />
+            -->
+
+        <!--<ToggleButton
             android:id="@+id/toggleButton"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:textOn="Notifications On"
             android:textOff="Notifications Off"
             android:layout_gravity="right"
-            android:background="#FFF" />
-        
-        <ImageView
-            android:id="@+id/groupImagePic"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="#FFF"/>
-        <ListView
-            android:id="@+id/drawer2"
-            android:layout_width="240dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:background="#FFF"
-            android:choiceMode="singleChoice"/>
+            android:background="#FFF" /> -->
 
         <ListView
             android:id="@+id/drawer2"
