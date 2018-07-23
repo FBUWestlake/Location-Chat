@@ -17,8 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@color/colorBlue"
-            android:minHeight="?attr/actionBarSize">
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:layout_alignParentLeft="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
