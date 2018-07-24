@@ -43,7 +43,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private Button gear;
     private NavigationView nv2;
-    final String[] data2 = {"Chat Group Name", "Leave Group"};
+    //final String[] data2 = {"Chat Group Name", "Leave Group"};
+    final String[] data2 = {"Leave Group"};    
     public DrawerLayout drawer2;
     public ListView navList2;
 
