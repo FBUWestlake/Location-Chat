@@ -110,4 +110,36 @@ public class Chat {
     public void setImageFile(File image) {
         this.imageFile = imageFile;
     }
+    
+    /*
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_IMAGE = "image";
+    private static final String KEY_USER = "user";
+
+    public String getDescription(){
+        return getString(KEY_DESCRIPTION);
+    }
+
+    public void setDescription(String description){
+        put(KEY_DESCRIPTION, description);
+    }
+
+    public ParseFile getImage(){
+        return getParseFile(KEY_IMAGE);
+    }
+
+    public void setImage(ParseFile image){
+        put(KEY_IMAGE, image);
+    }
+
+    public ParseUser getUser() {
+        return getParseUser(KEY_USER);
+    }
+
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
+    }
+    */
 }
+
+
