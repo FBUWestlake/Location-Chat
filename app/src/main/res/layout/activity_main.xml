@@ -72,7 +72,27 @@
             android:layout_below="@+id/toolbar"
             android:layout_alignParentLeft="true" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mapsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_edit_location"
+            android:layout_margin="16dp" />
+
     </RelativeLayout>
+
+
+
+<!--
+    <Button
+        android:id="@+id/mapsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/iv_chatImage"
+        android:text="Maps Button" />
+        -->
 
     <!--<android.support.design.widget.NavigationView-->
         <!--android:layout_width="wrap_content"-->
@@ -141,4 +161,5 @@
             android:choiceMode="singleChoice"/>
 
     </LinearLayout>
+
 </android.support.v4.widget.DrawerLayout>
