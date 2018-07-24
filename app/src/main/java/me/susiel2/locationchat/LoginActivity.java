@@ -3,17 +3,22 @@ package me.susiel2.locationchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 public class LoginActivity extends AppCompatActivity {
 
 
-    private EditText usernameInput;
+    private EditText phoneNumberInput;
     private EditText passwordInput;
     private Button loginBtn;
     private Button signUpBtn;
@@ -25,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO - set up parse login
 //        ParseUser currentUser = ParseUser.getCurrentUser();
-        ParseUser currentUser = null;
+        ParseUser currentUser = ParseUser.getCurrentUser();
 
         if (currentUser != null) {
             //HomeActivity is the main screen of the app, where we want users to go after logging in
@@ -34,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
 
-        usernameInput = findViewById(R.id.username_et);
+        phoneNumberInput = findViewById(R.id.phoneNumber_et);
         passwordInput = findViewById(R.id.password_et);
         loginBtn = findViewById(R.id.login_btn);
         signUpBtn = findViewById(R.id.signUp_btn);
@@ -42,9 +47,20 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String username = usernameInput.getText().toString();
+                final String phoneNumber = phoneNumberInput.getText().toString();
                 final String password = passwordInput.getText().toString();
-                login(username, password);
+                login(phoneNumber, password);
+            }
+        });
+
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                final String phoneNumber = phoneNumberInput.getText().toString();
+                final String password = passwordInput.getText().toString();
+
+                signUp(phoneNumber, password);
             }
         });
 
@@ -58,29 +74,58 @@ public class LoginActivity extends AppCompatActivity {
         });*/
     }
 
-    private void login(String username, String password) {
+    private void login(String phoneNumber, String password) {
 
-        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+//        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
+//        finish();
 
         // TODO - set up parse login
-//        ParseUser.logInInBackground(username, password, new LogInCallback() {
-//            @Override
-//            public void done(ParseUser user, ParseException e) {
-//                if (e == null) {
-//                    Log.d("LoginActivity", "Login successful");
-//
-//                    //HomeActivity is the main screen of the app, where we want users to go after logging in
-//                    final Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    Log.e("LoginActivity", "Login failure");
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        ParseUser.logInInBackground(phoneNumber, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e == null) {
+                    Log.d("LoginActivity", "Login successful");
+                    // Inside a callback, so MainActivity.this
+                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Log.e("LoginActivity", "Login failure.");
+                    Toast.makeText(LoginActivity.this, "Cannot identify login info", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void signUp(String phoneNumber, String password) {
+        // Create the ParseUser
+        ParseUser user = new ParseUser();
+        // Set core properties
+        user.setUsername(phoneNumber);
+        user.setPassword(password);
+
+        // Invoke signUpInBackground
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Hooray! Let them use the app now.
+                    Log.d("LoginActivity", "Sign up successful");
+                    Toast.makeText(LoginActivity.this, "Successfully signed up", Toast.LENGTH_SHORT).show();
+                    // Inside a callback, so MainActivity.this
+                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // Sign up didn't succeed. Look at the ParseException
+                    // to figure out what went wrong
+                    Log.e("SignUpActivity", "Sign up failure.");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

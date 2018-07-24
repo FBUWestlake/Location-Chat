@@ -1,50 +1,87 @@
 package me.susiel2.locationchat.model;
 
-public class Message {
+import com.parse.ParseClassName;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 
-    public String message;
-    public String user;
-    public String time;
-    public String userImage;
+import java.util.Date;
 
-    public Message(String message, String user, String time, String userImage){
-        this.message = message;
-        this.user = user;
-        this.time = time;
-        this.userImage = userImage;
+@ParseClassName("Message")
+public class Message extends ParseObject {
+
+//    public String message;
+//    public String user;
+//    public String time;
+//    public String userImage;
+//
+//    public Message(String message, String user, String time, String userImage){
+//        this.message = message;
+//        this.user = user;
+//        this.time = time;
+//        this.userImage = userImage;
+//    }
+//
+//    // TODO - add method for parsing raw createdAt() data
+//
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
+//
+//    public String getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(String user) {
+//        this.user = user;
+//    }
+//
+//    public String getTime() {
+//        return time;
+//    }
+//
+//    public void setTime(String time) {
+//        this.time = time;
+//    }
+//
+//    public String getUserImage() {
+//        return userImage;
+//    }
+//
+//    public void setUserImage(String userImage) {
+//        this.userImage = userImage;
+//    }
+
+    public static final String CREATED_BY_KEY = "createdBy";
+    public static final String CONTENT_KEY = "content";
+    public static final String IMAGE_KEY = "profileImage";
+    public static final String NAME_KEY = "name";
+
+
+    public String getCreatedBy() {
+        return getString(CREATED_BY_KEY);
     }
 
-    // TODO - add method for parsing raw createdAt() data
-
-    public String getMessage() {
-        return message;
+    public String getContent() {
+        return getString(CONTENT_KEY);
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setContent(String content) {
+        put(CONTENT_KEY, content);
     }
 
-    public String getUser() {
-        return user;
+    public Date getCreatedAt() {
+        return super.getCreatedAt();
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public ParseFile getProfileImage() {
+        return getParseFile(IMAGE_KEY);
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
+    public String getName() {
+        return getString(NAME_KEY);
     }
 }
