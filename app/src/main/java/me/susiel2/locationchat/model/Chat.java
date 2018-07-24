@@ -139,6 +139,22 @@ public class Chat {
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
+    
+    public static class Query extends ParseQuery<Post>{
+    public Query() {
+        super(Chat.class);
+    }
+
+    public Query withGroup(){
+        include(KEY_GROUP);
+        return this;
+    }
+
+    public Query withUser(){
+        include(KEY_USER);
+        return this;
+    }
+}
     */
 }
 
