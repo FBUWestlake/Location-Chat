@@ -14,7 +14,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/button"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
 
     <Button
         android:id="@+id/btNewGroup"
@@ -22,5 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:text="Create New Group" />
 </RelativeLayout>
