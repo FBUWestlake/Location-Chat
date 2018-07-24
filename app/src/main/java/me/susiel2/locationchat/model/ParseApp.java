@@ -11,6 +11,7 @@ public class ParseApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        ParseObject.registerSubclass(Chat.class);
 
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("bounceId")

@@ -3,6 +3,7 @@ package me.susiel2.locationchat;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> chats;
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
+
+
+
+
 
     Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
             "We love Mexican food!", "food", 400);
@@ -129,6 +134,18 @@ public class MainActivity extends AppCompatActivity {
         chats.add(acousticGuitar);
         chats.add(outdoorClimbing);
         chatAdapter.notifyDataSetChanged();
+
+
+//test here
+        FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
+        btn_maps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 //        dl.addDrawerListener(t);
 //        t.syncState();
