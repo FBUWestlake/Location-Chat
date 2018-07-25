@@ -2,6 +2,9 @@ package me.susiel2.locationchat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -9,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,9 +30,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -35,21 +48,29 @@ import permissions.dispatcher.RuntimePermissions;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 @RuntimePermissions
-public class MapDemoActivity extends AppCompatActivity {
+public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMarkerDragListener{
+
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private LocationRequest mLocationRequest;
     Location mCurrentLocation;
-    private long UPDATE_INTERVAL = 60000;  /* 60 secs */
-    private long FASTEST_INTERVAL = 5000; /* 5 secs */
+    private long UPDATE_INTERVAL = 60000;  // 60 secs
+    private long FASTEST_INTERVAL = 5000; // 5 secs
 
     private final static String KEY_LOCATION = "location";
+    Marker marker_1;
+    Location markCurrentLocation;
+    private Button confirmBtn;
+
+
 
     /*
      * Define a request code to send to Google Play services This code is
      * returned in Activity.onActivityResult
      */
+
+
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -73,12 +94,36 @@ public class MapDemoActivity extends AppCompatActivity {
                 @Override
                 public void onMapReady(GoogleMap map) {
                     loadMap(map);
+
+                    // Set the color of the marker to green
+                    BitmapDescriptor defaultMarker =
+                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+
+                    // listingPosition is a LatLng point
+                    LatLng listingPosition = new LatLng(39.828, -98.579);
+
+// Create the marker on the fragment
+                    Marker mapMarker = map.addMarker(new MarkerOptions()
+                            .position(listingPosition)
+                            //.title("Some title here")
+                            //.snippet("Some description here")
+                            .icon(defaultMarker)
+                            .draggable(true));
+
                 }
             });
         } else {
             Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
         }
 
+        confirmBtn = findViewById(R.id.confirm_button);
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent(MapDemoActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     protected void loadMap(GoogleMap googleMap) {
@@ -88,6 +133,21 @@ public class MapDemoActivity extends AppCompatActivity {
             Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             MapDemoActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
             MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+
+            map.setOnMarkerDragListener(this);
+
+            // Attach marker click listener to the map here
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                public boolean onMarkerClick(Marker marker) {
+                    // Handle marker click here
+                    if(marker.equals(marker_1)){
+                        Log.w("Click", "test");
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
         } else {
             Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
@@ -213,10 +273,11 @@ public class MapDemoActivity extends AppCompatActivity {
         // Report to the UI that the location was updated
 
         mCurrentLocation = location;
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
+        /*String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + ", " +
                 Double.toString(location.getLongitude());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        */
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -246,6 +307,50 @@ public class MapDemoActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return mDialog;
         }
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        // DO MOST WORK HERE
+
+        Double latitude = marker.getPosition().latitude;
+        Double longitude = marker.getPosition().longitude;
+
+        /*
+        String markerPos = "New Marker Position: " +
+                latitude + ", " + longitude;
+        Toast.makeText(this, markerPos, Toast.LENGTH_SHORT).show();
+*/
+
+
+        Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(latitude, longitude, 1);
+
+            String add = "";
+            if (addresses.size() > 0) {
+                //add = add + addresses.get(0).getLocality() + ", ";
+                //add = add + addresses.get(0).getCountryName();
+                //add += addresses.get(0).getAddressLine(0);
+                add += addresses.get(0).getAdminArea();
+            }
+
+            Toast.makeText(this, add, Toast.LENGTH_SHORT).show();
+        }
+        catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+
     }
 
 }
