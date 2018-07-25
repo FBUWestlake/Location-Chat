@@ -1,4 +1,4 @@
-package me.susiel2.locationchat.model;
+package me.susiel2.locationchat.database;
 
 import android.util.Log;
 import android.widget.EditText;
