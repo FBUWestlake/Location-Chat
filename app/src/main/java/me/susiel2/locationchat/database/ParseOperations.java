@@ -89,6 +89,56 @@ public class ParseOperations {
             }
         });
     }
+
+    public void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
+        final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("user", user);
+
+        ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
+        query2.getInBackground(groupId, new GetCallback<Chat>() {
+            public void done(Chat chat, ParseException e) {
+                if (e == null) {
+                    query.whereEqualTo("group", chat);
+                }
+            }
+        });
+
+        query.findInBackground(new FindCallback<UsersGroups>() {
+            public void done(List<UsersGroups> itemList, ParseException e) {
+                if (e == null) {
+                    UsersGroups firstItem = itemList.get(0);
+                    firstItem.setNotificationsOn(notificationsOn);
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public int getNumberOfMembersInGroup(String groupId){
+        final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+
+        ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
+        query2.getInBackground(groupId, new GetCallback<Chat>() {
+            public void done(Chat chat, ParseException e) {
+                if (e == null) {
+                    query.whereEqualTo("group", chat);
+                }
+            }
+        });
+
+        List<UsersGroups> results = null;
+        try {
+            results = query.find();
+            return results.size();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+        
+    }
+
     // Functions to get message information.
 
     public String getMessageContent() {
