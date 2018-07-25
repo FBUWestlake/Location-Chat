@@ -62,6 +62,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
     Marker marker_1;
     Location markCurrentLocation;
     private Button confirmBtn;
+    String add = "";
 
 
 
@@ -336,7 +337,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
         try {
             List<Address> addresses = geoCoder.getFromLocation(latitude, longitude, 1);
 
-            String add = "";
+            //String add = "";
             if (addresses.size() > 0) {
                 //add = add + addresses.get(0).getLocality() + ", ";
                 //add = add + addresses.get(0).getCountryName();
