@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
