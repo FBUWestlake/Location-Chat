@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
 
+    private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
+            R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
+
 //    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
 //            "We love Mexican food!", "food", 400);
 //
@@ -158,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO - populate list of chats that user is a part of, based on the user's location
 
 
-//test here
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
         btn_maps.setOnClickListener(new View.OnClickListener() {
             @Override
