@@ -51,6 +51,8 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
 
     private final static String KEY_LOCATION = "location";
     Marker marker_1;
+    Location markCurrentLocation;
+
 
 
     /*
@@ -86,13 +88,15 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
                     // Set the color of the marker to green
                     BitmapDescriptor defaultMarker =
                             BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-// listingPosition is a LatLng point
-                    LatLng listingPosition = new LatLng(-33.867, 151.206);
+
+                    // listingPosition is a LatLng point
+                    LatLng listingPosition = new LatLng(39.828, -98.579);
+
 // Create the marker on the fragment
                     Marker mapMarker = map.addMarker(new MarkerOptions()
                             .position(listingPosition)
-                            .title("Some title here")
-                            .snippet("Some description here")
+                            //.title("Some title here")
+                            //.snippet("Some description here")
                             .icon(defaultMarker)
                             .draggable(true));
 
