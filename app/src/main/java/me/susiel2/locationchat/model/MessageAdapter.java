@@ -114,14 +114,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
+
             messageText.setText(message.getContent());
-            nameText.setText(message.getName());
+            nameText.setText(message.getCreatedBy().getString("name"));
             timeText.setText(message.getCreatedAt().toString());
 
-            Glide.with(context).load(message.getProfileImage())
-                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
-                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
-                    .into(profileImage);
+//            Glide.with(context).load(message.getProfileImage())
+//                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
+//                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
+//                    .into(profileImage);
 
         }
     }
