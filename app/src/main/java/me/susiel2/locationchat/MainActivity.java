@@ -45,9 +45,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> chats;
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
+    private int spinnerPosition;
+    public RelativeLayout relativeLayout;
 
-    private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
-            R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
+    //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
+     //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
+
+    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona };
 
 //    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
 //            "We love Mexican food!", "food", 400);
@@ -83,9 +87,17 @@ public class MainActivity extends AppCompatActivity {
         //state_spinner.setAdapter(adapter);
 
         if (add != null) {
-            int spinnerPosition = stateAdapter.getPosition(add);
+            spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
         }
+//second test here
+        //ImageView imageview=(ImageView) findViewById(getResources().getIdentifier("imgView_"+i, "id", getPackageName()));
+        //imageview.setImageResource(getResources().getIdentifier("img_"+i, "drawable",  getPackageName()));
+
+
+        //test here
+        relativeLayout = findViewById(R.id.relativeLayout);
+        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
 
     /*
     //private method of your class
@@ -193,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+
+
 
 
     }
