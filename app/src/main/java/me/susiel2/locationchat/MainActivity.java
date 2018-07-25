@@ -1,7 +1,6 @@
 package me.susiel2.locationchat;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView plusButton;
     private NavigationView nv;
     final String[] data = {"Help", "About", "Log Out"};
-    final String[] states = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN",
-            "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SC", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
+    final String[] states = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+            "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"};
     public DrawerLayout drawer;
     public ListView navList;
     public Spinner state_spinner;
@@ -47,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> chats;
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
+    private int spinnerPosition;
+    public RelativeLayout relativeLayout;
+
+    //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
+     //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
+
+    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona };
 
 //    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
 //            "We love Mexican food!", "food", 400);
@@ -69,6 +74,42 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
 
+        //state_spinner.setSelection(4);
+
+
+        Intent i = getIntent();
+        String add = i.getStringExtra("myValue");
+
+        //String myValue = "MT";
+    //state_spinner.setSelection(getIndex(state_spinner, myValue));
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.select_state, android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //state_spinner.setAdapter(adapter);
+
+        if (add != null) {
+            spinnerPosition = stateAdapter.getPosition(add);
+            state_spinner.setSelection(spinnerPosition);
+        }
+//second test here
+        //ImageView imageview=(ImageView) findViewById(getResources().getIdentifier("imgView_"+i, "id", getPackageName()));
+        //imageview.setImageResource(getResources().getIdentifier("img_"+i, "drawable",  getPackageName()));
+
+
+        //test here
+        relativeLayout = findViewById(R.id.relativeLayout);
+        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
+
+    /*
+    //private method of your class
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+*/
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
@@ -132,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO - populate list of chats that user is a part of, based on the user's location
 
 
-//test here
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
         btn_maps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +207,12 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
 
+
+
     }
+
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 25 && requestCode == 25) {

@@ -62,6 +62,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
     Marker marker_1;
     Location markCurrentLocation;
     private Button confirmBtn;
+    String add = "";
 
 
 
@@ -121,6 +122,9 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
             @Override
             public void onClick(View view) {
                 final Intent i = new Intent(MapDemoActivity.this, MainActivity.class);
+                //this is a test line
+                i.putExtra("myValue", add);
+
                 startActivity(i);
             }
         });
@@ -336,12 +340,16 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
         try {
             List<Address> addresses = geoCoder.getFromLocation(latitude, longitude, 1);
 
-            String add = "";
+            //String add = "";
             if (addresses.size() > 0) {
                 //add = add + addresses.get(0).getLocality() + ", ";
                 //add = add + addresses.get(0).getCountryName();
                 //add += addresses.get(0).getAddressLine(0);
-                add += addresses.get(0).getAdminArea();
+                add = addresses.get(0).getAdminArea();
+
+                /*Intent i = new Intent(this, MainActivity.class);
+                i.putExtra("myValue", add);
+                startActivity(i);*/
             }
 
             Toast.makeText(this, add, Toast.LENGTH_SHORT).show();
