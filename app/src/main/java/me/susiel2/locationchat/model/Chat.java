@@ -91,6 +91,20 @@ public class Chat extends ParseObject {
         setCreatedBy(createdBy);
         setLocation(location);
     }
+    public String name;
+    public String imageUrl;
+    public String description;
+    public String category;
+    public int members;
+
+    public Chat(String name, String imageUrl,
+                        String description, String category, int members) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.category = category;
+        this.members = members;
+    }
 
     public int getNumberOfMembers(){
         // TODO - implement this
