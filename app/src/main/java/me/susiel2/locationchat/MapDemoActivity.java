@@ -2,6 +2,7 @@ package me.susiel2.locationchat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,10 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -59,6 +61,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
     private final static String KEY_LOCATION = "location";
     Marker marker_1;
     Location markCurrentLocation;
+    private Button confirmBtn;
 
 
 
@@ -113,6 +116,14 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
             Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
         }
 
+        confirmBtn = findViewById(R.id.confirm_button);
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent i = new Intent(MapDemoActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     protected void loadMap(GoogleMap googleMap) {
