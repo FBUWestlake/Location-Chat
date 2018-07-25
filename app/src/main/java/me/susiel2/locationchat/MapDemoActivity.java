@@ -25,7 +25,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -35,21 +39,26 @@ import permissions.dispatcher.RuntimePermissions;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 @RuntimePermissions
-public class MapDemoActivity extends AppCompatActivity {
+public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMarkerDragListener{
+
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private LocationRequest mLocationRequest;
     Location mCurrentLocation;
-    private long UPDATE_INTERVAL = 60000;  /* 60 secs */
-    private long FASTEST_INTERVAL = 5000; /* 5 secs */
+    private long UPDATE_INTERVAL = 60000;  // 60 secs
+    private long FASTEST_INTERVAL = 5000; // 5 secs
 
     private final static String KEY_LOCATION = "location";
+    Marker marker_1;
+
 
     /*
      * Define a request code to send to Google Play services This code is
      * returned in Activity.onActivityResult
      */
+
+
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -73,6 +82,20 @@ public class MapDemoActivity extends AppCompatActivity {
                 @Override
                 public void onMapReady(GoogleMap map) {
                     loadMap(map);
+
+                    // Set the color of the marker to green
+                    BitmapDescriptor defaultMarker =
+                            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+// listingPosition is a LatLng point
+                    LatLng listingPosition = new LatLng(-33.867, 151.206);
+// Create the marker on the fragment
+                    Marker mapMarker = map.addMarker(new MarkerOptions()
+                            .position(listingPosition)
+                            .title("Some title here")
+                            .snippet("Some description here")
+                            .icon(defaultMarker)
+                            .draggable(true));
+
                 }
             });
         } else {
@@ -88,6 +111,21 @@ public class MapDemoActivity extends AppCompatActivity {
             Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             MapDemoActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
             MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+
+            map.setOnMarkerDragListener(this);
+
+            // Attach marker click listener to the map here
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                public boolean onMarkerClick(Marker marker) {
+                    // Handle marker click here
+                    if(marker.equals(marker_1)){
+                        Log.w("Click", "test");
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
         } else {
             Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
@@ -246,6 +284,20 @@ public class MapDemoActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return mDialog;
         }
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        // DO MOST WORK HERE
     }
 
 }
