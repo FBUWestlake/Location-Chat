@@ -138,22 +138,29 @@ public class ParseOperations {
         
     }
 
-    // Functions to get message information.
+    public List<Chat> getGroupsBySearch(String searchParam) {
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereFullText("name", searchParam);
+        try {
+            return query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-    public String getMessageContent() {
-        return message.getContent();
+        return new ArrayList<Chat>();
     }
 
-    public String getMessageCreatorName() {
-        return message.getCreatedBy().getString("name");
-    }
+    public List<Chat> getGroupsBySearchAndCategory(String searchParam, String category) {
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereFullText("name", searchParam);
+        query.whereEqualTo("category", category);
+        try {
+            return query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-    public ParseUser getMessageCreatorUser() {
-        return message.getCreatedBy();
-    }
-
-    public String getMessageCreatedTime() {
-        return message.getCreatedAtString();
+        return new ArrayList<Chat>();
     }
 
 }
