@@ -256,7 +256,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
 
         mCurrentLocation = location;
         String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLatitude()) + ", " +
                 Double.toString(location.getLongitude());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
@@ -302,6 +302,21 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
     @Override
     public void onMarkerDragEnd(Marker marker) {
         // DO MOST WORK HERE
+        Double latitude = marker.getPosition().latitude;
+        Double longitude = marker.getPosition().longitude;
+
+        String markerPos = "New Marker Position: " +
+                latitude + ", " + longitude;
+        Toast.makeText(this, markerPos, Toast.LENGTH_SHORT).show();
+
+/*
+        List<Address> list = geoCoder.getFromLocation(location
+                .getLatitude(), location.getLongitude(), 1);
+        if (list != null & list.size() > 0) {
+            Address address = list.get(0);
+            result = address.getLocality();
+            return result;
+            */
     }
 
 }
