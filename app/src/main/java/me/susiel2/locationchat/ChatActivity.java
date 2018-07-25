@@ -107,7 +107,8 @@ public class ChatActivity extends AppCompatActivity {
 
                 // Save message in parse.
                 String content = etMessage.getText().toString();
-                parseOperations.createMessage(content);
+                // TODO: need "get specific group" task to create message successfully
+                parseOperations.createMessage(content, "objectId");
                 refreshMessages();
                 etMessage.setText(null);
             }

@@ -32,13 +32,11 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public void createMessage(String content, String groupObjectID) {
-    public static void createMessage(String content) {
+    public static void createMessage(String content, String groupObjectID) {
         ParseObject message = ParseObject.create("Message");
-        message.put("USER_ID", ParseUser.getCurrentUser().getObjectId());
+        message.put("objectId", ParseUser.getCurrentUser().getObjectId());
         message.put("content", content);
         message.put("groupId", groupObjectID);
-        // TODO: message.put("groupId", groupId);
         message.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -99,7 +97,6 @@ public class ParseOperations {
     }
 
     public void createGroup(String name, String description, File image, String category, ParseUser user, String location){
-    public static void createGroup(String name, String description, File image, String category, ParseUser user, String location){
         Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
         chat.saveInBackground(new SaveCallback() {
             @Override
@@ -126,7 +123,6 @@ public class ParseOperations {
         return null;
     }
 
-    public void addUserToGroup(ParseUser currentUser, String groupId){
     public static void addUserToGroup(ParseUser currentUser, String groupId){
         final UsersGroups usersGroups = new UsersGroups();
         usersGroups.setUser(currentUser);
