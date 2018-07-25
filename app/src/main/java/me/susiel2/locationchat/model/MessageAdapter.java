@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
 
-        if (message.getUser().equals(null /* TODO - INSERT getCurrentUser() HERE */)) {
+        if (message.getCreatedBy().equals(ParseUser.getCurrentUser())) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -93,8 +94,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
-            messageText.setText(message.getMessage());
-            timeText.setText(message.getTime());
+            messageText.setText(message.getContent());
+            timeText.setText(message.getCreatedAt().toString());
         }
     }
 
@@ -113,11 +114,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
-            messageText.setText(message.getMessage());
-            nameText.setText(message.getUser());
-            timeText.setText(message.getTime());
+            messageText.setText(message.getContent());
+            nameText.setText(message.getName());
+            timeText.setText(message.getCreatedAt().toString());
 
-            Glide.with(context).load(message.getUserImage())
+            Glide.with(context).load(message.getProfileImage())
                     .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
                     .into(profileImage);

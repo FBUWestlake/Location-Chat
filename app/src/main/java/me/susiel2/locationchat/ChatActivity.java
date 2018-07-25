@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,10 +20,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseLiveQueryClient;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
@@ -40,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageView ivSendButton;
     ImageView ivLogo;
     TextView tvTitle;
+    boolean firstLoad;
 
     private Button gear;
     private NavigationView nv2;
@@ -61,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
-        final Message chatMessage = new Message(chat.getDescription(), chat.getName(), chat.getCategory(), chat.getImageUrl());
+        //final Message chatMessage = new Message(chat.getDescription(), chat.getName(), chat.getCategory(), chat.getImageUrl());
 
         messages = new ArrayList<Message>();
 
@@ -76,17 +89,67 @@ public class ChatActivity extends AppCompatActivity {
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
         rvMessages.setLayoutManager(mManager);
+        firstLoad = true;
+
+        ParseObject.registerSubclass(Message.class);
+
 
         ivSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO - send the message typed into etMessage
                 // TEST - adding a test message to the adapter
-                messages.add(chatMessage);
-                mAdapter.notifyDataSetChanged();
+//                messages.add(chatMessage);
+//                mAdapter.notifyDataSetChanged();
                 // END TEST
+
+                // Save message in parse.
+                String content = etMessage.getText().toString();
+                ParseObject message = ParseObject.create("Message");
+                //content.put("USER_ID", ParseUser.getCurrentUser().getObjectId());
+                message.put("content", content);
+                // TODO: message.put("groupId", groupId);
+                message.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e==null) {
+                            Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
+                            refreshMessages();
+                        } else {
+                            Log.e("message", "failed to send");
+                        }
+                    }
+                });
+                etMessage.setText(null);
             }
         });
+
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+        // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
+        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+
+        // Connect to Parse server
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+        // Listen for CREATE events
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Message>() {
+                    @Override
+                    public void onEvent(ParseQuery<Message> query, Message object) {
+                        messages.add(0, object);
+
+                        // RecyclerView updates need to be run on the UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyDataSetChanged();
+                                rvMessages.scrollToPosition(0);
+                            }
+                        });
+                    }
+                });
 
         tvTitle.setText(chat.getName());
         // TODO - set ivLogo to bitmap from chat image
@@ -123,6 +186,36 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    void refreshMessages() {
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        // Configure limit and sort order
+        query.setLimit(60);
+
+        // get the latest 50 messages, order will show up newest to oldest of this group
+        query.orderByDescending("createdAt");
+        // Execute query to fetch all messages from Parse asynchronously
+        // This is equivalent to a SELECT query with SQL
+        query.findInBackground(new FindCallback<Message>() {
+            public void done(List<Message> messagesList, ParseException e) {
+                if (e == null) {
+                    messages.clear();
+                    messages.addAll(messagesList);
+                    mAdapter.notifyDataSetChanged(); // update adapter
+                    // Scroll to the bottom of the list on initial load
+                    if (firstLoad) {
+                        rvMessages.scrollToPosition(0);
+                        firstLoad = false;
+                    }
+                    Log.d("message", "messages loaded");
+                    Log.d("message", String.valueOf(messages.size()));
+                } else {
+                    Log.e("message", "Error Loading Messages" + e);
+                }
+            }
+        });
 
     }
 

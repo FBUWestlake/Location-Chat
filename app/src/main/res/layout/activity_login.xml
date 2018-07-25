@@ -33,12 +33,12 @@
             android:layout_marginTop="56dp">
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/username_et"
+                android:id="@+id/phoneNumber_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_username"
+                android:hint="@string/prompt_phone_number"
                 android:imeOptions="actionNext"
-                android:inputType="textVisiblePassword" />
+                android:inputType="phone" />
 
         </android.support.design.widget.TextInputLayout>
 
