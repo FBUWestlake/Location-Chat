@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="text"
-        android:text="Chat Name"
+        android:hint="Chat Name"
         tools:layout_editor_absoluteX="72dp"
         tools:layout_editor_absoluteY="0dp" />
 
@@ -36,7 +36,7 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="text"
-        android:text="Description"
+        android:hint="Description"
         tools:layout_editor_absoluteX="72dp"
         tools:layout_editor_absoluteY="0dp" />
 

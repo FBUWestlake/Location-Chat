@@ -31,7 +31,7 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public void createMessage(String content) {
+    public static void createMessage(String content) {
         ParseObject message = ParseObject.create("Message");
         message.put("USER_ID", ParseUser.getCurrentUser().getObjectId());
         message.put("content", content);
@@ -49,7 +49,7 @@ public class ParseOperations {
         });
     }
 
-    public void createGroup(String name, String description, File image, String category, ParseUser user, String location){
+    public static void createGroup(String name, String description, File image, String category, ParseUser user, String location){
         Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
         chat.saveInBackground(new SaveCallback() {
             @Override
@@ -63,7 +63,7 @@ public class ParseOperations {
         });
     }
 
-    public void addUserToGroup(ParseUser currentUser, String groupId){
+    public static void addUserToGroup(ParseUser currentUser, String groupId){
         final UsersGroups usersGroups = new UsersGroups();
         usersGroups.setUser(currentUser);
         usersGroups.setNotificationsOn(true);
@@ -89,7 +89,7 @@ public class ParseOperations {
         });
     }
 
-    public void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
+    public static void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
         final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
 
@@ -114,7 +114,7 @@ public class ParseOperations {
         });
     }
 
-    public int getNumberOfMembersInGroup(String groupId){
+    public static int getNumberOfMembersInGroup(String groupId){
         final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
 
         ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
@@ -138,7 +138,7 @@ public class ParseOperations {
         
     }
 
-    public List<Chat> getGroupsBySearch(String searchParam) {
+    public static List<Chat> getGroupsBySearch(String searchParam) {
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
         query.whereFullText("name", searchParam);
         try {
@@ -150,7 +150,7 @@ public class ParseOperations {
         return new ArrayList<Chat>();
     }
 
-    public List<Chat> getGroupsBySearchAndCategory(String searchParam, String category) {
+    public static List<Chat> getGroupsBySearchAndCategory(String searchParam, String category) {
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
         query.whereFullText("name", searchParam);
         query.whereEqualTo("category", category);

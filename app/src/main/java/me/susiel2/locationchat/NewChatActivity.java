@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.BitmapScaler;
 import me.susiel2.locationchat.model.Chat;
 
@@ -103,9 +104,8 @@ public class NewChatActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                ParseFile parseFile = new ParseFile(resizedFile);
-                Chat chat = new Chat(et_chatName.getText().toString(), et_description.getText().toString(), parseFile, selectedItemText, ParseUser.getCurrentUser(), /* TODO - create chat for every location */"MN");
-                chat.saveInBackground();
+                ParseOperations.createGroup(et_chatName.getText().toString(), et_description.getText().toString(), resizedFile, selectedItemText, ParseUser.getCurrentUser(), /* TODO - create chat for every location */"California");
+
                 // Intents and such to connect with MainActivity
                 Intent intent = new Intent();
                 setResult(25, intent);
