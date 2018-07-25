@@ -57,19 +57,6 @@ public class MainActivity extends AppCompatActivity {
 //    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
 //            "outdoor climbing enthusiasts!", "outdoors", 350);
 
-
-
-
-    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
-            "We love Mexican food!", "food", 400);
-
-    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://cdn.mos.cms.futurecdn.net/oZr3irkSDKpSSjmFkpgP6K.jpg",
-            "For those who play and enjoy acoustic guitar", "music", 200);
-
-    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
-            "outdoor climbing enthusiasts!", "outdoors", 350);
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,10 +130,6 @@ public class MainActivity extends AppCompatActivity {
 //        chats.add(outdoorClimbing);
 //        chatAdapter.notifyDataSetChanged();
         // TODO - populate list of chats that user is a part of, based on the user's location
-        chats.add(mexicanFood);
-        chats.add(acousticGuitar);
-        chats.add(outdoorClimbing);
-        chatAdapter.notifyDataSetChanged();
 
 
 //test here
