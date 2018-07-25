@@ -30,7 +30,6 @@ public class ParseOperations {
 
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
-    Message message;
 
     public void createMessage(String content) {
         ParseObject message = ParseObject.create("Message");
