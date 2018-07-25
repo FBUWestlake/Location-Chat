@@ -347,7 +347,6 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
                 //add += addresses.get(0).getAddressLine(0);
                 add = addresses.get(0).getAdminArea();
 
-                //test here to pass string
                 /*Intent i = new Intent(this, MainActivity.class);
                 i.putExtra("myValue", add);
                 startActivity(i);*/
