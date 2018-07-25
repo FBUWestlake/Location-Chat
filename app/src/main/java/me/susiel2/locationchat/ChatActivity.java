@@ -62,8 +62,8 @@ public class ChatActivity extends AppCompatActivity {
     public ListView navList2;
 
     // Test message created as fake message data
-    //Message testMessage = new Message("This is a test message", "Jacob Snyder", "4:26 PM",
-            //"http://www.clker.com/cliparts/u/2/A/u/A/t/blank-profile-head-hi.png");
+//    Message testMessage = new Message("This is a test message", "Jacob Snyder", "4:26 PM",
+//            "http://www.clker.com/cliparts/u/2/A/u/A/t/blank-profile-head-hi.png");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

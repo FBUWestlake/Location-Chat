@@ -78,6 +78,10 @@ public class Chat extends ParseObject {
         return getCreatedAt().toString();
     }
 
+    public Chat(){
+        super();
+    }
+
     public Chat(String name, String description, ParseFile image, String category, ParseUser createdBy, String location){
         super();
         setName(name);
@@ -86,6 +90,11 @@ public class Chat extends ParseObject {
         setCategory(category);
         setCreatedBy(createdBy);
         setLocation(location);
+    }
+
+    public int getNumberOfMembers(){
+        // TODO - implement this
+        return 0;
     }
 
     public static class Query extends ParseQuery<Chat> {
