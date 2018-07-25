@@ -2,6 +2,8 @@ package me.susiel2.locationchat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -32,6 +35,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -255,10 +262,11 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
         // Report to the UI that the location was updated
 
         mCurrentLocation = location;
-        String msg = "Updated Location: " +
+        /*String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + ", " +
                 Double.toString(location.getLongitude());
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        */
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -302,21 +310,36 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
     @Override
     public void onMarkerDragEnd(Marker marker) {
         // DO MOST WORK HERE
+
         Double latitude = marker.getPosition().latitude;
         Double longitude = marker.getPosition().longitude;
 
+        /*
         String markerPos = "New Marker Position: " +
                 latitude + ", " + longitude;
         Toast.makeText(this, markerPos, Toast.LENGTH_SHORT).show();
+*/
 
-/*
-        List<Address> list = geoCoder.getFromLocation(location
-                .getLatitude(), location.getLongitude(), 1);
-        if (list != null & list.size() > 0) {
-            Address address = list.get(0);
-            result = address.getLocality();
-            return result;
-            */
+
+        Geocoder geoCoder = new Geocoder(getBaseContext(), Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(latitude, longitude, 1);
+
+            String add = "";
+            if (addresses.size() > 0) {
+                //add = add + addresses.get(0).getLocality() + ", ";
+                //add = add + addresses.get(0).getCountryName();
+                //add += addresses.get(0).getAddressLine(0);
+                add += addresses.get(0).getAdminArea();
+            }
+
+            Toast.makeText(this, add, Toast.LENGTH_SHORT).show();
+        }
+        catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+
     }
 
 }
