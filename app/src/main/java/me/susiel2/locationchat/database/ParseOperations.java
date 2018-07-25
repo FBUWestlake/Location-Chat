@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -31,15 +32,17 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public void createMessage(String content) {
+    public void createMessage(String content, String groupObjectID) {
         ParseObject message = ParseObject.create("Message");
         message.put("USER_ID", ParseUser.getCurrentUser().getObjectId());
         message.put("content", content);
+        message.put("groupId", groupObjectID);
         // TODO: message.put("groupId", groupId);
         message.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e==null) {
+                    Log.d("ParseOperations", "Message sent");
                     //Toast.makeText(ChatActivity.class, "Message sent", Toast.LENGTH_SHORT).show();
                     //refreshMessages();
                 } else {
@@ -47,6 +50,51 @@ public class ParseOperations {
                 }
             }
         });
+    }
+
+    public List<Message> getGroupMessages(String currentGroupObjectID) {
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        query.whereEqualTo("groupId", currentGroupObjectID);
+        List<Message> result;
+        try {
+            result = query.find();
+            return result;
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setMessagesToUnread(String currentGroupObjectID) {
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("groupId", currentGroupObjectID);
+        List<UsersGroups> result;
+        try {
+            result = query.find();
+            for (int i = 0; i < result.size(); i++) {
+                result.get(i).setRead(false);
+            }
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Chat> getUnreadGroups(ParseUser user) {
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("user", user);
+        query.whereEqualTo("read", false);
+        List<UsersGroups> result;
+        List<Chat> chatGroups = null;
+        try {
+            result = query.find();
+            for (int i = 0; i < result.size(); i++) {
+                chatGroups.add(result.get(i).getChat());
+            }
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void createGroup(String name, String description, File image, String category, ParseUser user, String location){
@@ -61,6 +109,19 @@ public class ParseOperations {
                 }
             }
         });
+    }
+
+    public List<Chat> getGroupsInCategory(String category) {
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereEqualTo("category", category);
+        List<Chat> result;
+        try {
+            result = query.find();
+            return result;
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void addUserToGroup(ParseUser currentUser, String groupId){
@@ -87,5 +148,9 @@ public class ParseOperations {
                 }
             }
         });
+    }
+
+    public void changeUserLocation(ParseUser user, String location) {
+        user.put("location", location);
     }
 }
