@@ -5,13 +5,20 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.File;
+
+import me.susiel2.locationchat.ChatActivity;
+import me.susiel2.locationchat.model.Chat;
+import me.susiel2.locationchat.model.UsersGroups;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +29,7 @@ import me.susiel2.locationchat.model.MessageAdapter;
 public class ParseOperations {
 
     // Enjoy. :^)
+    // ¯\_(ツ)_/¯
 
     public void createMessage(String content) {
         ParseObject message = ParseObject.create("Message");
@@ -41,4 +49,43 @@ public class ParseOperations {
         });
     }
 
+    public void createGroup(String name, String description, File image, String category, ParseUser user, String location){
+        Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
+        chat.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e==null) {
+                    Log.e("ParseOperations", "New group successfully uploaded");
+                } else {
+                    Log.e("ParseOperations", "Failed to upload new group");
+                }
+            }
+        });
+    }
+
+    public void addUserToGroup(ParseUser currentUser, String groupId){
+        final UsersGroups usersGroups = new UsersGroups();
+        usersGroups.setUser(currentUser);
+        usersGroups.setNotificationsOn(true);
+        usersGroups.setRead(true);
+
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.getInBackground(groupId, new GetCallback<Chat>() {
+            public void done(Chat chat, ParseException e) {
+                if (e == null) {
+                    usersGroups.setChat(chat);
+                }
+            }
+        });
+        usersGroups.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e==null) {
+                    Log.e("ParseOperations", "User successfully added to group");
+                } else {
+                    Log.e("ParseOperations", "Failed to add user to group");
+                }
+            }
+        });
+    }
 }
