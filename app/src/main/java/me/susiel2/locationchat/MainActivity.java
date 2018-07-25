@@ -3,6 +3,7 @@ package me.susiel2.locationchat;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
 //
 //    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
 //            "outdoor climbing enthusiasts!", "outdoors", 350);
+
+
+
+
+    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
+            "We love Mexican food!", "food", 400);
+
+    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://cdn.mos.cms.futurecdn.net/oZr3irkSDKpSSjmFkpgP6K.jpg",
+            "For those who play and enjoy acoustic guitar", "music", 200);
+
+    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
+            "outdoor climbing enthusiasts!", "outdoors", 350);
 
 
     @Override
@@ -130,6 +143,47 @@ public class MainActivity extends AppCompatActivity {
 //        chats.add(outdoorClimbing);
 //        chatAdapter.notifyDataSetChanged();
         // TODO - populate list of chats that user is a part of, based on the user's location
+        chats.add(mexicanFood);
+        chats.add(acousticGuitar);
+        chats.add(outdoorClimbing);
+        chatAdapter.notifyDataSetChanged();
+
+
+//test here
+        FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
+        btn_maps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+//        dl.addDrawerListener(t);
+//        t.syncState();
+//
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        nv = findViewById(R.id.nv);
+//        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                int id = item.getItemId();
+//                switch(id)
+//                {
+//                    case R.id.nav_help:
+//                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();
+//                    case R.id.nav_about:
+//                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();
+//                    case R.id.nav_log_out:
+//                        Toast.makeText(MainActivity.this, "My Cart",Toast.LENGTH_SHORT).show();
+//                    default:
+//                        return true;
+//                }
+//            }
+//        });
+
 
     }
 
