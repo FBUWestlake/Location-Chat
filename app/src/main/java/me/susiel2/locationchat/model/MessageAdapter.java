@@ -44,7 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
 
-        if (parseOperations.getMessageCreatorUser().equals(ParseUser.getCurrentUser())) {
+        if (message.getCreatedBy().equals(ParseUser.getCurrentUser())) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -100,8 +100,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
-            messageText.setText(parseOperations.getMessageContent());
-            timeText.setText(parseOperations.getMessageCreatedTime());
+            messageText.setText(message.getContent());
+            timeText.setText(message.getCreatedAtString());
         }
     }
 
@@ -119,9 +119,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bind(Message message) {
 
-            messageText.setText(parseOperations.getMessageContent());
-            nameText.setText(parseOperations.getMessageCreatorName());
-            timeText.setText(parseOperations.getMessageCreatedTime());
+            messageText.setText(message.getContent());
+            nameText.setText(message.getCreatedBy().getString("name"));
+            timeText.setText(message.getCreatedAtString());
 
 //            Glide.with(context).load(message.getProfileImage())
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())

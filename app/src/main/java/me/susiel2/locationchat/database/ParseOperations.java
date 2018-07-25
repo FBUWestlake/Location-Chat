@@ -22,7 +22,6 @@ import me.susiel2.locationchat.model.MessageAdapter;
 public class ParseOperations {
 
     // Enjoy. :^)
-    Message message;
 
     public void createMessage(String content) {
         ParseObject message = ParseObject.create("Message");
@@ -40,24 +39,6 @@ public class ParseOperations {
                 }
             }
         });
-    }
-
-    // Functions to get message information.
-
-    public String getMessageContent() {
-        return message.getContent();
-    }
-
-    public String getMessageCreatorName() {
-        return message.getCreatedBy().getString("name");
-    }
-
-    public ParseUser getMessageCreatorUser() {
-        return message.getCreatedBy();
-    }
-
-    public String getMessageCreatedTime() {
-        return message.getCreatedAtString();
     }
 
 }
