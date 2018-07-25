@@ -1,9 +1,12 @@
-package me.susiel2.locationchat.model;
+package me.susiel2.locationchat.database;
 
 import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+
+import me.susiel2.locationchat.model.Chat;
+import me.susiel2.locationchat.model.Message;
 
 public class ParseApp extends Application {
 
@@ -12,6 +15,7 @@ public class ParseApp extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Chat.class);
+        ParseObject.registerSubclass(Message.class);
 
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("bounceId")

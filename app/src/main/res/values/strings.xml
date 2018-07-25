@@ -24,4 +24,7 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_search_existing">SearchExistingActivity</string>
     <string name="location_spinner_prompt">Location</string>
+    
+    <string name="google_maps_api_key">AIzaSyDH6HkViNYJq4SzpS2PFILEdEY-hK7HGRk</string>
+
 </resources>

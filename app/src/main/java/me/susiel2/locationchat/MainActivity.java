@@ -48,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
 
+//    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
+//            "We love Mexican food!", "food", 400);
+//
+//    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://cdn.mos.cms.futurecdn.net/oZr3irkSDKpSSjmFkpgP6K.jpg",
+//            "For those who play and enjoy acoustic guitar", "music", 200);
+//
+//    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
+//            "outdoor climbing enthusiasts!", "outdoors", 350);
 
 
 
@@ -130,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));
 
+//        chats.add(mexicanFood);
+//        chats.add(acousticGuitar);
+//        chats.add(outdoorClimbing);
+//        chatAdapter.notifyDataSetChanged();
+        // TODO - populate list of chats that user is a part of, based on the user's location
         chats.add(mexicanFood);
         chats.add(acousticGuitar);
         chats.add(outdoorClimbing);
@@ -174,26 +187,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        if(t.onOptionsItemSelected(item))
-//            return true;
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 25 && requestCode == 25) {
-            Chat chat = (Chat) Parcels.unwrap(data.getParcelableExtra("chat"));
-            if (chat != null) {
-                chat.setBitmapImage(BitmapFactory.decodeFile(chat.getImageFile().toString()));
-                chats.add(0, chat);
-                chatAdapter.notifyItemInserted(0);
-                Log.d("inserted chat", chat.getName());
-            } else {
-                Log.d("not inserted", "nono");
-            }
+//            Chat chat = (Chat) Parcels.unwrap(data.getParcelableExtra("chat"));
+//            if (chat != null) {
+//                chat.setBitmapImage(BitmapFactory.decodeFile(chat.getImageFile().toString()));
+//                chats.add(0, chat);
+//                chatAdapter.notifyItemInserted(0);
+//                Log.d("inserted chat", chat.getName());
+//            } else {
+//                Log.d("not inserted", "nono");
+//            }
+            // TODO - refresh feed or manually get new chat and add it to the adapter
         }
     }
 }
