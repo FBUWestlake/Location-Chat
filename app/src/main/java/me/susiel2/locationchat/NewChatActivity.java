@@ -18,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
@@ -100,10 +103,11 @@ public class NewChatActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Chat chat = new Chat(et_chatName.getText().toString(), resizedFile, et_description.getText().toString(), selectedItemText, 0);
+                ParseFile parseFile = new ParseFile(resizedFile);
+                Chat chat = new Chat(et_chatName.getText().toString(), et_description.getText().toString(), parseFile, selectedItemText, ParseUser.getCurrentUser(), /* TODO - create chat for every location */"MN");
+                chat.saveInBackground();
                 // Intents and such to connect with MainActivity
                 Intent intent = new Intent();
-                intent.putExtra("chat", Parcels.wrap(chat));
                 setResult(25, intent);
                 finish();
             }

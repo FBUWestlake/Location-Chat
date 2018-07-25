@@ -22,8 +22,8 @@ public class Chat extends ParseObject {
     private static final String KEY_CREATED_BY = "createdBy";
     private static final String KEY_LOCATION_ID = "location";
 
-    public String getGroupIdString() {
-        return getObjectId().toString();
+    public String getIdString() {
+        return getObjectId();
     }
 
     public String getName() {
@@ -66,16 +66,26 @@ public class Chat extends ParseObject {
         put(KEY_CREATED_BY, user);
     }
 
-    public int getLocation() {
-        return getInt(KEY_LOCATION_ID);
+    public String getLocation() {
+        return getString(KEY_LOCATION_ID);
     }
 
-    public void setLocation(int location) {
+    public void setLocation(String location) {
         put(KEY_LOCATION_ID, location);
     }
 
     public String getCreatedAtString() {
         return getCreatedAt().toString();
+    }
+
+    public Chat(String name, String description, ParseFile image, String category, ParseUser createdBy, String location){
+        super();
+        setName(name);
+        setDescription(description);
+        setImage(image);
+        setCategory(category);
+        setCreatedBy(createdBy);
+        setLocation(location);
     }
 
     public static class Query extends ParseQuery<Chat> {

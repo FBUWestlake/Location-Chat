@@ -30,7 +30,7 @@ public class SearchExistingActivity extends AppCompatActivity {
     final String[] categories = {"All Categories", "Food", "Entertainment", "Work"};
 
     // Mock data
-    Chat mockChat = new Chat("Mock Chat", "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", "This is a chat for hot dogs", "Dogs", 400);
+    //Chat mockChat = new Chat("Mock Chat", "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", "This is a chat for hot dogs", "Dogs", 400);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +60,13 @@ public class SearchExistingActivity extends AppCompatActivity {
         categorySpinner.setAdapter(categoryAdapter);
 
         // Mock data
-        chats.add(mockChat);
-        chats.add(mockChat);
-        chats.add(mockChat);
-        adapter.notifyDataSetChanged();
+//        chats.add(mockChat);
+//        chats.add(mockChat);
+//        chats.add(mockChat);
+//        adapter.notifyDataSetChanged();
         // End mock data
+
+        // TODO - Populate list of chats that current user isn't in
 
         btNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +80,6 @@ public class SearchExistingActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 25 && requestCode == 25) {
-            //Chat chat = data.getParcelableExtra("chat");
-            setResult(25, data);
             finish();
         }
     }
