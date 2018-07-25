@@ -154,7 +154,7 @@
         <Spinner
             android:id="@+id/state_spinner"
             android:layout_width="240dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:background="#FFF"/>
         <ListView
             android:id="@+id/drawer"

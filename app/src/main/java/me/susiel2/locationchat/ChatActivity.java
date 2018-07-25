@@ -36,6 +36,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.MessageAdapter;
@@ -43,6 +44,7 @@ import me.susiel2.locationchat.model.MessageAdapter;
 public class ChatActivity extends AppCompatActivity {
 
     Chat chat;
+    ParseOperations parseOperations;
 
     RecyclerView rvMessages;
     MessageAdapter mAdapter;
@@ -105,51 +107,13 @@ public class ChatActivity extends AppCompatActivity {
 
                 // Save message in parse.
                 String content = etMessage.getText().toString();
-                ParseObject message = ParseObject.create("Message");
-                //content.put("USER_ID", ParseUser.getCurrentUser().getObjectId());
-                message.put("content", content);
-                // TODO: message.put("groupId", groupId);
-                message.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e==null) {
-                            Toast.makeText(ChatActivity.this, "Message sent", Toast.LENGTH_SHORT).show();
-                            refreshMessages();
-                        } else {
-                            Log.e("message", "failed to send");
-                        }
-                    }
-                });
+                parseOperations.createMessage(content);
+                refreshMessages();
                 etMessage.setText(null);
             }
         });
 
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-
-        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
-        // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
-        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
-
-        // Connect to Parse server
-        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-
-        // Listen for CREATE events
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
-                SubscriptionHandling.HandleEventCallback<Message>() {
-                    @Override
-                    public void onEvent(ParseQuery<Message> query, Message object) {
-                        messages.add(0, object);
-
-                        // RecyclerView updates need to be run on the UI thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.notifyDataSetChanged();
-                                rvMessages.scrollToPosition(0);
-                            }
-                        });
-                    }
-                });
+        liveQuery();
 
         tvTitle.setText(chat.getName());
         // TODO - set ivLogo to bitmap from chat image
@@ -185,8 +149,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     void refreshMessages() {
@@ -217,6 +179,35 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    void liveQuery() {
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+        // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
+        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+
+        // Connect to Parse server
+        SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+        // Listen for CREATE events
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
+                SubscriptionHandling.HandleEventCallback<Message>() {
+                    @Override
+                    public void onEvent(ParseQuery<Message> query, Message object) {
+                        messages.add(0, object);
+
+                        // RecyclerView updates need to be run on the UI thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyDataSetChanged();
+                                rvMessages.scrollToPosition(0);
+                            }
+                        });
+                    }
+                });
     }
 
     public void openSettingsMenu(MenuItem item) {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,6 +29,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private ArrayList<Message> mMessageList;
     private Context context;
+    ParseOperations parseOperations;
 
     public MessageAdapter(ArrayList<Message> messages) {
         mMessageList = messages;
@@ -42,7 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
 
-        if (message.getCreatedBy().equals(ParseUser.getCurrentUser())) {
+        if (parseOperations.getMessageCreatorUser().equals(ParseUser.getCurrentUser())) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -98,8 +100,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
-            messageText.setText(message.getContent());
-            timeText.setText(message.getCreatedAt().toString());
+            messageText.setText(parseOperations.getMessageContent());
+            timeText.setText(parseOperations.getMessageCreatedTime());
         }
     }
 
@@ -117,17 +119,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bind(Message message) {
 
-            messageText.setText(message.getContent());
-            nameText.setText(message.getCreatedBy().getString("name"));
-            timeText.setText(message.getCreatedAt().toString());
+            messageText.setText(parseOperations.getMessageContent());
+            nameText.setText(parseOperations.getMessageCreatorName());
+            timeText.setText(parseOperations.getMessageCreatedTime());
 
 //            Glide.with(context).load(message.getProfileImage())
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
 //                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
 //                    .into(profileImage);
-
-            nameText.setText(message.getCreatedBy().getUsername());
-            timeText.setText(message.getCreatedAt().toString());
         }
     }
 
