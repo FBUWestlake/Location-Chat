@@ -51,7 +51,7 @@ public class ParseOperations {
         });
     }
 
-    public List<Message> getGroupMessages(String currentGroupObjectID) {
+    public static List<Message> getGroupMessages(String currentGroupObjectID) {
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo("groupId", currentGroupObjectID);
         List<Message> result;
@@ -64,7 +64,7 @@ public class ParseOperations {
         return null;
     }
 
-    public void setMessagesToUnread(String currentGroupObjectID) {
+    public static void setMessagesToUnread(String currentGroupObjectID) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("groupId", currentGroupObjectID);
         List<UsersGroups> result;
@@ -79,7 +79,7 @@ public class ParseOperations {
 
     }
 
-    public List<Chat> getUnreadGroups(ParseUser user) {
+    public static List<Chat> getUnreadGroups(ParseUser user) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
         query.whereEqualTo("read", false);
@@ -96,7 +96,7 @@ public class ParseOperations {
         return null;
     }
 
-    public void createGroup(String name, String description, File image, String category, ParseUser user, String location){
+    public static void createGroup(String name, String description, File image, String category, ParseUser user, String location){
         Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
         chat.saveInBackground(new SaveCallback() {
             @Override
@@ -110,7 +110,7 @@ public class ParseOperations {
         });
     }
 
-    public List<Chat> getGroupsInCategory(String category) {
+    public static List<Chat> getGroupsInCategory(String category) {
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
         query.whereEqualTo("category", category);
         List<Chat> result;
@@ -149,9 +149,10 @@ public class ParseOperations {
         });
     }
 
-    public void changeUserLocation(ParseUser user, String location) {
+    public static void changeUserLocation(ParseUser user, String location) {
         user.put("location", location);
     }
+
     public static void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
         final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
