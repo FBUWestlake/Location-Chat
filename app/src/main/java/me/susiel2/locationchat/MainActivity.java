@@ -19,10 +19,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     
     
     private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
-    R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_fl, R.drawable.ic_georgia,
+    R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_florida, R.drawable.ic_georgia,
             R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
             R.drawable.ic_kentucky, R.drawable.ic_louisiana, R.drawable.ic_maine, R.drawable.ic_maryland, R.drawable.ic_massachusetts, R.drawable.ic_michigan,
             R.drawable.ic_mn, R.drawable.ic_mississippi, R.drawable.ic_missouri, R.drawable.ic_montana, R.drawable.ic_nebraska, R.drawable.ic_nv,
@@ -115,12 +111,10 @@ public class MainActivity extends AppCompatActivity {
             spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
         }
-//second test here
         //ImageView imageview=(ImageView) findViewById(getResources().getIdentifier("imgView_"+i, "id", getPackageName()));
         //imageview.setImageResource(getResources().getIdentifier("img_"+i, "drawable",  getPackageName()));
 
 
-        //test here
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
 
@@ -135,6 +129,20 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 */
+
+    //test for spinner change here
+        state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                relativeLayout.setBackgroundResource(stateFlags[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
