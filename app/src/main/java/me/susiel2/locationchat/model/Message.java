@@ -40,7 +40,7 @@ public class Message extends ParseObject{
         return (Chat) getParseObject(KEY_GROUP_ID);
     }
 
-    public void setChat(Chat chat) { put(KEY_GROUP_ID, chat.getIdString()); }
+    public void setChat(Chat chat) { put(KEY_GROUP_ID, chat); }
 
     public ParseUser getCreatedBy() {
         return getParseUser(KEY_CREATED_BY);

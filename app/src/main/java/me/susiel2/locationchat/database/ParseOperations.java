@@ -33,30 +33,42 @@ public class ParseOperations {
     // ¯\_(ツ)_/¯
 
     public static void createMessage(String content, String groupObjectID) {
-        ParseObject message = ParseObject.create("Message");
-        message.put("objectId", ParseUser.getCurrentUser().getObjectId());
-        message.put("content", content);
-        message.put("groupId", groupObjectID);
-        message.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e==null) {
-                    Log.d("ParseOperations", "Message sent");
-                    //Toast.makeText(ChatActivity.class, "Message sent", Toast.LENGTH_SHORT).show();
-                    //refreshMessages();
-                } else {
-                    Log.e("message", "failed to send");
+        Message newMessage = new Message();
+        newMessage.setCreatedBy(ParseUser.getCurrentUser());
+        newMessage.setContent(content);
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereEqualTo("objectId", groupObjectID);
+        try {
+            List<Chat> result = query.find();
+            newMessage.setChat(result.get(0));
+            newMessage.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d("ParseOperations", "Message sent");
+                        //Toast.makeText(ChatActivity.class, "Message sent", Toast.LENGTH_SHORT).show();
+                        //refreshMessages();
+                    } else {
+                        Log.e("ParseOperations", e.toString());
+                    }
                 }
-            }
-        });
+            });
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public static List<Message> getGroupMessages(String currentGroupObjectID) {
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.whereEqualTo("groupId", currentGroupObjectID);
-        List<Message> result;
+        //List<Message> result;
+        ParseQuery<Chat> queryChat = ParseQuery.getQuery(Chat.class);
+        queryChat.whereEqualTo("objectId", currentGroupObjectID);
         try {
-            result = query.find();
+            List<Chat> chats = queryChat.find();
+            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+            query.whereEqualTo("groupId", chats.get(0));
+            List<Message> result = query.find();
+            Log.d("ParseOperation", result.get(0).getContent());
+            Log.d("ParseOperation", result.get(1).getContent());
             return result;
         } catch(ParseException e) {
             e.printStackTrace();

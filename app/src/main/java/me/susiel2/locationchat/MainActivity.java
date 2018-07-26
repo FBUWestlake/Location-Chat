@@ -23,6 +23,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 import me.susiel2.locationchat.database.DatabaseHelper;
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 
