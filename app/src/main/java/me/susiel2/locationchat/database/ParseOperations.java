@@ -269,4 +269,35 @@ public class ParseOperations {
 
         return new ArrayList<Chat>();
     }
+
+    public static void leaveGroup(ParseUser user, String groupId) {
+        ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
+        chatQuery.whereEqualTo("objectId", groupId);
+
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("user", user);
+        try {
+            Chat groupToLeave = chatQuery.find().get(0);
+            query.whereEqualTo("group", groupToLeave);
+            UsersGroups result = query.find().get(0);
+            result.delete();
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setMessageAsReadInGroup(ParseUser user, String groupId) {
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("user", user);
+
+        ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
+        chatQuery.whereEqualTo("objectId", groupId);
+        try {
+            Chat group = chatQuery.find().get(0);
+            query.whereEqualTo("group", group);
+            query.find().get(0).setRead(true);
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+    }
 }
