@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,11 +19,17 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.susiel2.locationchat.database.DatabaseHelper;
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 
@@ -67,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
+        List<Chat> results = ParseOperations.getGroupsBySearch("original");
+        Log.d("MainActivity", results.get(0).getObjectId());
+        Log.d("MainActivity", "Num of members in this group: " + ParseOperations.getNumberOfMembersInGroup(results.get(0).getObjectId()));
 
         usersDB = new DatabaseHelper(this);
 
