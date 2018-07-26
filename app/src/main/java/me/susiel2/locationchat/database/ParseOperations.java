@@ -67,8 +67,6 @@ public class ParseOperations {
             ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
             query.whereEqualTo("groupId", chats.get(0));
             List<Message> result = query.find();
-            Log.d("ParseOperation", result.get(0).getContent());
-            Log.d("ParseOperation", result.get(1).getContent());
             return result;
         } catch(ParseException e) {
             e.printStackTrace();
