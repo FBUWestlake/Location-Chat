@@ -49,10 +49,6 @@ public class UsersGroups extends ParseObject {
         return getCreatedAt().toString();
     }
 
-    public UsersGroups(){
-        super();
-    }
-
     public static class Query extends ParseQuery<Chat> {
         public Query() {
             super(Chat.class);

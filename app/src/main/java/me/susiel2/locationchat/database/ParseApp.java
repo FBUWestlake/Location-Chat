@@ -7,6 +7,7 @@ import com.parse.ParseObject;
 
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
+import me.susiel2.locationchat.model.UsersGroups;
 
 public class ParseApp extends Application {
 
@@ -16,6 +17,7 @@ public class ParseApp extends Application {
 
         ParseObject.registerSubclass(Chat.class);
         ParseObject.registerSubclass(Message.class);
+        ParseObject.registerSubclass(UsersGroups.class);
 
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("bounceId")

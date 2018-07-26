@@ -23,6 +23,7 @@ import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
+import me.susiel2.locationchat.SearchExistingActivity;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
@@ -54,6 +55,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         viewHolder.tv_chat_name.setText(chat.getName());
         viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()) + " members");
 
+        if(context instanceof SearchExistingActivity){
+            viewHolder.ivAddButton.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivAddButton.setVisibility(View.INVISIBLE);
+        }
+
         Bitmap bm_resized = null;
         try {
             String filePath = chat.getImage().getFile().getAbsolutePath();
@@ -77,6 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         public ImageView iv_chat_image;
         public TextView tv_chat_name;
         public TextView tvNumberOfMembers;
+        public ImageView ivAddButton;
         private WeakReference<ClickListener> listenerRef;
 
         public ViewHolder(View itemView, ClickListener listener) {
@@ -87,19 +95,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             iv_chat_image = itemView.findViewById(R.id.iv_chat_image);
             tv_chat_name = itemView.findViewById(R.id.tv_chat_name);
             tvNumberOfMembers = itemView.findViewById(R.id.tvNumberOfMembers);
+            ivAddButton = itemView.findViewById(R.id.ivAddButton);
 
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            listenerRef.get().onChatClicked(getAdapterPosition());
+            if(view.getId() == ivAddButton.getId())
+                listenerRef.get().onAddClicked(getAdapterPosition());
+            else
+                listenerRef.get().onChatClicked(getAdapterPosition());
         }
 
     }
 
     public interface ClickListener {
 
+        void onAddClicked(int position);
         void onChatClicked(int position);
 
     }

@@ -58,7 +58,7 @@ public class NewChatActivity extends AppCompatActivity {
         btn_newChat = findViewById(R.id.btn_newChat);
         btn_upload = findViewById(R.id.btn_upload);
         et_chatName = findViewById(R.id.et_chatName);
-        et_description = findViewById(R.id.et_chatName);
+        et_description = findViewById(R.id.et_description);
 
         //TODO: allow user to upload image for chat group.
         iv_chatImage = findViewById(R.id.iv_chatImage);

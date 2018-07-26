@@ -108,13 +108,14 @@ public class ParseOperations {
         return null;
     }
 
-    public static void createGroup(String name, String description, File image, String category, ParseUser user, String location){
-        Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
+    public static void createGroup(String name, String description, File image, String category, final ParseUser user, String location){
+        final Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
         chat.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e==null) {
                     Log.e("ParseOperations", "New group successfully uploaded");
+                    addUserToGroup(user, chat.getObjectId());
                 } else {
                     Log.e("ParseOperations", "Failed to upload new group");
                 }
@@ -142,13 +143,13 @@ public class ParseOperations {
         usersGroups.setRead(true);
 
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.getInBackground(groupId, new GetCallback<Chat>() {
-            public void done(Chat chat, ParseException e) {
-                if (e == null) {
-                    usersGroups.setChat(chat);
-                }
-            }
-        });
+        query.whereEqualTo("objectId", groupId);
+        try {
+            List<Chat> results = query.find();
+            usersGroups.setChat(results.get(0));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         usersGroups.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -170,37 +171,34 @@ public class ParseOperations {
         query.whereEqualTo("user", user);
 
         ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
-        query2.getInBackground(groupId, new GetCallback<Chat>() {
-            public void done(Chat chat, ParseException e) {
-                if (e == null) {
-                    query.whereEqualTo("group", chat);
-                }
-            }
-        });
+        query2.whereEqualTo("objectId", groupId);
+        try {
+            List<Chat> results = query2.find();
+            query.whereEqualTo("group", results.get(0));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        query.findInBackground(new FindCallback<UsersGroups>() {
-            public void done(List<UsersGroups> itemList, ParseException e) {
-                if (e == null) {
-                    UsersGroups firstItem = itemList.get(0);
-                    firstItem.setNotificationsOn(notificationsOn);
-                } else {
-                    Log.d("item", "Error: " + e.getMessage());
-                }
-            }
-        });
+        try {
+            List<UsersGroups> results = query.find();
+            results.get(0).setNotificationsOn(notificationsOn);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static int getNumberOfMembersInGroup(String groupId){
         final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
 
         ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
-        query2.getInBackground(groupId, new GetCallback<Chat>() {
-            public void done(Chat chat, ParseException e) {
-                if (e == null) {
-                    query.whereEqualTo("group", chat);
-                }
-            }
-        });
+        query2.whereEqualTo("objectId", groupId);
+        try {
+            List<Chat> results = query2.find();
+            query.whereEqualTo("group", results.get(0));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         List<UsersGroups> results = null;
         try {
