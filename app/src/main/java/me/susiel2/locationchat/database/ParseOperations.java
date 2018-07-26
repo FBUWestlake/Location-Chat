@@ -49,13 +49,14 @@ public class ParseOperations {
         });
     }
 
-    public static void createGroup(String name, String description, File image, String category, ParseUser user, String location){
-        Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
+    public static void createGroup(String name, String description, File image, String category, final ParseUser user, String location){
+        final Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
         chat.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e==null) {
                     Log.e("ParseOperations", "New group successfully uploaded");
+                    addUserToGroup(user, chat.getObjectId());
                 } else {
                     Log.e("ParseOperations", "Failed to upload new group");
                 }
@@ -70,13 +71,13 @@ public class ParseOperations {
         usersGroups.setRead(true);
 
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.getInBackground(groupId, new GetCallback<Chat>() {
-            public void done(Chat chat, ParseException e) {
-                if (e == null) {
-                    usersGroups.setChat(chat);
-                }
-            }
-        });
+        query.whereEqualTo("objectId", groupId);
+        try {
+            List<Chat> results = query.find();
+            usersGroups.setChat(results.get(0));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         usersGroups.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

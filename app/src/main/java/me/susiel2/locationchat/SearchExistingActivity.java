@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -46,7 +47,13 @@ public class SearchExistingActivity extends AppCompatActivity {
         adapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
             @Override
             public void onChatClicked(int position) {
-                // TODO - add this chat to list of joined chats (or maybe bring up a screen that gives you details about the chat)
+                // TODO - Bring up a details page
+            }
+
+            @Override
+            public void onAddClicked(int position) {
+                // TODO - add chat to list of added chats and remove it from this list
+                Log.e("SearchExistingActivity", "chat is added blah blah blah");
             }
         });
         btNewGroup = findViewById(R.id.btNewGroup);

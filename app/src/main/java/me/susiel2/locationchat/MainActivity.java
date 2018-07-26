@@ -141,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
         chats = new ArrayList<>();
         chatAdapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
             @Override
+            public void onAddClicked(int position) {
+                onChatClicked(position);
+            }
+
+            @Override
             public void onChatClicked(int position) {
                 Intent i = new Intent(MainActivity.this, ChatActivity.class);
                 i.putExtra("chat", Parcels.wrap(chats.get(position)));
