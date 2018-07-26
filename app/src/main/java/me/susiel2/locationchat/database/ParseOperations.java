@@ -134,6 +134,41 @@ public class ParseOperations {
         return null;
     }
 
+    public static List<Chat> getGroupsUserIsIn(ParseUser currentUser){
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("user", currentUser);
+        query.include("group");
+        ArrayList<Chat> groups = new ArrayList<Chat>();
+        try {
+            List<UsersGroups> results = query.find();
+            for(int i = 0; i < results.size(); i++){
+                groups.add(results.get(i).getChat());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return groups;
+    }
+
+
+    // Note that this method only returns groups whose location matches the location of the user
+    public static List<Chat> getGroupsUserIsNotIn(ParseUser currentUser){
+        List<Chat> userIsIn = getGroupsUserIsIn(currentUser);
+        ArrayList<String> groupNames = new ArrayList<String>();
+        for(int i = 0; i < userIsIn.size(); i++)
+            groupNames.add(userIsIn.get(i).getName());
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereNotContainedIn("name", groupNames);
+        query.whereEqualTo("location", currentUser.getString("location"));
+        List<Chat> results = new ArrayList<>();
+        try {
+            results = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
     public static void addUserToGroup(ParseUser currentUser, String groupId){
         final UsersGroups usersGroups = new UsersGroups();
         usersGroups.setUser(currentUser);
