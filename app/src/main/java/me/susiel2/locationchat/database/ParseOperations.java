@@ -100,6 +100,7 @@ public class ParseOperations {
             result = query.find();
             for (int i = 0; i < result.size(); i++) {
                 result.get(i).setRead(false);
+                result.get(i).saveInBackground();
             }
         } catch(ParseException e) {
             e.printStackTrace();
@@ -388,7 +389,10 @@ public class ParseOperations {
         try {
             List<UsersGroups> results = query.find();
             Log.e("ParseOperations", "messageAsRead ID: " + results.get(0).getObjectId());
+            Log.e("ParseOperations", "Is message read? : " + results.get(0).isRead());
             results.get(0).setRead(true);
+            Log.e("ParseOperations", "Is message read? : " + results.get(0).isRead());
+            results.get(0).saveInBackground();
         } catch(ParseException e) {
             e.printStackTrace();
         }

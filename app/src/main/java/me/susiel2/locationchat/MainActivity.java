@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     ParseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chats.get(position).getObjectId());
                 }
                 i.putExtra("chat", Parcels.wrap(chats.get(position)));
-                startActivity(i);
+                startActivityForResult(i, 26);
             }
         });
 
@@ -208,25 +208,9 @@ public class MainActivity extends AppCompatActivity {
         chatAdapter.notifyDataSetChanged();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 25 && requestCode == 25) {
-//            Chat chat = (Chat) Parcels.unwrap(data.getParcelableExtra("chat"));
-//            if (chat != null) {
-//                chat.setBitmapImage(BitmapFactory.decodeFile(chat.getImageFile().toString()));
-//                chats.add(0, chat);
-//                chatAdapter.notifyItemInserted(0);
-//                Log.d("inserted chat", chat.getName());
-//            } else {
-//                Log.d("not inserted", "nono");
-//            }
-            // TODO - refresh feed or manually get new chat and add it to the adapter
-        }
-        updateChats();
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        updateChats();
+//    }
 
-    @Override
-    public void onActivityReenter(int resultCode, Intent data) {
-        super.onActivityReenter(resultCode, data);
-        updateChats();
-    }
 }
