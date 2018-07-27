@@ -13,10 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.parse.Parse;
+import com.parse.ParseUser;
+
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 
@@ -29,9 +34,6 @@ public class SearchExistingActivity extends AppCompatActivity {
     Button btNewGroup;
     Spinner categorySpinner;
     final String[] categories = {"All Categories", "Food", "Entertainment", "Work"};
-
-    // Mock data
-    //Chat mockChat = new Chat("Mock Chat", "https://images-na.ssl-images-amazon.com/images/I/51io9pmG2QL._SL1072_.jpg", "This is a chat for hot dogs", "Dogs", 400);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +68,7 @@ public class SearchExistingActivity extends AppCompatActivity {
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
 
-        // Mock data
-//        chats.add(mockChat);
-//        chats.add(mockChat);
-//        chats.add(mockChat);
-//        adapter.notifyDataSetChanged();
-        // End mock data
-
+        updateChatsUserIsNotIn();
         // TODO - Populate list of chats that current user isn't in
 
         btNewGroup.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +79,16 @@ public class SearchExistingActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void updateChatsUserIsNotIn(){
+        List<Chat> currentGroups = ParseOperations.getGroupsUserIsNotIn(ParseUser.getCurrentUser());
+        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
+        for(int i = 0; i < currentGroups.size(); i++) {
+            chats.add(currentGroups.get(i));
+            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
+        }
+        adapter.notifyDataSetChanged();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
