@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
         Log.e("MainActivity","Number of Chats : " + currentGroups.size());
         chats.clear();
+//        chatAdapter.notifyDataSetChanged();
         for(int i = 0; i < currentGroups.size(); i++) {
             chats.add(currentGroups.get(i));
             Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
@@ -208,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
         chatAdapter.notifyDataSetChanged();
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        updateChats();
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        updateChats();
+    }
 
 }

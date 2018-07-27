@@ -95,7 +95,7 @@ public class ParseOperations {
     public static void setMessagesToUnread(String currentGroupObjectID) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
-        chatQuery.whereEqualTo("objectId", currentGroupObjectID)
+        chatQuery.whereEqualTo("objectId", currentGroupObjectID);
         List<Chat> result;
         try {
             result = chatQuery.find();
@@ -159,6 +159,7 @@ public class ParseOperations {
     public static List<Chat> getGroupsUserIsIn(ParseUser currentUser){
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", currentUser);
+        query.addDescendingOrder("updatedAt");
         final ArrayList<String> groupIds = new ArrayList<>();
 
         try {
