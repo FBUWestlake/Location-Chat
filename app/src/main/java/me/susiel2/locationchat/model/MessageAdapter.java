@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -101,6 +102,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void bind(Message message) {
             messageText.setText(message.getContent());
             timeText.setText(message.getCreatedAtString());
+
         }
     }
 
@@ -119,7 +121,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void bind(Message message) {
 
             messageText.setText(message.getContent());
-            //nameText.setText(message.getCreatedBy().getString("name"));
+            nameText.setText(ParseOperations.getUsersName(message.getCreatedBy()));
             timeText.setText(message.getCreatedAtString());
 
 //            Glide.with(context).load(message.getProfileImage())

@@ -50,10 +50,15 @@ public class SearchExistingActivity extends AppCompatActivity {
             @Override
             public void onChatClicked(int position) {
                 // TODO - Bring up a details page
+                Log.e("SearchExistingActivity", "chat wasnt clicked");
+
             }
 
             @Override
             public void onAddClicked(int position) {
+                ParseOperations.addUserToGroup(ParseUser.getCurrentUser(), chats.get(position).getIdString());
+                chats.remove(position);
+                adapter.notifyDataSetChanged();
                 // TODO - add chat to list of added chats and remove it from this list
                 Log.e("SearchExistingActivity", "chat is added blah blah blah");
             }

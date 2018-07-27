@@ -185,6 +185,19 @@ public class ParseOperations {
         return null;
     }
 
+    public static String getUsersName(ParseUser parseUser){
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", parseUser.getObjectId());
+        try {
+            List<ParseUser> result = query.find();
+            return result.get(0).getString("name");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     // Note that this method only returns groups whose location matches the location of the user
     public static List<Chat> getGroupsUserIsNotIn(ParseUser currentUser){

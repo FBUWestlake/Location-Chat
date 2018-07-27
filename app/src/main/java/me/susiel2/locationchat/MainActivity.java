@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d("not inserted", "nono");
 //            }
             // TODO - refresh feed or manually get new chat and add it to the adapter
+            updateChats();
         }
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.Parse;
 import com.parse.ParseException;
 
 import java.io.ByteArrayOutputStream;
@@ -24,6 +25,7 @@ import java.util.List;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
 import me.susiel2.locationchat.SearchExistingActivity;
+import me.susiel2.locationchat.database.ParseOperations;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
@@ -53,7 +55,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());
-        viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()) + " members");
+        viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat.getObjectId())) + " members");
 
         if(context instanceof SearchExistingActivity){
             viewHolder.ivAddButton.setVisibility(View.VISIBLE);
@@ -98,6 +100,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             ivAddButton = itemView.findViewById(R.id.ivAddButton);
 
             itemView.setOnClickListener(this);
+            ivAddButton.setOnClickListener(this);
         }
 
         @Override
