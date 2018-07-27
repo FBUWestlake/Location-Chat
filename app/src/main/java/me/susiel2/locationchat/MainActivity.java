@@ -93,10 +93,6 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
 
-
-
-        relativeLayout = findViewById(R.id.relativeLayout);
-        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
     //test for spinner change here
         state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
