@@ -17,6 +17,7 @@ import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
@@ -27,11 +28,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private ArrayList<Message> mMessageList;
+    private List<Message> mMessageList;
     private Context context;
     ParseOperations parseOperations;
-
-    public MessageAdapter(ArrayList<Message> messages) {
+    public MessageAdapter(List<Message> messages) {
         mMessageList = messages;
     }
 
@@ -119,7 +119,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void bind(Message message) {
 
             messageText.setText(message.getContent());
-            nameText.setText(message.getCreatedBy().getString("name"));
+            //nameText.setText(message.getCreatedBy().getString("name"));
             timeText.setText(message.getCreatedAtString());
 
 //            Glide.with(context).load(message.getProfileImage())

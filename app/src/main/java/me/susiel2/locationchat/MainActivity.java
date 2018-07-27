@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
     //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
      //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
 
-    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona };
-    
     private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
     R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_district_of_columbia, R.drawable.ic_fl, R.drawable.ic_georgia,
             R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
