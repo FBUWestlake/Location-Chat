@@ -113,6 +113,7 @@ public class ChatActivity extends AppCompatActivity {
                     messages.add(parseOperations.createMessage(content, chatID));
                     mAdapter.notifyItemInserted(messages.size() - 1);
                     parseOperations.setMessagesToUnread(chatID);
+                    parseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chatID);
                     etMessage.setText(null);
                 }
             }

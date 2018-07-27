@@ -3,6 +3,7 @@ package me.susiel2.locationchat.database;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseObject;
 
 import me.susiel2.locationchat.model.Chat;

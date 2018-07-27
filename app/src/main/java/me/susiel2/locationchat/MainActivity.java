@@ -163,6 +163,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChatClicked(int position) {
                 Intent i = new Intent(MainActivity.this, ChatActivity.class);
+                if (!ParseOperations.isChatRead(chats.get(position).getObjectId(), ParseUser.getCurrentUser())) {
+                    Log.e("MainActivity", "setting this chat to read.");
+                    ParseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chats.get(position).getObjectId());
+                }
                 i.putExtra("chat", Parcels.wrap(chats.get(position)));
                 startActivity(i);
             }
@@ -187,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
     public void updateChats(){
         List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
         Log.e("MainActivity","Number of Chats : " + currentGroups.size());
+        chats.clear();
         for(int i = 0; i < currentGroups.size(); i++) {
             chats.add(currentGroups.get(i));
             Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
@@ -206,7 +211,13 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d("not inserted", "nono");
 //            }
             // TODO - refresh feed or manually get new chat and add it to the adapter
-            updateChats();
         }
+        updateChats();
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+        updateChats();
     }
 }
