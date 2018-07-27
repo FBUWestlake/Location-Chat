@@ -78,6 +78,7 @@ public class ChatActivity extends AppCompatActivity {
         ParseObject.registerSubclass(Message.class);
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId());
         chatID = chat.getIdString();
         //final Message chatMessage = new Message(chat.getDescription(), chat.getName(), chat.getCategory(), chat.getImageUrl());
 
@@ -87,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
         etMessage = (EditText) findViewById(R.id.edittext_chat);
         ivSendButton = (ImageView) findViewById(R.id.button_chat_send);
         ivLogo = (ImageView) findViewById(R.id.ivLogo);
+        ivLogo.setImageBitmap(chat.getImageBitmap());
         tvTitle = (TextView) findViewById(R.id.tvTitle);
 
         mManager = new LinearLayoutManager(this);
@@ -104,28 +106,21 @@ public class ChatActivity extends AppCompatActivity {
         ivSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO - send the message typed into etMessage
-                // TEST - adding a test message to the adapter
-//                messages.add(chatMessage);
-//                mAdapter.notifyDataSetChanged();
-                // END TEST
-
                 // Save message in parse.
                 String content = etMessage.getText().toString();
                 // TODO: need "get specific group" task to create message successfully
-                messages.add(parseOperations.createMessage(content, chatID));
-                mAdapter.notifyItemInserted(messages.size() - 1);
-                parseOperations.setMessagesToUnread(chatID);
-                etMessage.setText(null);
+                if(!content.equals("")) {
+                    messages.add(parseOperations.createMessage(content, chatID));
+                    mAdapter.notifyItemInserted(messages.size() - 1);
+                    parseOperations.setMessagesToUnread(chatID);
+                    etMessage.setText(null);
+                }
             }
         });
 
         liveQuery();
 
         tvTitle.setText(chat.getName());
-        // TODO - set ivLogo to bitmap from chat image
-        Drawable logo = getResources().getDrawable(R.drawable.pepsi_logo);
-        ivLogo.setImageDrawable(logo);
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data2);
         gear = findViewById(R.id.iv_gear);

@@ -77,9 +77,25 @@ public class ParseOperations {
         return null;
     }
 
+    public static boolean isChatRead(String groupId, ParseUser user){
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("group", getGroupFromId(groupId));
+        query.whereEqualTo("user", user);
+        List<UsersGroups> result;
+        try {
+            result = query.find();
+            for (int i = 0; i < result.size(); i++) {
+                return result.get(i).isRead();
+            }
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public static void setMessagesToUnread(String currentGroupObjectID) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-        query.whereEqualTo("groupId", currentGroupObjectID);
+        query.whereEqualTo("group", currentGroupObjectID);
         List<UsersGroups> result;
         try {
             result = query.find();
