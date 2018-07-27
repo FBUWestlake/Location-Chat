@@ -137,17 +137,36 @@ public class ParseOperations {
     public static List<Chat> getGroupsUserIsIn(ParseUser currentUser){
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", currentUser);
-        query.include("group");
-        ArrayList<Chat> groups = new ArrayList<Chat>();
+        final ArrayList<String> groupIds = new ArrayList<>();
+
         try {
             List<UsersGroups> results = query.find();
             for(int i = 0; i < results.size(); i++){
-                groups.add(results.get(i).getChat());
+                groupIds.add(results.get(i).getChat().getIdString());
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        ArrayList<Chat> groups = new ArrayList<Chat>();
+        for(int i = 0; i < groupIds.size(); i++){
+            groups.add(getGroupFromId(groupIds.get(i)));
+        }
         return groups;
+    }
+
+    public static Chat getGroupFromId(String objectId){
+
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereEqualTo("objectId", objectId);
+        try {
+            List<Chat> result = query.find();
+            return result.get(0);
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 
 

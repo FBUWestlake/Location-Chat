@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -59,28 +60,6 @@ public class MainActivity extends AppCompatActivity {
      //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
 
     private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona };
-    
-    /*
-    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
-    R.drawable.ic_arkansas, R.drawable.ic_california, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_florida,
-            R.drawable.ic_georgia, R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_illinois, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
-            R.drawable.ic_kentucky, R.drawable.ic_louisiana, R.drawable.ic_maine, R.drawable.ic_maryland, R.drawable.ic_massachusetts, R.drawable.ic_michigan,
-            R.drawable.ic_mn, R.drawable.ic_mississippi, R.drawable.ic_missouri, R.drawable.ic_montana, R.drawable.ic_nebraska, R.drawable.ic_nv,
-            R.drawable.ic_new_hampshire, R.drawable.ic_new_jersey, R.drawable.ic_new_mexico, R.drawable.ic_new_york, R.drawable.ic_nc, R.drawable.ic_north_dakota,
-            R.drawable.ic_ohio, R.drawable.ic_oklahoma, R.drawable.ic_oregon, R.drawable.ic_pennsylvania, R.drawable.ic_ri, R.drawable.ic_south_carolina,
-            R.drawable.ic_south_dakota, R.drawable.ic_tn, R.drawable.ic_texas, R.drawable.ic_utah, R.drawable.ic_vermont, R.drawable.ic_va, R.drawable.ic_washington,
-            R.drawable.ic_west_virginia, R.drawable.ic_wisconsin, R.drawable.ic_wyoming
-    };
-    */
-
-//    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
-//            "We love Mexican food!", "food", 400);
-//
-//    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://cdn.mos.cms.futurecdn.net/oZr3irkSDKpSSjmFkpgP6K.jpg",
-//            "For those who play and enjoy acoustic guitar", "music", 200);
-//
-//    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
-//            "outdoor climbing enthusiasts!", "outdoors", 350);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,53 +67,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-
-        List<Chat> results = ParseOperations.getGroupsBySearch("original");
-        Log.d("MainActivity", results.get(0).getObjectId());
-        Log.d("MainActivity", "Num of members in this group: " + ParseOperations.getNumberOfMembersInGroup(results.get(0).getObjectId()));
-
         usersDB = new DatabaseHelper(this);
 
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
 
-        //state_spinner.setSelection(4);
-
-
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
-
-        //String myValue = "MT";
-    //state_spinner.setSelection(getIndex(state_spinner, myValue));
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.select_state, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //state_spinner.setAdapter(adapter);
 
         if (add != null) {
             spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
         }
-//second test here
-        //ImageView imageview=(ImageView) findViewById(getResources().getIdentifier("imgView_"+i, "id", getPackageName()));
-        //imageview.setImageResource(getResources().getIdentifier("img_"+i, "drawable",  getPackageName()));
 
-
-        //test here
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
-
-    /*
-    //private method of your class
-    private int getIndex(Spinner spinner, String myString){
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
-                return i;
-            }
-        }
-        return 0;
-    }
-*/
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
@@ -196,12 +144,7 @@ public class MainActivity extends AppCompatActivity {
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));
 
-//        chats.add(mexicanFood);
-//        chats.add(acousticGuitar);
-//        chats.add(outdoorClimbing);
-//        chatAdapter.notifyDataSetChanged();
-        // TODO - populate list of chats that user is a part of, based on the user's location
-
+        updateChats();
 
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
         btn_maps.setOnClickListener(new View.OnClickListener() {
@@ -212,37 +155,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        dl.addDrawerListener(t);
-//        t.syncState();
-//
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        nv = findViewById(R.id.nv);
-//        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//                switch(id)
-//                {
-//                    case R.id.nav_help:
-//                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_about:
-//                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_log_out:
-//                        Toast.makeText(MainActivity.this, "My Cart",Toast.LENGTH_SHORT).show();
-//                    default:
-//                        return true;
-//                }
-//            }
-//        });
-
-
-
-
     }
 
-
-
+    public void updateChats(){
+        List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
+        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
+        for(int i = 0; i < currentGroups.size(); i++) {
+            chats.add(currentGroups.get(i));
+            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
+        }
+        chatAdapter.notifyDataSetChanged();
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 25 && requestCode == 25) {
