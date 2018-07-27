@@ -90,9 +90,9 @@ public class ChatActivity extends AppCompatActivity {
 
         mManager = new LinearLayoutManager(this);
         mManager.setReverseLayout(true);
-        mAdapter = new MessageAdapter(messages);
-        rvMessages.setAdapter(mAdapter);
-        rvMessages.setLayoutManager(mManager);
+//        mAdapter = new MessageAdapter(messages);
+//        rvMessages.setAdapter(mAdapter);
+//        rvMessages.setLayoutManager(mManager);
         firstLoad = true;
 
         ParseObject.registerSubclass(Message.class);
@@ -112,7 +112,9 @@ public class ChatActivity extends AppCompatActivity {
                 // TODO: need "get specific group" task to create message successfully
                 parseOperations.createMessage(content, chatID);
                 parseOperations.setMessagesToUnread(chatID);
-                parseOperations.getGroupMessages(chatID);
+                mAdapter = new MessageAdapter(parseOperations.getGroupMessages(chatID));
+                rvMessages.setAdapter(mAdapter);
+                rvMessages.setLayoutManager(mManager);
                 etMessage.setText(null);
             }
         });
