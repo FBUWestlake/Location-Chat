@@ -1,8 +1,10 @@
 package me.susiel2.locationchat.model;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -106,9 +108,13 @@ public class Chat extends ParseObject {
         this.members = members;
     }
 
-    public int getNumberOfMembers(){
-        // TODO - implement this
-        return 0;
+    public Bitmap getImageBitmap(){
+        try {
+            return BitmapFactory.decodeFile(getImage().getFile().getAbsolutePath());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static class Query extends ParseQuery<Chat> {

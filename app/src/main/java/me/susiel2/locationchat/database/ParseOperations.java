@@ -77,9 +77,25 @@ public class ParseOperations {
         return null;
     }
 
+    public static boolean isChatRead(String groupId, ParseUser user){
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("group", getGroupFromId(groupId));
+        query.whereEqualTo("user", user);
+        List<UsersGroups> result;
+        try {
+            result = query.find();
+            for (int i = 0; i < result.size(); i++) {
+                return result.get(i).isRead();
+            }
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     public static void setMessagesToUnread(String currentGroupObjectID) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-        query.whereEqualTo("groupId", currentGroupObjectID);
+        query.whereEqualTo("group", currentGroupObjectID);
         List<UsersGroups> result;
         try {
             result = query.find();
@@ -178,6 +194,19 @@ public class ParseOperations {
         try {
             List<ParseUser> result = query.find();
             return result.get(0).getString("location");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String getUsersName(ParseUser parseUser){
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", parseUser.getObjectId());
+        try {
+            List<ParseUser> result = query.find();
+            return result.get(0).getString("name");
         } catch(ParseException e) {
             e.printStackTrace();
         }

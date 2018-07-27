@@ -3,6 +3,7 @@ package me.susiel2.locationchat.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
@@ -15,15 +16,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.susiel2.locationchat.MainActivity;
 import me.susiel2.locationchat.R;
 import me.susiel2.locationchat.SearchExistingActivity;
+import me.susiel2.locationchat.database.ParseOperations;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
@@ -53,7 +58,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());
-        viewHolder.tvNumberOfMembers.setText(String.valueOf(chat.getNumberOfMembers()) + " members");
+        if(context instanceof MainActivity && !ParseOperations.isChatRead(chat.getObjectId(), ParseUser.getCurrentUser()))
+            viewHolder.tv_chat_name.setTypeface(null, Typeface.BOLD);
+        viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat.getObjectId())) + " members");
 
         if(context instanceof SearchExistingActivity){
             viewHolder.ivAddButton.setVisibility(View.VISIBLE);
@@ -98,6 +105,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             ivAddButton = itemView.findViewById(R.id.ivAddButton);
 
             itemView.setOnClickListener(this);
+            ivAddButton.setOnClickListener(this);
         }
 
         @Override
