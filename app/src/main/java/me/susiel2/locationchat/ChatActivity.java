@@ -123,8 +123,8 @@ public class ChatActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mAdapter.notifyDataSetChanged();
-                                rvMessages.scrollToPosition(0);
+                                mAdapter.notifyItemInserted(messages.size() - 1);
+                                rvMessages.scrollToPosition(messages.size() - 1);
                             }
                         });
                     }
@@ -138,12 +138,6 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Save message in parse.
                 String content = etMessage.getText().toString();
-                // TODO: need "get specific group" task to create message successfully
-                messages.add(parseOperations.createMessage(content, chatID));
-                mAdapter.notifyItemInserted(messages.size() - 1);
-                rvMessages.scrollToPosition(messages.size() - 1);
-                parseOperations.setMessagesToUnread(chatID);
-                etMessage.setText(null);
                 if(!content.equals("")) {
                     messages.add(parseOperations.createMessage(content, chatID));
                     mAdapter.notifyItemInserted(messages.size() - 1);
