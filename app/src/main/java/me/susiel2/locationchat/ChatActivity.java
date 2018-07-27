@@ -104,8 +104,10 @@ public class ChatActivity extends AppCompatActivity {
         firstLoad = true;
 
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+        Log.d("livequery", parseLiveQueryClient.toString());
 
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+        parseQuery.whereNotEqualTo("user", ParseUser.getCurrentUser().getObjectId());
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
         // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 
@@ -117,7 +119,8 @@ public class ChatActivity extends AppCompatActivity {
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
-                        messages.add(0, object);
+                        messages.add(object);
+                        Log.d("livequery", "added");
 
                         // RecyclerView updates need to be run on the UI thread
                         runOnUiThread(new Runnable() {
@@ -139,8 +142,7 @@ public class ChatActivity extends AppCompatActivity {
                 // Save message in parse.
                 String content = etMessage.getText().toString();
                 if(!content.equals("")) {
-                    messages.add(parseOperations.createMessage(content, chatID));
-                    mAdapter.notifyItemInserted(messages.size() - 1);
+                    parseOperations.createMessage(content, chatID);
                     parseOperations.setMessagesToUnread(chatID);
                     etMessage.setText(null);
                 }
@@ -180,35 +182,35 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-//    void refreshMessages() {
-//        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-//        // Configure limit and sort order
-//        query.setLimit(60);
-//
-//        // get the latest 50 messages, order will show up newest to oldest of this group
-//        query.orderByDescending("createdAt");
-//        // Execute query to fetch all messages from Parse asynchronously
-//        // This is equivalent to a SELECT query with SQL
-//        query.findInBackground(new FindCallback<Message>() {
-//            public void done(List<Message> messagesList, ParseException e) {
-//                if (e == null) {
-//                    messages.clear();
-//                    messages.addAll(messagesList);
-//                    mAdapter.notifyDataSetChanged(); // update adapter
-//                    // Scroll to the bottom of the list on initial load
-//                    if (firstLoad) {
-//                        rvMessages.scrollToPosition(0);
-//                        firstLoad = false;
-//                    }
-//                    Log.d("message", "messages loaded");
-//                    Log.d("message", String.valueOf(messages.size()));
-//                } else {
-//                    Log.e("message", "Error Loading Messages" + e);
-//                }
-//            }
-//        });
-//
-//    }
+    void refreshMessages() {
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        // Configure limit and sort order
+        query.setLimit(60);
+
+        // get the latest 50 messages, order will show up newest to oldest of this group
+        query.orderByDescending("createdAt");
+        // Execute query to fetch all messages from Parse asynchronously
+        // This is equivalent to a SELECT query with SQL
+        query.findInBackground(new FindCallback<Message>() {
+            public void done(List<Message> messagesList, ParseException e) {
+                if (e == null) {
+                    messages.clear();
+                    messages.addAll(messagesList);
+                    mAdapter.notifyDataSetChanged(); // update adapter
+                    // Scroll to the bottom of the list on initial load
+                    if (firstLoad) {
+                        rvMessages.scrollToPosition(0);
+                        firstLoad = false;
+                    }
+                    Log.d("message", "messages loaded");
+                    Log.d("message", String.valueOf(messages.size()));
+                } else {
+                    Log.e("message", "Error Loading Messages" + e);
+                }
+            }
+        });
+
+    }
 
 //    void liveQuery() {
 //        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();

@@ -20,16 +20,15 @@ public class ParseApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        ParseObject.registerSubclass(Chat.class);
+        ParseObject.registerSubclass(Message.class);
+        ParseObject.registerSubclass(UsersGroups.class);
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         // Can be Level.BASIC, Level.HEADERS, or Level.BODY
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
-
-
-        ParseObject.registerSubclass(Chat.class);
-        ParseObject.registerSubclass(Message.class);
-        ParseObject.registerSubclass(UsersGroups.class);
 
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("bounceId")
