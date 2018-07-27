@@ -21,6 +21,7 @@ import me.susiel2.locationchat.ChatActivity;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.UsersGroups;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.susiel2.locationchat.ChatActivity;
@@ -169,6 +170,19 @@ public class ParseOperations {
 
     }
 
+    public static String getUserLocation(ParseUser parseUser){
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", parseUser.getObjectId());
+        try {
+            List<ParseUser> result = query.find();
+            return result.get(0).getString("location");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     // Note that this method only returns groups whose location matches the location of the user
     public static List<Chat> getGroupsUserIsNotIn(ParseUser currentUser){
@@ -177,8 +191,10 @@ public class ParseOperations {
         for(int i = 0; i < userIsIn.size(); i++)
             groupNames.add(userIsIn.get(i).getName());
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.whereNotContainedIn("name", groupNames);
-        query.whereEqualTo("location", currentUser.getString("location"));
+        query.whereNotContainedIn("name", Arrays.asList(groupNames));
+        String location = getUserLocation(currentUser);
+        Log.e("ParseOperations", location);
+        query.whereEqualTo("location", location);
         List<Chat> results = new ArrayList<>();
         try {
             results = query.find();
