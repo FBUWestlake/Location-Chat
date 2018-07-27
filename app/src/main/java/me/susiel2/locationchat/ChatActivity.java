@@ -58,6 +58,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private Button gear;
     private NavigationView nv2;
+    private String chatID;
     //final String[] data2 = {"Chat Group Name", "Leave Group"};
     final String[] data2 = {"Leave Group"};    
     public DrawerLayout drawer2;
@@ -76,6 +77,7 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        chatID = chat.getIdString();
         //final Message chatMessage = new Message(chat.getDescription(), chat.getName(), chat.getCategory(), chat.getImageUrl());
 
         messages = new ArrayList<Message>();
@@ -108,8 +110,9 @@ public class ChatActivity extends AppCompatActivity {
                 // Save message in parse.
                 String content = etMessage.getText().toString();
                 // TODO: need "get specific group" task to create message successfully
-                parseOperations.createMessage(content, "objectId");
-                refreshMessages();
+                parseOperations.createMessage(content, chatID);
+                parseOperations.setMessagesToUnread(chatID);
+                parseOperations.getGroupMessages(chatID);
                 etMessage.setText(null);
             }
         });
@@ -152,35 +155,35 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    void refreshMessages() {
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        // Configure limit and sort order
-        query.setLimit(60);
-
-        // get the latest 50 messages, order will show up newest to oldest of this group
-        query.orderByDescending("createdAt");
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
-        query.findInBackground(new FindCallback<Message>() {
-            public void done(List<Message> messagesList, ParseException e) {
-                if (e == null) {
-                    messages.clear();
-                    messages.addAll(messagesList);
-                    mAdapter.notifyDataSetChanged(); // update adapter
-                    // Scroll to the bottom of the list on initial load
-                    if (firstLoad) {
-                        rvMessages.scrollToPosition(0);
-                        firstLoad = false;
-                    }
-                    Log.d("message", "messages loaded");
-                    Log.d("message", String.valueOf(messages.size()));
-                } else {
-                    Log.e("message", "Error Loading Messages" + e);
-                }
-            }
-        });
-
-    }
+//    void refreshMessages() {
+//        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//        // Configure limit and sort order
+//        query.setLimit(60);
+//
+//        // get the latest 50 messages, order will show up newest to oldest of this group
+//        query.orderByDescending("createdAt");
+//        // Execute query to fetch all messages from Parse asynchronously
+//        // This is equivalent to a SELECT query with SQL
+//        query.findInBackground(new FindCallback<Message>() {
+//            public void done(List<Message> messagesList, ParseException e) {
+//                if (e == null) {
+//                    messages.clear();
+//                    messages.addAll(messagesList);
+//                    mAdapter.notifyDataSetChanged(); // update adapter
+//                    // Scroll to the bottom of the list on initial load
+//                    if (firstLoad) {
+//                        rvMessages.scrollToPosition(0);
+//                        firstLoad = false;
+//                    }
+//                    Log.d("message", "messages loaded");
+//                    Log.d("message", String.valueOf(messages.size()));
+//                } else {
+//                    Log.e("message", "Error Loading Messages" + e);
+//                }
+//            }
+//        });
+//
+//    }
 
     void liveQuery() {
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();

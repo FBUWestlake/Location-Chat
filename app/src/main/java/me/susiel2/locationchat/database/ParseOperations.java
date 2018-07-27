@@ -216,6 +216,21 @@ public class ParseOperations {
 
     public static void changeUserLocation(ParseUser user, String location) {
         user.put("location", location);
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("user", user);
+        try {
+            List<UsersGroups> usersGroups = query.find();
+            List<UsersGroups> newGroups = null;
+            for (int i = 0; i < usersGroups.size(); i++) {
+                String groupId = usersGroups.get(i).getChat().getIdString();
+                String groupName = usersGroups.get(i).getChat().getName();
+                leaveGroup(user, groupId);
+                addUserToGroup(user, getGroupByNameLocation(groupName, location).getIdString());
+            }
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
@@ -274,6 +289,18 @@ public class ParseOperations {
         }
 
         return new ArrayList<Chat>();
+    }
+
+    public static Chat getGroupByNameLocation(String chatName, String location) {
+        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+        query.whereFullText("name", chatName);
+        query.whereFullText("location", location);
+        try {
+            return query.find().get(0);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static List<Chat> getGroupsBySearchAndCategory(String searchParam, String category) {
