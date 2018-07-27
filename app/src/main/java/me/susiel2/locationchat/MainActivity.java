@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper usersDB;
     private int spinnerPosition;
     public RelativeLayout relativeLayout;
+    private Button logoutButton;
+
 
     //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
      //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
@@ -93,10 +95,6 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
 
-
-
-        relativeLayout = findViewById(R.id.relativeLayout);
-        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
     //test for spinner change here
         state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -114,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
         drawer = findViewById(R.id.activity_main);
+        logoutButton = findViewById(R.id.logoutBtn);
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
@@ -184,6 +184,14 @@ public class MainActivity extends AppCompatActivity {
                 final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
                 startActivity(intent);
             }
+        });
+        
+         logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);            }
         });
 
     }
