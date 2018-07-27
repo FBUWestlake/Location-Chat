@@ -163,6 +163,7 @@ public class ParseOperations {
         List<Chat> results = new ArrayList<>();
         try {
             results = query.find();
+            Log.d("parseoperations", results.get(0).getName());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -198,13 +199,14 @@ public class ParseOperations {
     public static void changeUserLocation(ParseUser user, String location) {
         user.put("location", location);
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.include("group");
         query.whereEqualTo("user", user);
         try {
             List<UsersGroups> usersGroups = query.find();
-            List<UsersGroups> newGroups = null;
             for (int i = 0; i < usersGroups.size(); i++) {
                 String groupId = usersGroups.get(i).getChat().getIdString();
                 String groupName = usersGroups.get(i).getChat().getName();
+                Log.d("works", groupName);
                 leaveGroup(user, groupId);
                 addUserToGroup(user, getGroupByNameLocation(groupName, location).getIdString());
             }
