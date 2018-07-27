@@ -49,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView rvMessages;
     MessageAdapter mAdapter;
     LinearLayoutManager mManager;
-    ArrayList<Message> messages;
+    List<Message> messages;
     EditText etMessage;
     ImageView ivSendButton;
     ImageView ivLogo;
@@ -75,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ParseObject.registerSubclass(Message.class);
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
         chatID = chat.getIdString();
@@ -89,13 +90,15 @@ public class ChatActivity extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tvTitle);
 
         mManager = new LinearLayoutManager(this);
-        mManager.setReverseLayout(true);
+        messages = parseOperations.getGroupMessages(chatID);
+        mAdapter = new MessageAdapter(messages);
+        rvMessages.setAdapter(mAdapter);
+        rvMessages.setLayoutManager(mManager);
+
 //        mAdapter = new MessageAdapter(messages);
 //        rvMessages.setAdapter(mAdapter);
 //        rvMessages.setLayoutManager(mManager);
         firstLoad = true;
-
-        ParseObject.registerSubclass(Message.class);
 
 
         ivSendButton.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +113,9 @@ public class ChatActivity extends AppCompatActivity {
                 // Save message in parse.
                 String content = etMessage.getText().toString();
                 // TODO: need "get specific group" task to create message successfully
-                parseOperations.createMessage(content, chatID);
+                messages.add(parseOperations.createMessage(content, chatID));
+                mAdapter.notifyItemInserted(messages.size() - 1);
                 parseOperations.setMessagesToUnread(chatID);
-                mAdapter = new MessageAdapter(parseOperations.getGroupMessages(chatID));
-                rvMessages.setAdapter(mAdapter);
-                rvMessages.setLayoutManager(mManager);
                 etMessage.setText(null);
             }
         });

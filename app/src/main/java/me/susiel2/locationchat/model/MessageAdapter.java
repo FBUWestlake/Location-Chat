@@ -44,7 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
 
-        if (message.getCreatedBy().equals(ParseUser.getCurrentUser())) {
+        if (message.getCreatedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;

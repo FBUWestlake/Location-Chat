@@ -32,12 +32,13 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public static void createMessage(String content, String groupObjectID) {
+    public static Message createMessage(String content, String groupObjectID) {
         Message newMessage = new Message();
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
         query.whereEqualTo("objectId", groupObjectID);
+        query.addDescendingOrder("createdAt");
         try {
             List<Chat> result = query.find();
             newMessage.setChat(result.get(0));
@@ -56,6 +57,7 @@ public class ParseOperations {
         } catch(ParseException e) {
             e.printStackTrace();
         }
+        return newMessage;
     }
 
     public static List<Message> getGroupMessages(String currentGroupObjectID) {
