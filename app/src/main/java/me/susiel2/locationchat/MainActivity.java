@@ -59,11 +59,10 @@ public class MainActivity extends AppCompatActivity {
     //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
      //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
 
-    //private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona };
-    
+    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona };
     
     private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
-    R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_fl, R.drawable.ic_georgia,
+    R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_district_of_columbia, R.drawable.ic_fl, R.drawable.ic_georgia,
             R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
             R.drawable.ic_kentucky, R.drawable.ic_louisiana, R.drawable.ic_maine, R.drawable.ic_maryland, R.drawable.ic_massachusetts, R.drawable.ic_michigan,
             R.drawable.ic_mn, R.drawable.ic_mississippi, R.drawable.ic_missouri, R.drawable.ic_montana, R.drawable.ic_nebraska, R.drawable.ic_nv,
@@ -72,16 +71,6 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_south_dakota, R.drawable.ic_tn, R.drawable.ic_texas, R.drawable.ic_utah, R.drawable.ic_vermont, R.drawable.ic_va, R.drawable.ic_washington,
             R.drawable.ic_west_virginia, R.drawable.ic_wisconsin, R.drawable.ic_wyoming
     };
-    
-
-//    Chat mexicanFood = new Chat("Mexican Food", "https://leaf.nutrisystem.com/wp-content/uploads/2017/05/mexican.jpg",
-//            "We love Mexican food!", "food", 400);
-//
-//    Chat acousticGuitar = new Chat("Acoustic Guitar", "https://cdn.mos.cms.futurecdn.net/oZr3irkSDKpSSjmFkpgP6K.jpg",
-//            "For those who play and enjoy acoustic guitar", "music", 200);
-//
-//    Chat outdoorClimbing = new Chat("Outdoor Climbing", "http://www.cwexpeditions.net/includes/pics/gallery/1097.jpg",
-//            "outdoor climbing enthusiasts!", "outdoors", 350);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,53 +78,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-
-        List<Chat> results = ParseOperations.getGroupsBySearch("original");
-        Log.d("MainActivity", results.get(0).getObjectId());
-        Log.d("MainActivity", "Num of members in this group: " + ParseOperations.getNumberOfMembersInGroup(results.get(0).getObjectId()));
-
         usersDB = new DatabaseHelper(this);
 
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
 
-        //state_spinner.setSelection(4);
-
-
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
-
-        //String myValue = "MT";
-    //state_spinner.setSelection(getIndex(state_spinner, myValue));
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.select_state, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //state_spinner.setAdapter(adapter);
 
         if (add != null) {
             spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
         }
-//second test here
-        //ImageView imageview=(ImageView) findViewById(getResources().getIdentifier("imgView_"+i, "id", getPackageName()));
-        //imageview.setImageResource(getResources().getIdentifier("img_"+i, "drawable",  getPackageName()));
 
-
-        //test here
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
 
-    /*
-    //private method of your class
-    private int getIndex(Spinner spinner, String myString){
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
-                return i;
+
+
+        relativeLayout = findViewById(R.id.relativeLayout);
+        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
+    //test for spinner change here
+        state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                relativeLayout.setBackgroundResource(stateFlags[position]);
             }
-        }
-        return 0;
-    }
-*/
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
@@ -197,12 +173,7 @@ public class MainActivity extends AppCompatActivity {
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));
 
-//        chats.add(mexicanFood);
-//        chats.add(acousticGuitar);
-//        chats.add(outdoorClimbing);
-//        chatAdapter.notifyDataSetChanged();
-        // TODO - populate list of chats that user is a part of, based on the user's location
-
+        updateChats();
 
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
         btn_maps.setOnClickListener(new View.OnClickListener() {
@@ -213,37 +184,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        dl.addDrawerListener(t);
-//        t.syncState();
-//
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-//        nv = findViewById(R.id.nv);
-//        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//                switch(id)
-//                {
-//                    case R.id.nav_help:
-//                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_about:
-//                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();
-//                    case R.id.nav_log_out:
-//                        Toast.makeText(MainActivity.this, "My Cart",Toast.LENGTH_SHORT).show();
-//                    default:
-//                        return true;
-//                }
-//            }
-//        });
-
-
-
-
     }
 
-
-
+    public void updateChats(){
+        List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
+        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
+        for(int i = 0; i < currentGroups.size(); i++) {
+            chats.add(currentGroups.get(i));
+            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
+        }
+        chatAdapter.notifyDataSetChanged();
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 25 && requestCode == 25) {
