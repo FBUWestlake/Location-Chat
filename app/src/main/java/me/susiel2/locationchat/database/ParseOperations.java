@@ -383,13 +383,12 @@ public class ParseOperations {
     public static void setMessageAsReadInGroup(ParseUser user, String groupId) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
-
-        ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
-        chatQuery.whereEqualTo("objectId", groupId);
+        query.whereEqualTo("group", getGroupFromId(groupId));
+        query.include("read");
         try {
-            Chat group = chatQuery.find().get(0);
-            query.whereEqualTo("group", group);
-            query.find().get(0).setRead(true);
+            List<UsersGroups> results = query.find();
+            Log.e("ParseOperations", "messageAsRead ID: " + results.get(0).getObjectId());
+            results.get(0).setRead(true);
         } catch(ParseException e) {
             e.printStackTrace();
         }

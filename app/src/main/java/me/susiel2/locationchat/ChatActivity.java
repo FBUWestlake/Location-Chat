@@ -144,6 +144,7 @@ public class ChatActivity extends AppCompatActivity {
                 if(!content.equals("")) {
                     parseOperations.createMessage(content, chatID);
                     parseOperations.setMessagesToUnread(chatID);
+                    parseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chatID);
                     etMessage.setText(null);
                 }
             }
