@@ -22,8 +22,10 @@ import android.widget.Spinner;
 
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseLiveQueryClient;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
 
@@ -34,6 +36,8 @@ import me.susiel2.locationchat.database.DatabaseHelper;
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
+import me.susiel2.locationchat.model.Message;
+import me.susiel2.locationchat.model.UsersGroups;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -115,6 +119,29 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
 
+        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
+        ParseQuery<UsersGroups> parseQuery = ParseQuery.getQuery(UsersGroups.class);
+        parseQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+        // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
+        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+
+        // Connect to Parse server
+        SubscriptionHandling<UsersGroups> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+        // Listen for CREATE events
+        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
+                SubscriptionHandling.HandleEventCallback<UsersGroups>() {
+                    @Override
+                    public void onEvent(ParseQuery<UsersGroups> query, UsersGroups object) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateChats();
+                            }
+                        });
+                    }
+                });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
@@ -208,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
         chatAdapter.notifyDataSetChanged();
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        updateChats();
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        updateChats();
+    }
 
 }
