@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private int spinnerPosition;
     public RelativeLayout relativeLayout;
     private Button logoutButton;
+    SwipeRefreshLayout swipeContainer;
+
 
 
     //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
@@ -118,30 +121,6 @@ public class MainActivity extends AppCompatActivity {
         plusButton = findViewById(R.id.iv_addChat);
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
-
-        ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
-
-        ParseQuery<UsersGroups> parseQuery = ParseQuery.getQuery(UsersGroups.class);
-        parseQuery.whereEqualTo("user", ParseUser.getCurrentUser());
-        // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
-        // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
-
-        // Connect to Parse server
-        SubscriptionHandling<UsersGroups> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
-
-        // Listen for CREATE events
-        subscriptionHandling.handleEvent(SubscriptionHandling.Event.UPDATE, new
-                SubscriptionHandling.HandleEventCallback<UsersGroups>() {
-                    @Override
-                    public void onEvent(ParseQuery<UsersGroups> query, UsersGroups object) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateChats();
-                            }
-                        });
-                    }
-                });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
@@ -203,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));
 
-        updateChats();
 
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
         btn_maps.setOnClickListener(new View.OnClickListener() {
@@ -222,6 +200,25 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);            }
         });
 
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                updateChats();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        updateChats();
+
+
     }
 
     public void updateChats(){
@@ -233,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
         }
         chatAdapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
     }
 
     @Override

@@ -1,9 +1,12 @@
 package me.susiel2.locationchat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,15 +66,35 @@ public class LoginActivity extends AppCompatActivity {
                 signUp(phoneNumber, password);
             }
         });
+    }
+    
+    private void openDialog(){
+        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+        View subView = inflater.inflate(R.layout.dialog_layout, null);
+        final EditText subEditText = (EditText)subView.findViewById(R.id.dialogEditText);
 
-//the sign up button doesnt to anything in our app b/c we're building the MVP
-        /*signUpBtn.setOnClickListener(new View.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please Enter Your Display Name");
+        builder.setMessage("You cannot change this later.");
+        builder.setView(subView);
+        AlertDialog alertDialog = builder.create();
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                final Intent i = new Intent(LoginActivity.this, CreateAccountActivity.class);
-                startActivity(i);
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO - Sophia I'm not sure what this is supposed to be but textInfo doesn't exist and is causing compilation to fail
+//                textInfo.setText(subEditText.getText().toString());
             }
-        });*/
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(LoginActivity.this, "Cancel", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.show();
     }
 
     private void login(String phoneNumber, String password) {
