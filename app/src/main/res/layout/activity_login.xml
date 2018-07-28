@@ -57,6 +57,13 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+        
         <Button
             android:id="@+id/login_btn"
             style="@style/Widget.AppCompat.Button.Colored"
