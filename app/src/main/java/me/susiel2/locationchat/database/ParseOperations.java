@@ -96,7 +96,6 @@ public class ParseOperations {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
         chatQuery.whereEqualTo("objectId", currentGroupObjectID);
-        List<Chat> result;
         List<UsersGroups> result = null;
         try {
             query.whereEqualTo("group", chatQuery.find().get(0));
