@@ -20,6 +20,11 @@
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SwitchCompatTheme" >
+        <item name="colorControlActivated">@android:color/holo_green_dark</item>
+            <item name="android:thumb">@drawable/notif_switch_thumb</item>
+    </style>
+
     <style name="SwitchCompatStyle" >
         <item name="android:thumb">@drawable/notif_switch_thumb</item>
         <item name="trackTint">@android:color/holo_green_dark</item>
