@@ -1,9 +1,12 @@
 package me.susiel2.locationchat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,7 +82,8 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                textInfo.setText(subEditText.getText().toString());
+                // TODO - Sophia I'm not sure what this is supposed to be but textInfo doesn't exist and is causing compilation to fail
+//                textInfo.setText(subEditText.getText().toString());
             }
         });
 
