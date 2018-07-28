@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
         }
         chatAdapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
