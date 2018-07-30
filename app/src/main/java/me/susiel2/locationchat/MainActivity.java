@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logoutBtn);
         etSearchMain = findViewById(R.id.etSearchMain);
         
+        display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
         display_name.setText(getUsersName(currentUser));
 
