@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     private Button logoutButton;
     SwipeRefreshLayout swipeContainer;
     TextView display_name;
+    private Button deleteAccountButton;
+
 
 
 
@@ -134,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
         etSearchMain = findViewById(R.id.etSearchMain);
+        deleteAccountButton = findViewById(R.id.deleteAccountBtn);
+
         
         display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -238,6 +242,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);            }
+        });
+        
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.getCurrentUser().deleteInBackground();
+                ParseUser.logOutInBackground();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);            }
         });
