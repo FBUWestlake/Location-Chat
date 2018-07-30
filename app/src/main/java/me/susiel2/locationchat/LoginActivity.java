@@ -86,8 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO - Sophia I'm not sure what this is supposed to be but textInfo doesn't exist and is causing compilation to fail
-//                textInfo.setText(subEditText.getText().toString());
+                textInfo.setText(subEditText.getText().toString());
             }
         });
 
