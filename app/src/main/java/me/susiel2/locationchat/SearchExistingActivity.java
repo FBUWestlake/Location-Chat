@@ -2,6 +2,7 @@ package me.susiel2.locationchat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,42 +93,21 @@ public class SearchExistingActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                ArrayList<Chat> tempList = new ArrayList<Chat>();
-                for(int i = 0; i < masterList.size(); i++){
-                    if((categorySpinner.getSelectedItem().toString().equals("All Categories") || masterList.get(i).getCategory().equals(categorySpinner.getSelectedItem().toString())) &&
-                            masterList.get(i).getName().toUpperCase().contains(etSearch.getText().toString().toUpperCase()))
-                        tempList.add(masterList.get(i));
-                }
-                if(!tempList.equals(chats)) {
-                    Log.e("SearchExistingActivity", "modifying chat list");
-                    chats.clear();
-                    for(int i = 0; i < tempList.size(); i++)
-                        chats.add(tempList.get(i));
-                    adapter.notifyDataSetChanged();
-                }
-                else
-                    Log.e("SearchExistingActivity", "no need for chat list modification");
+                final String beforeText = etSearch.getText().toString();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        if(beforeText.equals(etSearch.getText().toString()))
+                            updateChatsBySearchAndCategory();
+                    }
+                }, 300);
             }
         });
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                ArrayList<Chat> tempList = new ArrayList<Chat>();
-                for(int i = 0; i < masterList.size(); i++){
-                    if((categorySpinner.getSelectedItem().toString().equals("All Categories") || masterList.get(i).getCategory().equals(categorySpinner.getSelectedItem().toString())) &&
-                            masterList.get(i).getName().toUpperCase().contains(etSearch.getText().toString().toUpperCase()))
-                        tempList.add(masterList.get(i));
-                }
-                if(!tempList.equals(chats)) {
-                    Log.e("SearchExistingActivity", "modifying chat list");
-                    chats.clear();
-                    for(int i = 0; i < tempList.size(); i++)
-                        chats.add(tempList.get(i));
-                    adapter.notifyDataSetChanged();
-                }
-                else
-                    Log.e("SearchExistingActivity", "no need for chat list modification");
+                updateChatsBySearchAndCategory();
             }
 
             @Override
@@ -147,19 +127,37 @@ public class SearchExistingActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     public void updateChatsUserIsNotIn(){
         List<Chat> currentGroups = ParseOperations.getGroupsUserIsNotIn(ParseUser.getCurrentUser());
         Log.e("MainActivity","Number of Chats : " + currentGroups.size());
+        chats.clear();
+        masterList.clear();
         for(int i = 0; i < currentGroups.size(); i++) {
             chats.add(currentGroups.get(i));
             masterList.add(currentGroups.get(i));
             Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
         }
         adapter.notifyDataSetChanged();
+    }
+
+    public void updateChatsBySearchAndCategory(){
+        ArrayList<Chat> tempList = new ArrayList<Chat>();
+        for(int i = 0; i < masterList.size(); i++){
+            if((categorySpinner.getSelectedItem().toString().equals("All Categories") || masterList.get(i).getCategory().equals(categorySpinner.getSelectedItem().toString())) &&
+                    masterList.get(i).getName().toUpperCase().contains(etSearch.getText().toString().toUpperCase()))
+                tempList.add(masterList.get(i));
+        }
+        if(!tempList.equals(chats)) {
+            Log.e("SearchExistingActivity", "modifying chat list");
+            chats.clear();
+            for(int i = 0; i < tempList.size(); i++)
+                chats.add(tempList.get(i));
+            adapter.notifyDataSetChanged();
+        }
+        else
+            Log.e("SearchExistingActivity", "no need for chat list modification");
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
