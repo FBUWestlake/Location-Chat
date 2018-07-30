@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -25,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordInput;
     private Button loginBtn;
     private Button signUpBtn;
+    TextView textInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password_et);
         loginBtn = findViewById(R.id.login_btn);
         signUpBtn = findViewById(R.id.signUp_btn);
+        textInfo = (TextView)findViewById(R.id.info);
+
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String phoneNumber = phoneNumberInput.getText().toString();
                 final String password = passwordInput.getText().toString();
+
+                openDialog();
 
                 signUp(phoneNumber, password);
             }
@@ -82,8 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO - Sophia I'm not sure what this is supposed to be but textInfo doesn't exist and is causing compilation to fail
-//                textInfo.setText(subEditText.getText().toString());
+                textInfo.setText(subEditText.getText().toString());
             }
         });
 
