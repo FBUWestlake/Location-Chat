@@ -68,6 +68,8 @@ public class LoginActivity extends AppCompatActivity {
                 final String phoneNumber = phoneNumberInput.getText().toString();
                 final String password = passwordInput.getText().toString();
 
+                openDialog();
+
                 signUp(phoneNumber, password);
             }
         });
