@@ -35,6 +35,7 @@ public class ParseApp extends Application {
                 .clientKey("bounceKey")
                 .server("http://bounce-fbu.herokuapp.com/parse")
                 .build();
+        Parse.enableLocalDatastore(this);
         Parse.initialize(configuration);
     }
 
