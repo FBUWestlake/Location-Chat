@@ -27,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private Button signUpBtn;
     TextView textInfo;
+    EditText subEditText;
+
 
 
     @Override
@@ -65,12 +67,11 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                final String phoneNumber = phoneNumberInput.getText().toString();
-                final String password = passwordInput.getText().toString();
+                //final String phoneNumber = phoneNumberInput.getText().toString();
+                //final String password = passwordInput.getText().toString();
 
                 openDialog();
 
-                signUp(phoneNumber, password);
             }
         });
     }
@@ -78,18 +79,28 @@ public class LoginActivity extends AppCompatActivity {
     private void openDialog(){
         LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
         View subView = inflater.inflate(R.layout.dialog_layout, null);
-        final EditText subEditText = (EditText)subView.findViewById(R.id.dialogEditText);
+        final EditText subEditText = (EditText) subView.findViewById(R.id.dialogEditText);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Your Display Name");
         builder.setMessage("You cannot change this later.");
         builder.setView(subView);
-        AlertDialog alertDialog = builder.create();
+        //AlertDialog alertDialog = builder.create();
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                textInfo.setText(subEditText.getText().toString());
+                //textInfo.setText(subEditText.getText().toString());
+
+                final String phoneNumber = phoneNumberInput.getText().toString();
+                final String password = passwordInput.getText().toString();
+                String name = subEditText.getText().toString();
+                signUp(phoneNumber, password, name);
+
+                dialog.dismiss();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -100,7 +111,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        AlertDialog alertDialog = builder.create();
         builder.show();
+
+//        final String phoneNumber = phoneNumberInput.getText().toString();
+//        final String password = passwordInput.getText().toString();
+//        String name = subEditText.getText().toString();
+//        signUp(phoneNumber, password, name);
+
     }
 
     private void login(String phoneNumber, String password) {
@@ -129,12 +147,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void signUp(String phoneNumber, String password) {
+    private void signUp(String phoneNumber, String password, String name) {
         // Create the ParseUser
         ParseUser user = new ParseUser();
         // Set core properties
         user.setUsername(phoneNumber);
         user.setPassword(password);
+        user.put("name", name);
 
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {
