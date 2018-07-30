@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         etSearchMain = findViewById(R.id.etSearchMain);
         
         ParseUser currentUser = ParseUser.getCurrentUser();
+        display_name = findViewById(R.id.display_name);
         display_name.setText(getUsersName(currentUser));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
