@@ -73,7 +73,7 @@
             android:layout_marginTop="44dp"
             android:background="@drawable/roundshapebutton"
             android:stateListAnimator="@null"
-            android:text="Log in"
+            android:text="Log In"
             android:layout_marginBottom="16dp"/>
 
         <Button
@@ -83,7 +83,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/roundshapebutton"
-            android:text="Don't have an account? Sign up."
+            android:text="Register"
             android:textColor="@android:color/white" />
 
     </LinearLayout>
