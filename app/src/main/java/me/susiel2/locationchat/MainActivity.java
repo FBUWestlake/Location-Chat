@@ -218,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
 
         updateChats();
 
-
     }
 
     public void updateChats(){

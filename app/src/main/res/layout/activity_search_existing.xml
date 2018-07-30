@@ -27,7 +27,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/appName"
+                    android:id="@+id/etSearch"
                     android:layout_width="350dp"
                     android:layout_height="56dp"
                     android:layout_alignParentTop="true"
