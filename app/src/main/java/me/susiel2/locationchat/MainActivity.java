@@ -33,6 +33,7 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,8 @@ import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
+import static me.susiel2.locationchat.database.ParseOperations.getUsersName;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
     public RelativeLayout relativeLayout;
     private Button logoutButton;
     SwipeRefreshLayout swipeContainer;
+    TextView display_name;
+
 
 
 
@@ -128,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
         etSearchMain = findViewById(R.id.etSearchMain);
+        
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        display_name.setText(getUsersName(currentUser));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
