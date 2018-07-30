@@ -2,6 +2,7 @@ package me.susiel2.locationchat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -29,6 +33,7 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +44,8 @@ import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
+import static me.susiel2.locationchat.database.ParseOperations.getUsersName;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     //private DrawerLayout dl;
     private ImageView hamburger;
     private ImageView plusButton;
+    private EditText etSearchMain;
     private NavigationView nv;
     final String[] data = {"Help", "About"};
     final String[] states = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
@@ -57,12 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView rv_chats;
     private ArrayList<Chat> chats;
+    private ArrayList<Chat> masterList;
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
     private int spinnerPosition;
     public RelativeLayout relativeLayout;
     private Button logoutButton;
     SwipeRefreshLayout swipeContainer;
+    TextView display_name;
+
 
 
 
@@ -121,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
         plusButton = findViewById(R.id.iv_addChat);
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
+        etSearchMain = findViewById(R.id.etSearchMain);
+        
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        display_name.setText(getUsersName(currentUser));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
@@ -161,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
         rv_chats = findViewById(R.id.rv_chats);
         chats = new ArrayList<>();
+        masterList = new ArrayList<>();
         chatAdapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
             @Override
             public void onAddClicked(int position) {
@@ -182,6 +198,29 @@ public class MainActivity extends AppCompatActivity {
         rv_chats.setAdapter(chatAdapter);
         rv_chats.setLayoutManager(new LinearLayoutManager(this));
 
+        etSearchMain.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                final String beforeText = etSearchMain.getText().toString();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        if(beforeText.equals(etSearchMain.getText().toString()))
+                            updateBySearch();
+                    }
+                }, 300);
+            }
+        });
 
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
         btn_maps.setOnClickListener(new View.OnClickListener() {
@@ -218,19 +257,37 @@ public class MainActivity extends AppCompatActivity {
 
         updateChats();
 
-
     }
 
     public void updateChats(){
         List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
         Log.e("MainActivity","Number of Chats : " + currentGroups.size());
         chats.clear();
+        masterList.clear();
         for(int i = 0; i < currentGroups.size(); i++) {
             chats.add(currentGroups.get(i));
+            masterList.add(currentGroups.get(i));
             Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
         }
         chatAdapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
+    }
+
+    public void updateBySearch(){
+        ArrayList<Chat> tempList = new ArrayList<Chat>();
+        for(int i = 0; i < masterList.size(); i++){
+            if(masterList.get(i).getName().toUpperCase().contains(etSearchMain.getText().toString().toUpperCase()))
+                tempList.add(masterList.get(i));
+        }
+        if(!tempList.equals(chats)) {
+            Log.e("SearchExistingActivity", "modifying chat list");
+            chats.clear();
+            for(int i = 0; i < tempList.size(); i++)
+                chats.add(tempList.get(i));
+            chatAdapter.notifyDataSetChanged();
+        }
+        else
+            Log.e("SearchExistingActivity", "no need for chat list modification");
     }
 
     @Override

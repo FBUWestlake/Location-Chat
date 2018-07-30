@@ -138,7 +138,7 @@ public class ParseOperations {
         return null;
     }
 
-    public static List<Chat> getGroupsUserIsIn(ParseUser currentUser){
+    public static List<Chat> getGroupsUserIsInDeprecated(ParseUser currentUser){
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", currentUser);
         query.addDescendingOrder("updatedAt");
@@ -155,6 +155,21 @@ public class ParseOperations {
         ArrayList<Chat> groups = new ArrayList<Chat>();
         for(int i = 0; i < groupIds.size(); i++){
             groups.add(getGroupFromId(groupIds.get(i)));
+        }
+        return groups;
+    }
+
+    public static List<Chat> getGroupsUserIsIn(ParseUser currentUser){
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.include("group").whereEqualTo("user", currentUser).addDescendingOrder("updatedAt");
+        final ArrayList<Chat> groups = new ArrayList<>();
+        try {
+            List<UsersGroups> results = query.find();
+            for(int i = 0; i < results.size(); i++){
+                groups.add(results.get(i).getChat());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return groups;
     }
@@ -232,9 +247,9 @@ public class ParseOperations {
             @Override
             public void done(ParseException e) {
                 if (e==null) {
-                    Log.e("ParseOperations", "User successfully added to group");
+                    Log.d("ParseOperations", "User successfully added to group");
                 } else {
-                    Log.e("ParseOperations", "Failed to add user to group");
+                    Log.d("ParseOperations", "Failed to add user to group");
                 }
             }
         });
@@ -348,10 +363,7 @@ public class ParseOperations {
         query.include("read");
         try {
             List<UsersGroups> results = query.find();
-            Log.e("ParseOperations", "messageAsRead ID: " + results.get(0).getObjectId());
-            Log.e("ParseOperations", "Is message read? : " + results.get(0).isRead());
             results.get(0).setRead(true);
-            Log.e("ParseOperations", "Is message read? : " + results.get(0).isRead());
             results.get(0).saveInBackground();
         } catch(ParseException e) {
             e.printStackTrace();
