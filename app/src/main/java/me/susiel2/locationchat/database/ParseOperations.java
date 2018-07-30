@@ -293,13 +293,9 @@ public class ParseOperations {
         try {
             List<Chat> results = query2.find();
             query.whereEqualTo("group", results.get(0));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            List<UsersGroups> results = query.find();
-            results.get(0).setNotificationsOn(notificationsOn);
+            List<UsersGroups> results2 = query.find();
+            results2.get(0).setNotificationsOn(notificationsOn);
+            results2.get(0).saveInBackground();
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -43,6 +45,7 @@ import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.MessageAdapter;
+import me.susiel2.locationchat.model.UsersGroups;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -56,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageView ivSendButton;
     ImageView ivLogo;
     TextView tvTitle;
+    SwitchCompat switch_notifications;
 
     private Button gear;
     private String chatID;
@@ -118,9 +122,23 @@ public class ChatActivity extends AppCompatActivity {
         navList2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ParseOperations.leaveGroup(ParseUser.getCurrentUser(), chatID);
+                parseOperations.leaveGroup(ParseUser.getCurrentUser(), chatID);
                 Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        switch_notifications = findViewById(R.id.switch_notifications);
+        switch_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    Log.d("switch", String.valueOf(b));
+                    parseOperations.setNotificationsForUserInGroup(b, ParseUser.getCurrentUser(), chatID);
+                } else {
+                    Log.d("switch", String.valueOf(b));
+                    parseOperations.setNotificationsForUserInGroup(b, ParseUser.getCurrentUser(), chatID);
+                }
             }
         });
 

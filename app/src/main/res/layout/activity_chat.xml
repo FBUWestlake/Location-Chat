@@ -119,7 +119,8 @@
                 android:layout_gravity="end"
                 android:layout_weight="0"
                 android:gravity="center_vertical"
-                style="@style/SwitchCompatTheme"/>
+                style="@style/SwitchCompatTheme"
+                android:checked="true"/>
 
         </LinearLayout>
 

@@ -37,7 +37,9 @@ public class UsersGroups extends ParseObject {
         return getBoolean(KEY_NOTIFICATIONS);
     }
 
-    public void setNotificationsOn(boolean notificationsOn) { put(KEY_NOTIFICATIONS, notificationsOn); }
+    public void setNotificationsOn(boolean notificationsOn) {
+        put(KEY_NOTIFICATIONS, notificationsOn);
+    }
 
     public boolean isRead() {
         return getBoolean(KEY_READ);
