@@ -340,11 +340,12 @@ public class ParseOperations {
         return new ArrayList<Chat>();
     }
 
-    public static Chat getGroupByNameLocation(String chatName, String location) {
+     public static Chat getGroupByNameLocation(String chatName, String location) {
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.whereFullText("name", chatName);
-        query.whereFullText("location", location);
+        query.whereEqualTo("name", chatName);
+        //query.whereFullText("location", location);
         try {
+            query.whereEqualTo("location", location);
             return query.find().get(0);
         } catch (ParseException e) {
             e.printStackTrace();
