@@ -1,5 +1,7 @@
 package me.susiel2.locationchat.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -9,11 +11,19 @@ import com.parse.ParseUser;
 import java.util.Date;
 
 @ParseClassName("Message")
+@DatabaseTable(tableName = "messages")
 public class Message extends ParseObject{
 
+    @DatabaseField(columnName = "CONTENT")
     private static final String KEY_CONTENT = "content";
+
+    @DatabaseField(columnName = "ATTACHMENT")
     private static final String KEY_ATTACHMENT = "attachment";
+
+    @DatabaseField(columnName = "GROUP_ID")
     private static final String KEY_GROUP_ID = "groupId";
+
+    @DatabaseField(columnName = "CREATED_BY")
     private static final String KEY_CREATED_BY = "createdBy";
 
     public String getIdString() { return getObjectId(); }
