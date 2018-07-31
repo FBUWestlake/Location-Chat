@@ -95,12 +95,9 @@ public class LoginActivity extends AppCompatActivity {
                 final String phoneNumber = phoneNumberInput.getText().toString();
                 final String password = passwordInput.getText().toString();
                 String name = subEditText.getText().toString();
-                signUp(phoneNumber, password, name);
 
                 dialog.dismiss();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                signUp(phoneNumber, password, name);
             }
         });
 
@@ -147,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void signUp(String phoneNumber, String password, String name) {
+    private void signUp(final String phoneNumber, final String password, String name) {
         // Create the ParseUser
         ParseUser user = new ParseUser();
         // Set core properties
@@ -162,10 +159,23 @@ public class LoginActivity extends AppCompatActivity {
                     // Hooray! Let them use the app now.
                     Log.d("LoginActivity", "Sign up successful");
                     Toast.makeText(LoginActivity.this, "Successfully signed up", Toast.LENGTH_SHORT).show();
-                    // Inside a callback, so MainActivity.this
-                    final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    ParseUser.logInInBackground(phoneNumber, password, new LogInCallback() {
+                        @Override
+                        public void done(ParseUser user, ParseException e) {
+                            if (e == null) {
+                                Log.d("LoginActivity", "Login successful");
+                                // Inside a callback, so MainActivity.this
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Log.e("LoginActivity", "Login failure.");
+                                Toast.makeText(LoginActivity.this, "Cannot identify login info", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 } else {
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
@@ -174,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
 }
