@@ -230,7 +230,6 @@ public class ParseOperations {
         List<Chat> results = new ArrayList<>();
         try {
             results = query.find();
-            Log.d("parseoperations", results.get(0).getName());
         } catch (ParseException e) {
             e.printStackTrace();
         }
