@@ -116,12 +116,9 @@ public class MainActivity extends AppCompatActivity {
             state_spinner.setSelection(spinnerPosition);
 
             ParseUser currentUser = ParseUser.getCurrentUser();
-            //String selected = state_spinner.getItemAtPosition(spinnerPosition).toString();
-            currentUser.put("location", states[spinnerPosition]);
-            currentUser.saveInBackground();
 
             //test here for location change, changing groups
-            //changeUserLocation(currentUser, states[spinnerPosition]);
+            changeUserLocation(currentUser, states[spinnerPosition]);
             
         }
 
