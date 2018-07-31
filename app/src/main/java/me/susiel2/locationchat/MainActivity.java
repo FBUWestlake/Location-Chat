@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onChatClicked(int position) {
+                Intent i = new Intent(MainActivity.this, ChatActivity.class);
                 if (!ParseOperations.isChatRead(chats.get(position), ParseUser.getCurrentUser())) {
                     Log.e("MainActivity", "setting this chat to read.");
                     ParseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chats.get(position));
