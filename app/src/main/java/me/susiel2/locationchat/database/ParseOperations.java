@@ -130,13 +130,13 @@ public class ParseOperations {
         return null;
     }
 
-    public static void createGroup(String name, String description, File image, String category, final ParseUser user, String location){
+    public static void createGroup(String name, String description, File image, String category, final ParseUser user, final String location){
         final Chat chat = new Chat(name, description, new ParseFile(image), category, user, location);
         chat.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e==null) {
-                    Log.e("ParseOperations", "New group successfully uploaded");
+                if (e==null && location.equals(getUserLocation(user))) {
+                    Log.e("ParseOperationsLocation", getUserLocation(user));
                     addUserToGroup(user, chat);
                 } else {
                     Log.e("ParseOperations", "Failed to upload new group");
