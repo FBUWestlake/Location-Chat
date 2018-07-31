@@ -247,6 +247,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(etSearchMain.getText().toString().equals(""))
+                    return;
                 final String beforeText = etSearchMain.getText().toString();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -306,7 +308,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateChats(){
         ArrayList<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
-        if(chats.size() == 0 || !currentGroups.get(0).getName().equals(chats.get(0).getName())) {
+        if(chats.size() == 0 || (!currentGroups.get(0).getName().equals(chats.get(0).getName()) || currentGroups.size() == chats.size())) {
+            Log.e("SearchExistingActivity", "YES need for chat list modification");
             chats.clear();
             masterList.clear();
             for (int i = 0; i < currentGroups.size(); i++) {
