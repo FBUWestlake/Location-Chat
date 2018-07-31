@@ -114,6 +114,14 @@ public class MainActivity extends AppCompatActivity {
         if (add != null) {
             spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
+
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            //String selected = state_spinner.getItemAtPosition(spinnerPosition).toString();
+            currentUser.put("location", states[spinnerPosition]);
+            currentUser.saveInBackground();
+
+            //test here for location change, changing groups
+            changeUserLocation(currentUser, states[spinnerPosition]);
             
         }
 
@@ -126,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 relativeLayout.setBackgroundResource(stateFlags[position]);
 
-
+/*
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String selected = state_spinner.getItemAtPosition(spinnerPosition).toString();
                 currentUser.put("location", selected);
@@ -140,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                });
+                }); */
                 //Log.d("tag", selected);
                 //String test = getUserLocation(currentUser);
                 //Log.d("tag 2", test);
