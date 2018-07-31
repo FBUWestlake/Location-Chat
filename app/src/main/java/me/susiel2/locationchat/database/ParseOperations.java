@@ -33,41 +33,27 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public static void createMessage(String content, String groupObjectID) {
+    public static void createMessage(String content, Chat chat) {
         Message newMessage = new Message();
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
-        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.whereEqualTo("objectId", groupObjectID);
-        query.addDescendingOrder("createdAt");
-        try {
-            List<Chat> result = query.find();
-            newMessage.setChat(result.get(0));
-            newMessage.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Log.d("ParseOperations", "Message sent");
-                        //Toast.makeText(ChatActivity.class, "Message sent", Toast.LENGTH_SHORT).show();
-                        //refreshMessages();
-                    } else {
-                        Log.e("ParseOperations", e.toString());
-                    }
+        newMessage.setChat(chat);
+        newMessage.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("ParseOperations", "Message sent");
+                } else {
+                    Log.e("ParseOperations", e.toString());
                 }
-            });
-        } catch(ParseException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
-    public static List<Message> getGroupMessages(String currentGroupObjectID) {
-        //List<Message> result;
-        ParseQuery<Chat> queryChat = ParseQuery.getQuery(Chat.class);
-        queryChat.whereEqualTo("objectId", currentGroupObjectID);
+    public static List<Message> getGroupMessages(Chat chat) {
         try {
-            List<Chat> chats = queryChat.find();
             ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-            query.whereEqualTo("groupId", chats.get(0));
+            query.whereEqualTo("groupId", chat);
             List<Message> result = query.find();
             return result;
         } catch(ParseException e) {
@@ -76,9 +62,9 @@ public class ParseOperations {
         return null;
     }
 
-    public static boolean isChatRead(String groupId, ParseUser user){
+    public static boolean isChatRead(Chat chat, ParseUser user){
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-        query.whereEqualTo("group", getGroupFromId(groupId));
+        query.whereEqualTo("group", chat);
         query.whereEqualTo("user", user);
         List<UsersGroups> result;
         try {
@@ -92,13 +78,11 @@ public class ParseOperations {
         return true;
     }
 
-    public static void setMessagesToUnread(String currentGroupObjectID) {
+    public static void setMessagesToUnread(Chat chat) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-        ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
-        chatQuery.whereEqualTo("objectId", currentGroupObjectID);
         List<UsersGroups> result = null;
         try {
-            query.whereEqualTo("group", chatQuery.find().get(0));
+            query.whereEqualTo("group", chat);
             result = query.find();
             for (int i = 0; i < result.size(); i++) {
                 result.get(i).setRead(false);
@@ -133,7 +117,7 @@ public class ParseOperations {
             public void done(ParseException e) {
                 if (e==null) {
                     Log.e("ParseOperations", "New group successfully uploaded");
-                    addUserToGroup(user, chat.getObjectId());
+                    addUserToGroup(user, chat);
                 } else {
                     Log.e("ParseOperations", "Failed to upload new group");
                 }
@@ -253,20 +237,12 @@ public class ParseOperations {
         return results;
     }
 
-    public static void addUserToGroup(ParseUser currentUser, String groupId){
+    public static void addUserToGroup(ParseUser currentUser, Chat chat) {
         final UsersGroups usersGroups = new UsersGroups();
         usersGroups.setUser(currentUser);
         usersGroups.setNotificationsOn(true);
         usersGroups.setRead(true);
-
-        ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
-        query.whereEqualTo("objectId", groupId);
-        try {
-            List<Chat> results = query.find();
-            usersGroups.setChat(results.get(0));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        usersGroups.setChat(chat);
         usersGroups.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -287,11 +263,10 @@ public class ParseOperations {
         try {
             List<UsersGroups> usersGroups = query.find();
             for (int i = 0; i < usersGroups.size(); i++) {
-                String groupId = usersGroups.get(i).getChat().getIdString();
                 String groupName = usersGroups.get(i).getChat().getName();
                 Log.d("works", groupName);
-                leaveGroup(user, groupId);
-                addUserToGroup(user, getGroupByNameLocation(groupName, location).getIdString());
+                leaveGroup(user, usersGroups.get(i).getChat());
+                addUserToGroup(user, getGroupByNameLocation(groupName, location));
             }
         } catch(ParseException e) {
             e.printStackTrace();
@@ -299,36 +274,28 @@ public class ParseOperations {
 
     }
 
-    public static void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
+    // Unnecessary.
+//    public static void setNotificationsForUserInGroup(final boolean notificationsOn, ParseUser user, String groupId){
+//        final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+//        query.whereEqualTo("user", user);
+//
+//        ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
+//        query2.whereEqualTo("objectId", groupId);
+//        try {
+//            List<Chat> results = query2.find();
+//            query.whereEqualTo("group", results.get(0));
+//            List<UsersGroups> results2 = query.find();
+//            results2.get(0).setNotificationsOn(notificationsOn);
+//            results2.get(0).saveInBackground();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
+    public static int getNumberOfMembersInGroup(Chat chat){
         final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-        query.whereEqualTo("user", user);
-
-        ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
-        query2.whereEqualTo("objectId", groupId);
-        try {
-            List<Chat> results = query2.find();
-            query.whereEqualTo("group", results.get(0));
-            List<UsersGroups> results2 = query.find();
-            results2.get(0).setNotificationsOn(notificationsOn);
-            results2.get(0).saveInBackground();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static int getNumberOfMembersInGroup(String groupId){
-        final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-
-        ParseQuery<Chat> query2 = ParseQuery.getQuery(Chat.class);
-        query2.whereEqualTo("objectId", groupId);
-        try {
-            List<Chat> results = query2.find();
-            query.whereEqualTo("group", results.get(0));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        query.whereEqualTo("group", chat);
         List<UsersGroups> results = null;
         try {
             results = query.find();
@@ -336,7 +303,6 @@ public class ParseOperations {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         return -1;
         
     }
@@ -378,15 +344,11 @@ public class ParseOperations {
         return new ArrayList<Chat>();
     }
 
-    public static void leaveGroup(ParseUser user, String groupId) {
-        ParseQuery<Chat> chatQuery = ParseQuery.getQuery(Chat.class);
-        chatQuery.whereEqualTo("objectId", groupId);
-
+    public static void leaveGroup(ParseUser user, Chat chat) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
         try {
-            Chat groupToLeave = chatQuery.find().get(0);
-            query.whereEqualTo("group", groupToLeave);
+            query.whereEqualTo("group", chat);
             UsersGroups result = query.find().get(0);
             result.delete();
         } catch(ParseException e) {
@@ -394,10 +356,10 @@ public class ParseOperations {
         }
     }
 
-    public static void setMessageAsReadInGroup(ParseUser user, String groupId) {
+    public static void setMessageAsReadInGroup(ParseUser user, Chat chat) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
-        query.whereEqualTo("group", getGroupFromId(groupId));
+        query.whereEqualTo("group", chat);
         query.include("read");
         try {
             List<UsersGroups> results = query.find();

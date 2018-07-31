@@ -59,10 +59,10 @@ public class ChatActivity extends AppCompatActivity {
     ImageView ivSendButton;
     ImageView ivLogo;
     TextView tvTitle;
-    SwitchCompat switch_notifications;
+//    SwitchCompat switch_notifications;
 
     private Button gear;
-    private String chatID;
+//    private String chatID;
     final String[] listviewData = {"Leave Group"};
     public DrawerLayout drawer;
     public ListView navList2;
@@ -79,7 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
         Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId());
-        chatID = chat.getIdString();
+//        chatID = chat.getIdString();
 
         messages = new ArrayList<Message>();
         rvMessages = (RecyclerView) findViewById(R.id.recycler_chat);
@@ -89,7 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         ivLogo.setImageBitmap(chat.getImageBitmap());
         tvTitle = (TextView) findViewById(R.id.tvTitle);
 
-        messages = parseOperations.getGroupMessages(chatID);
+        messages = parseOperations.getGroupMessages(chat);
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
         rvMessages.setLayoutManager(new LinearLayoutManager(this));
@@ -103,9 +103,9 @@ public class ChatActivity extends AppCompatActivity {
                 // Save message in parse.
                 String content = etMessage.getText().toString();
                 if(!content.equals("")) {
-                    parseOperations.createMessage(content, chatID);
-                    parseOperations.setMessagesToUnread(chatID);
-                    parseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chatID);
+                    parseOperations.createMessage(content, chat);
+                    parseOperations.setMessagesToUnread(chat);
+                    parseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chat);
                     etMessage.setText(null);
                 }
             }
@@ -122,25 +122,25 @@ public class ChatActivity extends AppCompatActivity {
         navList2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                parseOperations.leaveGroup(ParseUser.getCurrentUser(), chatID);
+                parseOperations.leaveGroup(ParseUser.getCurrentUser(), chat);
                 Intent intent = new Intent(ChatActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
 
-        switch_notifications = findViewById(R.id.switch_notifications);
-        switch_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    Log.d("switch", String.valueOf(b));
-                    parseOperations.setNotificationsForUserInGroup(b, ParseUser.getCurrentUser(), chatID);
-                } else {
-                    Log.d("switch", String.valueOf(b));
-                    parseOperations.setNotificationsForUserInGroup(b, ParseUser.getCurrentUser(), chatID);
-                }
-            }
-        });
+//        switch_notifications = findViewById(R.id.switch_notifications);
+//        switch_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                if (b) {
+//                    Log.d("switch", String.valueOf(b));
+//                    parseOperations.setNotificationsForUserInGroup(b, ParseUser.getCurrentUser(), chatID);
+//                } else {
+//                    Log.d("switch", String.valueOf(b));
+//                    parseOperations.setNotificationsForUserInGroup(b, ParseUser.getCurrentUser(), chatID);
+//                }
+//            }
+//        });
 
         gear.setOnClickListener(new View.OnClickListener() {
 

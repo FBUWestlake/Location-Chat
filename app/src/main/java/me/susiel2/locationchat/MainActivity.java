@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -33,6 +34,7 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,8 @@ import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
+import static me.susiel2.locationchat.database.ParseOperations.getUsersName;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
     public RelativeLayout relativeLayout;
     private Button logoutButton;
     SwipeRefreshLayout swipeContainer;
+    TextView display_name;
+    private Button deleteAccountButton;
+
+
 
 
 
@@ -128,6 +136,13 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
         etSearchMain = findViewById(R.id.etSearchMain);
+        deleteAccountButton = findViewById(R.id.deleteAccountBtn);
+
+        
+        display_name = findViewById(R.id.display_name);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        display_name = findViewById(R.id.display_name);
+        display_name.setText(getUsersName(currentUser));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);
@@ -180,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, ChatActivity.class);
                 if (!ParseOperations.isChatRead(chats.get(position).getObjectId(), ParseUser.getCurrentUser())) {
                     ParseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chats.get(position).getObjectId());
+                if (!ParseOperations.isChatRead(chats.get(position), ParseUser.getCurrentUser())) {
+                    Log.e("MainActivity", "setting this chat to read.");
+                    ParseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chats.get(position));
                 }
                 i.putExtra("chat", Parcels.wrap(chats.get(position)));
                 startActivityForResult(i, 26);
@@ -226,6 +244,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseUser.logOut();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);            }
+        });
+        
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.getCurrentUser().deleteInBackground();
+                ParseUser.logOutInBackground();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);            }
         });

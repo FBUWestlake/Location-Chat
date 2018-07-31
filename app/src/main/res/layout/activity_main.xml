@@ -159,7 +159,6 @@
             android:layout_weight="1"
             android:background="#FFF"
             android:choiceMode="singleChoice"/>
-        
         <Button
             android:id="@+id/logoutBtn"
             android:layout_width="240dp"
@@ -167,6 +166,14 @@
             android:background="#FFF"
             android:text="Log out"
             android:textColor="@color/colorPrimary" />
+        
+        <Button
+            android:id="@+id/deleteAccountBtn"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:text="Delete Account"
+            android:textColor="@android:color/holo_red_dark" />
 
     </LinearLayout>
 

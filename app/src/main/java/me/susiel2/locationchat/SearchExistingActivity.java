@@ -63,7 +63,8 @@ public class SearchExistingActivity extends AppCompatActivity {
 
             @Override
             public void onAddClicked(int position) {
-                ParseOperations.addUserToGroup(ParseUser.getCurrentUser(), chats.get(position).getIdString());
+                ParseOperations.addUserToGroup(ParseUser.getCurrentUser(), chats.get(position));
+                ParseOperations.addUserToGroup(ParseUser.getCurrentUser(), chats.get(position));
                 masterList.remove(chats.get(position));
                 chats.remove(position);
                 adapter.notifyDataSetChanged();
