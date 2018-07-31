@@ -50,6 +50,7 @@ public class ParseOperations {
         });
     }
 
+    //No longer used. Implemented in-class so as to use global variables
     public static List<Message> getGroupMessages(Chat chat) {
         try {
             ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
@@ -76,6 +77,25 @@ public class ParseOperations {
             e.printStackTrace();
         }
         return true;
+    }
+
+    public static void ifChatNotReadSetRead(final Chat chat, final ParseUser user){
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("group", chat);
+        query.whereEqualTo("user", user);
+
+        query.findInBackground(new FindCallback<UsersGroups>() {
+            public void done(List<UsersGroups> itemList, ParseException e) {
+                if (e == null) {
+                    if(!itemList.get(0).isRead())
+                        setMessageAsReadInGroup(user, chat);
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+
     }
 
     public static void setMessagesToUnread(Chat chat) {
@@ -360,12 +380,15 @@ public class ParseOperations {
         query.whereEqualTo("user", user);
         query.whereEqualTo("group", chat);
         query.include("read");
-        try {
-            List<UsersGroups> results = query.find();
-            results.get(0).setRead(true);
-            results.get(0).saveInBackground();
-        } catch(ParseException e) {
-            e.printStackTrace();
-        }
+        query.findInBackground(new FindCallback<UsersGroups>() {
+            public void done(List<UsersGroups> itemList, ParseException e) {
+                if (e == null) {
+                    itemList.get(0).setRead(true);
+                    itemList.get(0).saveInBackground();
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 }
