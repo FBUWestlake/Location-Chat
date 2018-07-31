@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             currentUser.saveInBackground();
 
             //test here for location change, changing groups
-            changeUserLocation(currentUser, states[spinnerPosition]);
+            //changeUserLocation(currentUser, states[spinnerPosition]);
             
         }
 
