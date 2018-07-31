@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
@@ -53,18 +55,43 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ChatAdapter.ViewHolder viewHolder, int i) {
         Log.d("chat adapter", String.valueOf(chats.size()));
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());
         Log.d("time parse", "start");
-        if (context instanceof MainActivity && !ParseOperations.isChatRead(chat, ParseUser.getCurrentUser()))
-            viewHolder.tv_chat_name.setTypeface(null, Typeface.BOLD);
-        else
-            viewHolder.tv_chat_name.setTypeface(null, Typeface.NORMAL);
-        //viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat.getObjectId())) + " members");
-        viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat)) + " members");
+
+        if (context instanceof MainActivity) {
+            ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+            query.whereEqualTo("group", chat);
+            query.whereEqualTo("user", ParseUser.getCurrentUser());
+            query.findInBackground(new FindCallback<UsersGroups>() {
+                public void done(List<UsersGroups> itemList, ParseException e) {
+                    if (e == null) {
+                        if(!itemList.get(0).isRead())
+                            viewHolder.tv_chat_name.setTypeface(null, Typeface.BOLD);
+                        else
+                            viewHolder.tv_chat_name.setTypeface(null, Typeface.NORMAL);
+                    } else {
+                        Log.d("item", "Error: " + e.getMessage());
+                    }
+                }
+            });
+        }
+
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.whereEqualTo("group", chat);
+        query.findInBackground(new FindCallback<UsersGroups>() {
+            public void done(List<UsersGroups> itemList, ParseException e) {
+                if (e == null) {
+                    viewHolder.tvNumberOfMembers.setText(String.valueOf(itemList.size()) + " members");
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
+
         Log.d("time parse", "end");
         if(context instanceof SearchExistingActivity){
             viewHolder.ivAddButton.setVisibility(View.VISIBLE);

@@ -63,6 +63,7 @@ public class ParseOperations {
         return null;
     }
 
+    //No longer used, implemented in-class
     public static boolean isChatRead(Chat chat, ParseUser user){
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("group", chat);
@@ -312,6 +313,7 @@ public class ParseOperations {
 //
 //    }
 
+    //No longer used. Implemented in-class to run in background
     public static int getNumberOfMembersInGroup(Chat chat){
         final ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("group", chat);
