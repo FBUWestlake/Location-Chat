@@ -34,8 +34,9 @@ import com.parse.ParseUser;
 import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
+import com.parse.ParseException;
 import com.parse.ParseUser;
-
+import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private Button logoutButton;
     SwipeRefreshLayout swipeContainer;
     TextView display_name;
+    private Button deleteAccountButton;
+
 
 
 
@@ -103,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
+        state_spinner.setVisibility(View.GONE);
+
 
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         if (add != null) {
             spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
+            
         }
 
         relativeLayout = findViewById(R.id.relativeLayout);
@@ -120,7 +126,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 relativeLayout.setBackgroundResource(stateFlags[position]);
+
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String selected = state_spinner.getItemAtPosition(spinnerPosition).toString();
+                currentUser.put("location", selected);
+                currentUser.saveInBackground(new SaveCallback() {
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            //success, saved!
+                            Log.d("MyApp", "Successfully saved!");
+                        } else {
+                            //fail to save!
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                //Log.d("tag", selected);
+                //String test = getUserLocation(currentUser);
+                //Log.d("tag 2", test);
+
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
@@ -134,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
         drawer = findViewById(R.id.activity_main);
         logoutButton = findViewById(R.id.logoutBtn);
         etSearchMain = findViewById(R.id.etSearchMain);
+        deleteAccountButton = findViewById(R.id.deleteAccountBtn);
+
         
         display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -241,6 +270,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);            }
         });
+        
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser.getCurrentUser().deleteInBackground();
+                ParseUser.logOutInBackground();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);            }
+        });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
@@ -263,17 +301,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateChats(){
-        List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
-        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
-        chats.clear();
-        masterList.clear();
-        for(int i = 0; i < currentGroups.size(); i++) {
-            chats.add(currentGroups.get(i));
-            masterList.add(currentGroups.get(i));
-            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
+        ArrayList<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
+        if(chats.size() == 0 || !currentGroups.get(0).getName().equals(chats.get(0).getName())) {
+            chats.clear();
+            masterList.clear();
+            for (int i = 0; i < currentGroups.size(); i++) {
+                chats.add(currentGroups.get(i));
+                masterList.add(currentGroups.get(i));
+            }
+            chatAdapter.notifyDataSetChanged();
         }
-        chatAdapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
+        etSearchMain.setText("");
     }
 
     public void updateBySearch(){
@@ -283,7 +322,6 @@ public class MainActivity extends AppCompatActivity {
                 tempList.add(masterList.get(i));
         }
         if(!tempList.equals(chats)) {
-            Log.e("SearchExistingActivity", "modifying chat list");
             chats.clear();
             for(int i = 0; i < tempList.size(); i++)
                 chats.add(tempList.get(i));

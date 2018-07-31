@@ -140,12 +140,12 @@
             android:background="#FFF"
             android:textSize="20sp"
             android:textColor="@android:color/black" />
-
+<!--
         <TextView
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:background="#FFF"
-            android:text="   Location:"/>
+            android:text="   Location:"/> -->
 
         <Spinner
             android:id="@+id/state_spinner"
