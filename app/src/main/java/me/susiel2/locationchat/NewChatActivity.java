@@ -58,6 +58,7 @@ public class NewChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_chat);
 
         final String[] categories = {"food", "outdoors", "sports", "art", "music", "tech", "beauty"};
+        final String[] states = getResources().getStringArray(R.array.states);
 
         btn_newChat = findViewById(R.id.btn_newChat);
         iv_takePhoto = findViewById(R.id.iv_takePhoto);
@@ -110,9 +111,9 @@ public class NewChatActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                ParseOperations.createGroup(et_chatName.getText().toString(), et_description.getText().toString(), resizedFile, selectedItemText, ParseUser.getCurrentUser(), /* TODO - create chat for every location */"California");
-
+                for (int i = 0; i < states.length; i++) {
+                    ParseOperations.createGroup(et_chatName.getText().toString(), et_description.getText().toString(), resizedFile, selectedItemText, ParseUser.getCurrentUser(), states[i]);
+                }
                 // Intents and such to connect with MainActivity
                 Intent intent = new Intent();
                 setResult(25, intent);

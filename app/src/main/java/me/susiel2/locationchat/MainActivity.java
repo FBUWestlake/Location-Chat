@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etSearchMain;
     private NavigationView nv;
     final String[] data = {"Help", "About"};
-    final String[] states = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
-            "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"};
+    String[] states = null;
     public DrawerLayout drawer;
     public ListView navList;
     public Spinner state_spinner;
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         usersDB = new DatabaseHelper(this);
-
+        states = getResources().getStringArray(R.array.states);
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
