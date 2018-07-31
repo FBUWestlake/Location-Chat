@@ -277,6 +277,7 @@ public class ParseOperations {
 
     public static void changeUserLocation(ParseUser user, String location) {
         user.put("location", location);
+        user.saveInBackground();
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.include("group");
         query.whereEqualTo("user", user);
