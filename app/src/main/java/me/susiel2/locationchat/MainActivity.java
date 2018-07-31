@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
+        state_spinner.setVisibility(View.GONE);
+
 
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
