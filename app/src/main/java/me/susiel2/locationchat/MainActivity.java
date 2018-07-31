@@ -113,9 +113,6 @@ public class MainActivity extends AppCompatActivity {
             spinnerPosition = stateAdapter.getPosition(add);
             state_spinner.setSelection(spinnerPosition);
             
-            ParseUser currentUser = ParseUser.getCurrentUser();
-            String selected = state_spinner.getItemAtPosition(spinnerPosition).toString();
-            currentUser.put("location", selected);
         }
 
         relativeLayout = findViewById(R.id.relativeLayout);
