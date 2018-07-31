@@ -58,12 +58,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         Chat chat = chats.get(i);
 
         viewHolder.tv_chat_name.setText(chat.getName());
-        if(context instanceof MainActivity && !ParseOperations.isChatRead(chat, ParseUser.getCurrentUser()))
+        Log.d("time parse", "start");
+        if (context instanceof MainActivity && !ParseOperations.isChatRead(chat, ParseUser.getCurrentUser()))
             viewHolder.tv_chat_name.setTypeface(null, Typeface.BOLD);
         else
             viewHolder.tv_chat_name.setTypeface(null, Typeface.NORMAL);
         viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat)) + " members");
-
+        Log.d("time parse", "end");
         if(context instanceof SearchExistingActivity){
             viewHolder.ivAddButton.setVisibility(View.VISIBLE);
         } else {

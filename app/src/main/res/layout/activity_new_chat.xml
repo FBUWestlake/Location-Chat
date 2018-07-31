@@ -9,8 +9,8 @@
     <ImageView
         android:id="@+id/iv_chatImage"
         android:layout_width="171dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_upload"
+        android:layout_height="73dp"
+        android:layout_above="@+id/iv_takePhoto"
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/ic_menu_camera"
         tools:layout_editor_absoluteX="159dp"
@@ -64,11 +64,23 @@
         android:layout_alignStart="@+id/spinner_category"
         android:text="Category" />
 
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
+    <ImageView
+        android:id="@+id/iv_takePhoto"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         android:layout_above="@+id/et_chatName"
-        android:layout_centerHorizontal="true"
-        android:text="Button" />
+        android:layout_alignStart="@+id/btn_newChat"
+        android:clickable="true"
+        android:tint="@android:color/darker_gray"
+        app:srcCompat="@drawable/take_photo"/>
+
+    <ImageView
+        android:id="@+id/iv_selectPhoto"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_above="@+id/et_chatName"
+        android:layout_alignEnd="@+id/btn_newChat"
+        android:clickable="true"
+        android:tint="@android:color/darker_gray"
+        app:srcCompat="@drawable/gallery" />
 </RelativeLayout>

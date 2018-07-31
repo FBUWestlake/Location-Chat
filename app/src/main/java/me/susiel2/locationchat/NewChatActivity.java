@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -35,7 +38,8 @@ import me.susiel2.locationchat.model.Chat;
 
 public class NewChatActivity extends AppCompatActivity {
 
-    Button btn_upload;
+    ImageView iv_takePhoto;
+    ImageView iv_selectPhoto;
     Button btn_newChat;
     ImageView iv_chatImage;
     Bitmap bm_chatImage;
@@ -56,7 +60,8 @@ public class NewChatActivity extends AppCompatActivity {
         final String[] categories = {"food", "outdoors", "sports", "art", "music", "tech", "beauty"};
 
         btn_newChat = findViewById(R.id.btn_newChat);
-        btn_upload = findViewById(R.id.btn_upload);
+        iv_takePhoto = findViewById(R.id.iv_takePhoto);
+        iv_selectPhoto = findViewById(R.id.iv_selectPhoto);
         et_chatName = findViewById(R.id.et_chatName);
         et_description = findViewById(R.id.et_description);
 
@@ -78,13 +83,15 @@ public class NewChatActivity extends AppCompatActivity {
             }
         });
 
-        //btn_upload.setOnClickListener(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);));
-
         btn_newChat.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 // Call create chat method.
+                if (bm_chatImage == null) {
+                    iv_chatImage.buildDrawingCache();
+                    bm_chatImage = iv_chatImage.getDrawingCache();
+                }
                 Bitmap bm_resized = BitmapScaler.scaleToFitWidth(bm_chatImage, 500);
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
@@ -113,7 +120,15 @@ public class NewChatActivity extends AppCompatActivity {
             }
         });
 
-        btn_upload.setOnClickListener(new View.OnClickListener() {
+        iv_takePhoto.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                onLaunchCamera(iv_takePhoto);
+            }
+        });
+
+        iv_selectPhoto.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -139,6 +154,9 @@ public class NewChatActivity extends AppCompatActivity {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            bm_chatImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+            iv_chatImage.setImageBitmap(bm_chatImage);
         }
     }
 
@@ -158,4 +176,28 @@ public class NewChatActivity extends AppCompatActivity {
 
         return file;
     }
+
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    File photoFile;
+
+    public void onLaunchCamera(View view) {
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Create a File reference to access to future access
+        photoFile = getPhotoFileUri(photoFileName);
+
+        // wrap File object into a content provider
+        // required for API >= 24
+        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+        Uri fileProvider = FileProvider.getUriForFile(NewChatActivity.this, "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            // Start the image capture intent to take photo
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
 }
