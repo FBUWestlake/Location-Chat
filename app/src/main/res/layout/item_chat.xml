@@ -5,7 +5,7 @@
     android:id="@+id/item_chat"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#8888">
+    android:background="#99ffffff">
 
     <ImageView
         android:id="@+id/iv_chat_image"
