@@ -179,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
             public void onChatClicked(int position) {
                 Intent i = new Intent(MainActivity.this, ChatActivity.class);
                 if (!ParseOperations.isChatRead(chats.get(position).getObjectId(), ParseUser.getCurrentUser())) {
-                    Log.e("MainActivity", "setting this chat to read.");
                     ParseOperations.setMessageAsReadInGroup(ParseUser.getCurrentUser(), chats.get(position).getObjectId());
                 }
                 i.putExtra("chat", Parcels.wrap(chats.get(position)));
@@ -252,17 +251,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateChats(){
-        List<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
-        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
-        chats.clear();
-        masterList.clear();
-        for(int i = 0; i < currentGroups.size(); i++) {
-            chats.add(currentGroups.get(i));
-            masterList.add(currentGroups.get(i));
-            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
+        ArrayList<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
+        if(chats.size() == 0 || !currentGroups.get(0).getName().equals(chats.get(0).getName())) {
+            chats.clear();
+            masterList.clear();
+            for (int i = 0; i < currentGroups.size(); i++) {
+                chats.add(currentGroups.get(i));
+                masterList.add(currentGroups.get(i));
+            }
+            chatAdapter.notifyDataSetChanged();
         }
-        chatAdapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
+        etSearchMain.setText("");
     }
 
     public void updateBySearch(){
@@ -272,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
                 tempList.add(masterList.get(i));
         }
         if(!tempList.equals(chats)) {
-            Log.e("SearchExistingActivity", "modifying chat list");
             chats.clear();
             for(int i = 0; i < tempList.size(); i++)
                 chats.add(tempList.get(i));

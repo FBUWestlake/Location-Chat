@@ -175,7 +175,7 @@ public class ParseOperations {
         return groups;
     }
 
-    public static List<Chat> getGroupsUserIsIn(ParseUser currentUser){
+    public static ArrayList<Chat> getGroupsUserIsIn(ParseUser currentUser){
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.include("group").whereEqualTo("user", currentUser).addDescendingOrder("updatedAt");
         final ArrayList<Chat> groups = new ArrayList<>();

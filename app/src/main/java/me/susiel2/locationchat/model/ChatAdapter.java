@@ -62,7 +62,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             viewHolder.tv_chat_name.setTypeface(null, Typeface.BOLD);
         else
             viewHolder.tv_chat_name.setTypeface(null, Typeface.NORMAL);
-        viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat.getObjectId())) + " members");
+        //viewHolder.tvNumberOfMembers.setText(String.valueOf(ParseOperations.getNumberOfMembersInGroup(chat.getObjectId())) + " members");
 
         if(context instanceof SearchExistingActivity){
             viewHolder.ivAddButton.setVisibility(View.VISIBLE);
