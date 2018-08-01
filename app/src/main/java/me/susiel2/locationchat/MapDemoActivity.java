@@ -102,6 +102,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
 
                     // listingPosition is a LatLng point
                     LatLng listingPosition = new LatLng(39.828, -98.579);
+                    map.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(39, -98) , 2.0f) );
 
 // Create the marker on the fragment
                     Marker mapMarker = map.addMarker(new MarkerOptions()
