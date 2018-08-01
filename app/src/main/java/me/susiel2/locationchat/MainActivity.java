@@ -47,7 +47,6 @@ import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
-import static me.susiel2.locationchat.database.ParseOperations.getUsersName;
 
 
 
@@ -174,7 +173,19 @@ public class MainActivity extends AppCompatActivity {
         display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
         display_name = findViewById(R.id.display_name);
-        display_name.setText(getUsersName(currentUser));
+
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    display_name.setText(objects.get(0).getString("name"));
+                } else {
+                    // Something went wrong.
+                }
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
         navList = findViewById(R.id.drawer);

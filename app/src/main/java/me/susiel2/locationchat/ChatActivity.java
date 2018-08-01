@@ -108,7 +108,9 @@ public class ChatActivity extends AppCompatActivity {
 
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
-        rvMessages.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setStackFromEnd(true);
+        rvMessages.setLayoutManager(manager);
 
         liveQuery();
         rvMessages.scrollToPosition(messages.size() - 1);

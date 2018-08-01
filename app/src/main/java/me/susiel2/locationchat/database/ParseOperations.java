@@ -139,12 +139,22 @@ public class ParseOperations {
         chat.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e==null && location.equals(getUserLocation(user))) {
-                    Log.e("ParseOperationsLocation", getUserLocation(user));
-                    addUserToGroup(user, chat);
-                } else {
-                    Log.e("ParseOperations", "Failed to upload new group");
-                }
+
+                ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+                query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    public void done(List<ParseUser> objects, ParseException e) {
+                        if (e == null) {
+                            if (e==null && location.equals(objects.get(0).getString("location"))) {
+                                addUserToGroup(user, chat);
+                            } else {
+                                Log.e("ParseOperations", "Failed to upload new group");
+                            }                        } else {
+                            // Something went wrong.
+                        }
+                    }
+                });
             }
         });
     }
@@ -249,7 +259,6 @@ public class ParseOperations {
         ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
         query.whereNotContainedIn("name", Arrays.asList(groupNames));
         String location = getUserLocation(currentUser);
-        Log.e("ParseOperations", location);
         query.whereEqualTo("location", location);
         List<Chat> results = new ArrayList<>();
         try {
