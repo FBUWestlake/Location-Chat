@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
@@ -121,7 +124,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void bind(Message message) {
 
             messageText.setText(message.getContent());
-            nameText.setText(ParseOperations.getUsersName(message.getCreatedBy()));
+
+            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+            query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+
+            query.findInBackground(new FindCallback<ParseUser>() {
+                public void done(List<ParseUser> objects, ParseException e) {
+                    if (e == null) {
+                        nameText.setText(objects.get(0).getString("name"));
+                    } else {
+                        // Something went wrong.
+                    }
+                }
+            });
+
             timeText.setText(message.getCreatedAtString());
 
 //            Glide.with(context).load(message.getProfileImage())

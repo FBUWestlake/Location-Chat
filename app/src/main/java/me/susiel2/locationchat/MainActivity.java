@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             ParseUser currentUser = ParseUser.getCurrentUser();
 
             //test here for location change, changing groups
-            changeUserLocation(currentUser, states[spinnerPosition]);
+            ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
             
         }
 
@@ -306,19 +307,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateChats(){
-        ArrayList<Chat> currentGroups = ParseOperations.getGroupsUserIsIn(ParseUser.getCurrentUser());
-        if(chats.size() == 0 || (!currentGroups.get(0).getName().equals(chats.get(0).getName()) || currentGroups.size() == chats.size())) {
-            Log.e("SearchExistingActivity", "YES need for chat list modification");
-            chats.clear();
-            masterList.clear();
-            for (int i = 0; i < currentGroups.size(); i++) {
-                chats.add(currentGroups.get(i));
-                masterList.add(currentGroups.get(i));
+        ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+        query.include("group").whereEqualTo("user", ParseUser.getCurrentUser()).addDescendingOrder("updatedAt");
+        query.findInBackground(new FindCallback<UsersGroups>() {
+            public void done(List<UsersGroups> itemList, ParseException e) {
+                if (e == null) {
+                    for(int i = 0; i < itemList.size(); i++) {
+
+                        if(chats.size() == 0 || (!itemList.get(0).getChat().getName().equals(chats.get(0).getName()) || itemList.size() == chats.size())) {
+                            Log.e("SearchExistingActivity", "YES need for chat list modification");
+                            chats.clear();
+                            masterList.clear();
+                            for (int j = 0; j < itemList.size(); j++) {
+                                chats.add(itemList.get(j).getChat());
+                                masterList.add(itemList.get(j).getChat());
+                            }
+                            chatAdapter.notifyDataSetChanged();
+                        }
+                        swipeContainer.setRefreshing(false);
+                        etSearchMain.setText("");
+
+                    }
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
             }
-            chatAdapter.notifyDataSetChanged();
-        }
-        swipeContainer.setRefreshing(false);
-        etSearchMain.setText("");
+        });
+
+
     }
 
     public void updateBySearch(){

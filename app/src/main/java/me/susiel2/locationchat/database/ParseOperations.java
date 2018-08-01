@@ -101,17 +101,20 @@ public class ParseOperations {
 
     public static void setMessagesToUnread(Chat chat) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
-        List<UsersGroups> result = null;
-        try {
-            query.whereEqualTo("group", chat);
-            result = query.find();
-            for (int i = 0; i < result.size(); i++) {
-                result.get(i).setRead(false);
-                result.get(i).saveInBackground();
+        query.whereEqualTo("group", chat);
+        query.whereEqualTo("read", true);
+        query.findInBackground(new FindCallback<UsersGroups>() {
+            public void done(List<UsersGroups> itemList, ParseException e) {
+                if (e == null) {
+                    for(int i = 0; i < itemList.size(); i++) {
+                        itemList.get(i).setRead(false);
+                        itemList.get(i).saveInBackground();
+                    }
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     public static List<Chat> getUnreadGroups(ParseUser user) {
