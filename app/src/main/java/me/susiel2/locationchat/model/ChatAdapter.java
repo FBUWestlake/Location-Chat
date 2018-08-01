@@ -85,7 +85,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         query.findInBackground(new FindCallback<UsersGroups>() {
             public void done(List<UsersGroups> itemList, ParseException e) {
                 if (e == null) {
-                    viewHolder.tvNumberOfMembers.setText(String.valueOf(itemList.size()) + " members");
+                    viewHolder.tvNumberOfMembers.setText(String.valueOf(itemList.size()));
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
