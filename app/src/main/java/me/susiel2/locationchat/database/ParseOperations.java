@@ -99,16 +99,20 @@ public class ParseOperations {
 
     }
 
-    public static void setMessagesToUnread(Chat chat) {
+    //Sets all flags to unread except for the message poster
+    public static void setMessagesToUnread(Chat chat, final ParseUser currentUser) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("group", chat);
         query.whereEqualTo("read", true);
+        query.include("user");
         query.findInBackground(new FindCallback<UsersGroups>() {
             public void done(List<UsersGroups> itemList, ParseException e) {
                 if (e == null) {
                     for(int i = 0; i < itemList.size(); i++) {
-                        itemList.get(i).setRead(false);
-                        itemList.get(i).saveInBackground();
+                        if(!itemList.get(i).getUser().getUsername().equals(currentUser.getUsername())) {
+                            itemList.get(i).setRead(false);
+                            itemList.get(i).saveInBackground();
+                        }
                     }
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
@@ -274,19 +278,14 @@ public class ParseOperations {
         usersGroups.setNotificationsOn(true);
         usersGroups.setRead(true);
         usersGroups.setChat(chat);
-        usersGroups.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e==null) {
-                    Log.d("ParseOperations", "User successfully added to group");
-                } else {
-                    Log.d("ParseOperations", "Failed to add user to group");
-                }
-            }
-        });
+        try {
+            usersGroups.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void changeUserLocation(ParseUser user, String location) {
+    public static void changeUserLocation(final ParseUser user, final String location) {
         user.put("location", location);
         user.saveInBackground();
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
@@ -303,7 +302,6 @@ public class ParseOperations {
         } catch(ParseException e) {
             e.printStackTrace();
         }
-
     }
 
     // Unnecessary.
@@ -381,11 +379,10 @@ public class ParseOperations {
     public static void leaveGroup(ParseUser user, Chat chat) {
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.whereEqualTo("user", user);
+        query.whereEqualTo("group", chat);
         try {
-            query.whereEqualTo("group", chat);
-            UsersGroups result = query.find().get(0);
-            result.delete();
-        } catch(ParseException e) {
+            query.find().get(0).delete();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

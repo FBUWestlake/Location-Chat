@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv_chats;
     private ArrayList<Chat> chats;
     private ArrayList<Chat> masterList;
+    private ArrayList<Boolean> isChatRead;
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
     private int spinnerPosition;
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             ParseUser currentUser = ParseUser.getCurrentUser();
 
             //test here for location change, changing groups
+            Log.e("MainActivity", "About to change user location");
             ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
             
         }
@@ -227,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         rv_chats = findViewById(R.id.rv_chats);
         chats = new ArrayList<>();
         masterList = new ArrayList<>();
+        isChatRead = new ArrayList<>();
         chatAdapter = new ChatAdapter(chats, new ChatAdapter.ClickListener() {
             @Override
             public void onAddClicked(int position) {
@@ -318,27 +321,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateChats(){
+        Log.e("MainActivity", "updating chats now");
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.include("group").whereEqualTo("user", ParseUser.getCurrentUser()).addDescendingOrder("updatedAt");
         query.findInBackground(new FindCallback<UsersGroups>() {
             public void done(List<UsersGroups> itemList, ParseException e) {
                 if (e == null) {
+                    boolean refresh = false;
+                    if(chats.size() == 0 || itemList.size() != chats.size())
+                        refresh = true;
                     for(int i = 0; i < itemList.size(); i++) {
-
-                        if(chats.size() == 0 || (!itemList.get(0).getChat().getName().equals(chats.get(0).getName()) || itemList.size() != chats.size())) {
-                            Log.e("MainActivity", "YES need for chat list modification");
-                            chats.clear();
-                            masterList.clear();
-                            for (int j = 0; j < itemList.size(); j++) {
-                                chats.add(itemList.get(j).getChat());
-                                masterList.add(itemList.get(j).getChat());
-                            }
-                            chatAdapter.notifyDataSetChanged();
+                        if(refresh)
+                            break;
+                        if(!itemList.get(i).getChat().getName().equals(chats.get(i).getName()) || itemList.get(i).isRead() != isChatRead.get(i)) {
+                            refresh = true;
+                            break;
                         }
-                        swipeContainer.setRefreshing(false);
-                        etSearchMain.setText("");
-
                     }
+                    if(refresh){
+                        chats.clear();
+                        masterList.clear();
+                        isChatRead.clear();
+                        for (int j = 0; j < itemList.size(); j++) {
+                            chats.add(itemList.get(j).getChat());
+                            masterList.add(itemList.get(j).getChat());
+                            isChatRead.add(itemList.get(j).isRead());
+                        }
+                        chatAdapter.notifyDataSetChanged();
+                    }
+                    swipeContainer.setRefreshing(false);
+                    etSearchMain.setText("");
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
@@ -366,6 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("MainActivity", "About to update the chats");
         updateChats();
     }
 
