@@ -25,6 +25,9 @@ public class Message extends ParseObject{
 
     @DatabaseField(columnName = "CREATED_BY")
     private static final String KEY_CREATED_BY = "createdBy";
+    
+    @DatabaseField(columnName = "LIKES")
+    private static final String KEY_LIKES = "likes";
 
     public String getIdString() { return getObjectId(); }
 
@@ -62,6 +65,14 @@ public class Message extends ParseObject{
 
     public String getCreatedAtString() {
         return getCreatedAt().toString();
+    }
+    
+   public String getLikes() {
+        return getString(KEY_LIKES);
+    }
+
+    public void setLikes(String likes) {
+        put(KEY_LIKES, likes);
     }
 
     public static class Query extends ParseQuery<Message> {
