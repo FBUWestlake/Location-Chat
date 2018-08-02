@@ -148,10 +148,9 @@ public class ParseOperations {
                         if (e == null) {
                             if (e==null && location.equals(objects.get(0).getString("location"))) {
                                 addUserToGroup(user, chat);
-                            } else {
-                                Log.e("ParseOperations", "Failed to upload new group");
-                            }                        } else {
-                            // Something went wrong.
+                            }
+                        } else {
+                            Log.e("ParseOperations", "Failed to upload new group");
                         }
                     }
                 });

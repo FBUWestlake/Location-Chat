@@ -325,8 +325,8 @@ public class MainActivity extends AppCompatActivity {
                 if (e == null) {
                     for(int i = 0; i < itemList.size(); i++) {
 
-                        if(chats.size() == 0 || (!itemList.get(0).getChat().getName().equals(chats.get(0).getName()) || itemList.size() == chats.size())) {
-                            Log.e("SearchExistingActivity", "YES need for chat list modification");
+                        if(chats.size() == 0 || (!itemList.get(0).getChat().getName().equals(chats.get(0).getName()) || itemList.size() != chats.size())) {
+                            Log.e("MainActivity", "YES need for chat list modification");
                             chats.clear();
                             masterList.clear();
                             for (int j = 0; j < itemList.size(); j++) {

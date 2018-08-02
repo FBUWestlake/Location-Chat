@@ -18,17 +18,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
+import me.susiel2.locationchat.model.UsersGroups;
 
 public class SearchExistingActivity extends AppCompatActivity {
 
@@ -129,17 +134,79 @@ public class SearchExistingActivity extends AppCompatActivity {
 
     }
 
+//    public void updateChatsUserIsNotInDeprecated(){
+//        List<Chat> currentGroups = ParseOperations.getGroupsUserIsNotIn(ParseUser.getCurrentUser());
+//        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
+//        chats.clear();
+//        masterList.clear();
+//        for(int i = 0; i < currentGroups.size(); i++) {
+//            chats.add(currentGroups.get(i));
+//            masterList.add(currentGroups.get(i));
+//            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
+//        }
+//        adapter.notifyDataSetChanged();
+//    }
+
     public void updateChatsUserIsNotIn(){
-        List<Chat> currentGroups = ParseOperations.getGroupsUserIsNotIn(ParseUser.getCurrentUser());
-        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
-        chats.clear();
-        masterList.clear();
-        for(int i = 0; i < currentGroups.size(); i++) {
-            chats.add(currentGroups.get(i));
-            masterList.add(currentGroups.get(i));
-            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
-        }
-        adapter.notifyDataSetChanged();
+
+        //Query for user location
+        ParseQuery<ParseUser> query1 = ParseQuery.getQuery(ParseUser.class);
+        query1.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+        query1.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    final String location = objects.get(0).getString("location");
+
+                    //Query for groups user belongs to
+                    ParseQuery<UsersGroups> query2 = ParseQuery.getQuery(UsersGroups.class);
+                    query2.include("group").whereEqualTo("user", ParseUser.getCurrentUser()).addDescendingOrder("updatedAt");
+                    query2.findInBackground(new FindCallback<UsersGroups>() {
+                        public void done(List<UsersGroups> itemList, ParseException e) {
+                            if (e == null) {
+
+                                ArrayList<String> groupNames = new ArrayList<String>();
+                                for(int i = 0; i < itemList.size(); i++) {
+                                    groupNames.add(itemList.get(i).getChat().getName());
+                                    Log.e("MainActivity","Chat name string: " + itemList.get(i).getChat().getName());
+                                }
+
+                                //Query for groups user isn't in
+                                ParseQuery<Chat> query3 = ParseQuery.getQuery(Chat.class);
+                                query3.whereNotContainedIn("name", Arrays.asList(groupNames));
+                                query3.whereEqualTo("location", location);
+                                query3.findInBackground(new FindCallback<Chat>() {
+                                    @Override
+                                    public void done(List<Chat> objects, ParseException e) {
+                                        if(e == null){
+
+                                            //If an update is needed, rebuild the list of chats and bind them
+                                            if(chats.size() == 0 || (!objects.get(0).getName().equals(chats.get(0).getName()) || objects.size() != chats.size())){
+                                                Log.e("SearchExistingActivity", "YES need for chat list modification.");
+                                                chats.clear();
+                                                masterList.clear();
+                                                for (int j = 0; j < objects.size(); j++) {
+                                                    chats.add(objects.get(j));
+                                                    masterList.add(objects.get(j));
+                                                    Log.e("SearchExistingActivity","Chat name: " + objects.get(j).getName());
+
+                                                }
+                                                adapter.notifyDataSetChanged();
+                                            }
+
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                Log.d("item", "Error: " + e.getMessage());
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
+
     }
 
     public void updateChatsBySearchAndCategory(){
