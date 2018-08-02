@@ -67,14 +67,14 @@ public class Message extends ParseObject{
         return getCreatedAt().toString();
     }
     
-   public String getLikes() {
-        return getString(KEY_LIKES);
+   public int getLikes() {
+        return getInt(KEY_LIKES);
     }
 
-    public void setLikes(String likes) {
+    public void setLikes(int likes) {
         put(KEY_LIKES, likes);
     }
-
+    
     public static class Query extends ParseQuery<Message> {
         public Query() {
             super(Message.class);
