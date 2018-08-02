@@ -38,6 +38,7 @@ public class ParseOperations {
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
         newMessage.setChat(chat);
+        newMessage.setLikes(0);
         newMessage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
