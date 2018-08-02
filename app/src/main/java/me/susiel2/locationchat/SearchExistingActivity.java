@@ -3,6 +3,7 @@ package me.susiel2.locationchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -124,9 +125,9 @@ public class SearchExistingActivity extends AppCompatActivity {
 
         updateChatsUserIsNotIn();
 
-        btNewGroup.setOnClickListener(new View.OnClickListener() {
+        btNewGroup.setOnClickListener(new OnOneClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onOneClick(View view) {
                 Intent i = new Intent(SearchExistingActivity.this, NewChatActivity.class);
                 startActivityForResult(i, 25);
             }
@@ -231,6 +232,22 @@ public class SearchExistingActivity extends AppCompatActivity {
         if (resultCode == 25 && requestCode == 25) {
             finish();
         }
+    }
+
+    public abstract class OnOneClickListener implements View.OnClickListener {
+        private static final long MIN_CLICK_INTERVAL = 1000; //in millis
+        private long lastClickTime = 0;
+
+        @Override
+        public final void onClick(View v) {
+            long currentTime = SystemClock.elapsedRealtime();
+            if (currentTime - lastClickTime > MIN_CLICK_INTERVAL) {
+                lastClickTime = currentTime;
+                onOneClick(v);
+            }
+        }
+
+        public abstract void onOneClick(View v);
     }
 
 }

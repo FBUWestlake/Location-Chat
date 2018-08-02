@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -84,10 +85,10 @@ public class NewChatActivity extends AppCompatActivity {
             }
         });
 
-        btn_newChat.setOnClickListener(new View.OnClickListener() {
+        btn_newChat.setOnClickListener(new OnOneClickListener() {
 
             @Override
-            public void onClick(View view) {
+            public void onOneClick(View view) {
                 // Call create chat method.
                 if (bm_chatImage == null) {
                     iv_chatImage.buildDrawingCache();
@@ -121,18 +122,18 @@ public class NewChatActivity extends AppCompatActivity {
             }
         });
 
-        iv_takePhoto.setOnClickListener(new View.OnClickListener() {
+        iv_takePhoto.setOnClickListener(new OnOneClickListener() {
 
             @Override
-            public void onClick(View view) {
+            public void onOneClick(View view) {
                 onLaunchCamera(iv_takePhoto);
             }
         });
 
-        iv_selectPhoto.setOnClickListener(new View.OnClickListener() {
+        iv_selectPhoto.setOnClickListener(new OnOneClickListener() {
 
             @Override
-            public void onClick(View view) {
+            public void onOneClick(View view) {
                 startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
             }
         });
@@ -199,6 +200,22 @@ public class NewChatActivity extends AppCompatActivity {
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
+    }
+
+    public abstract class OnOneClickListener implements View.OnClickListener {
+        private static final long MIN_CLICK_INTERVAL = 1000; //in millis
+        private long lastClickTime = 0;
+
+        @Override
+        public final void onClick(View v) {
+            long currentTime = SystemClock.elapsedRealtime();
+            if (currentTime - lastClickTime > MIN_CLICK_INTERVAL) {
+                lastClickTime = currentTime;
+                onOneClick(v);
+            }
+        }
+
+        public abstract void onOneClick(View v);
     }
 
 }

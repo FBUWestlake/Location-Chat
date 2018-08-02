@@ -3,6 +3,7 @@ package me.susiel2.locationchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -217,13 +218,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        plusButton.setOnClickListener(new View.OnClickListener(){
-
+        plusButton.setOnClickListener(new OnOneClickListener(){
             @Override
-            public void onClick(View view) {
+            public void onOneClick(View v) {
                 Intent i = new Intent(MainActivity.this, SearchExistingActivity.class);
                 startActivityForResult(i, 25);
             }
+
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, SearchExistingActivity.class);
+//                startActivityForResult(i, 25);
+//            }
         });
 
         rv_chats = findViewById(R.id.rv_chats);
@@ -275,25 +281,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
-        btn_maps.setOnClickListener(new View.OnClickListener() {
+        btn_maps.setOnClickListener(new OnOneClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onOneClick(View view) {
                 final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
                 startActivity(intent);
             }
         });
         
-         logoutButton.setOnClickListener(new View.OnClickListener() {
+         logoutButton.setOnClickListener(new OnOneClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onOneClick(View v) {
                 ParseUser.logOut();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);            }
         });
         
-        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+        deleteAccountButton.setOnClickListener(new OnOneClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onOneClick(View v) {
                 ParseUser.getCurrentUser().deleteInBackground();
                 ParseUser.logOutInBackground();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -380,6 +386,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("MainActivity", "About to update the chats");
         updateChats();
+    }
+
+    public abstract class OnOneClickListener implements View.OnClickListener {
+        private static final long MIN_CLICK_INTERVAL = 1000; //in millis
+        private long lastClickTime = 0;
+
+        @Override
+        public final void onClick(View v) {
+            long currentTime = SystemClock.elapsedRealtime();
+            if (currentTime - lastClickTime > MIN_CLICK_INTERVAL) {
+                lastClickTime = currentTime;
+                onOneClick(v);
+            }
+        }
+
+        public abstract void onOneClick(View v);
     }
 
 }
