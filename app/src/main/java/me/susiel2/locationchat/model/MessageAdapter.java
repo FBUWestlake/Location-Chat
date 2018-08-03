@@ -162,7 +162,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.ufi_heart).getConstantState()))) {
+                    if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
                         ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
                         int moreLikes = message1.getLikes();
                         moreLikes = moreLikes + 1;
