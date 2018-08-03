@@ -3,6 +3,7 @@ package me.susiel2.locationchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.SyncStateContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -26,6 +27,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.cardiomood.android.sync.ormlite.SyncHelper;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseLiveQueryClient;
@@ -38,6 +41,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import me.susiel2.locationchat.database.DatabaseHelper;
@@ -76,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
     TextView display_name;
     private Button deleteAccountButton;
 
-
-
-
-
-    //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
-     //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
-
     private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
     R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_district_of_columbia, R.drawable.ic_fl, R.drawable.ic_georgia,
             R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        usersDB = new DatabaseHelper(this);
+        usersDB = DatabaseHelper.getInstance(this);
         states = getResources().getStringArray(R.array.states);
         state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
