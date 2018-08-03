@@ -95,25 +95,32 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
-        TextView messageText, timeText;
+        TextView messageText, timeText, tvNumberSent;
+        ImageView ivHeartSent;
 
         SentMessageHolder(View itemView) {
             super(itemView);
 
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            tvNumberSent = (TextView) itemView.findViewById(R.id.tvNumberSent);
+            ivHeartSent = (ImageView) itemView.findViewById(R.id.ivHeartSent);
+
         }
 
         void bind(Message message) {
             messageText.setText(message.getContent());
             timeText.setText(message.getCreatedAtString());
 
+            final int numberOfLikes = message.getLikes();
+            tvNumberSent.setText(numberOfLikes + " ");
+
         }
     }
 
     // Messages sent by others display a profile image and nickname.
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
-        TextView messageText, timeText, nameText, tvNumber;
+        TextView messageText, timeText, nameText, tvNumberRec;
         Button likeButton;
         ImageView ivHeart;
 
@@ -123,7 +130,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             nameText = (TextView) itemView.findViewById(R.id.text_message_name);
-            tvNumber = (TextView) itemView.findViewById(R.id.tvNumber);
+            tvNumberRec = (TextView) itemView.findViewById(R.id.tvNumberRec);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             likeButton = itemView.findViewById(R.id.likeButton);
 
@@ -131,7 +138,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bind(Message message) {
             final Message message1 = message;
-
             messageText.setText(message.getContent());
 
             ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
@@ -154,7 +160,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
 //                    .into(profileImage);
             final int numberOfLikes = message.getLikes();
-            tvNumber.setText(numberOfLikes + " ");
+            tvNumberRec.setText(numberOfLikes + " ");
 
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -174,7 +180,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 }
                             }
                         });
-                        tvNumber.setText(Integer.toString(moreLikes) + " ");
+                        tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                     } else {
                         ivHeart.setImageResource(R.drawable.ufi_heart);
                         int lessLikes = message1.getLikes();
@@ -190,12 +196,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 }
                             }
                         });
-                        tvNumber.setText(Integer.toString(lessLikes) + " ");
+                        tvNumberRec.setText(Integer.toString(lessLikes) + " ");
                     }
                 }
             });
         }
     }
+
 
 
 }
