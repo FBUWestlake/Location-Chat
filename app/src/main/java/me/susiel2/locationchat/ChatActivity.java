@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageView ivSendButton;
     ImageView ivLogo;
     TextView tvTitle;
-    DatabaseHelper dbHelper;
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
 //    SwitchCompat switch_notifications;
 
     private Button gear;

@@ -98,9 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                 signUp(phoneNumber, password, name);
 
                 dialog.dismiss();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
 
