@@ -28,6 +28,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Message> mMessageList;
     private Context context;
     ParseOperations parseOperations;
+
     public MessageAdapter(List<Message> messages) {
         mMessageList = messages;
     }
@@ -162,123 +163,85 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
+                        if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
+                            ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
+                            int moreLikes = message1.getLikes();
+                            moreLikes = moreLikes + 1;
+                            message1.setLikes(moreLikes);
+                            message1.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d("MessageAdapter", "Like post success");
+                                    } else {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            tvNumberRec.setText(Integer.toString(moreLikes) + " ");
+                        } else {
+                            ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
+                            int lessLikes = message1.getLikes();
+                            lessLikes = lessLikes - 1;
+                            message1.setLikes(lessLikes);
+                            message1.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d("MessageAdapter", "Like post success");
+                                    } else {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            tvNumberRec.setText(Integer.toString(lessLikes) + " ");
+                        }
+                    }
+                }
+            });
+
+
+            dislikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
-                        ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
-                        int moreLikes = message1.getLikes();
-                        moreLikes = moreLikes + 1;
-                        message1.setLikes(moreLikes);
-                        message1.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("MessageAdapter", "Like post success");
-                                } else {
-                                    e.printStackTrace();
+                        if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
+                            ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
+                            int lessLikes = message1.getLikes();
+                            lessLikes = lessLikes - 1;
+                            message1.setLikes(lessLikes);
+                            message1.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d("MessageAdapter", "Dislike post success");
+                                    } else {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        });
-                        tvNumberRec.setText(Integer.toString(moreLikes) + " ");
-                    } else {
-                        ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
-                        int lessLikes = message1.getLikes();
-                        lessLikes = lessLikes - 1;
-                        message1.setLikes(lessLikes);
-                        message1.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("MessageAdapter", "Like post success");
-                                } else {
-                                    e.printStackTrace();
+                            });
+                            tvNumberRec.setText(Integer.toString(lessLikes) + " ");
+                        } else {
+                            ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
+                            int moreLikes = message1.getLikes();
+                            moreLikes = moreLikes + 1;
+                            message1.setLikes(moreLikes);
+                            message1.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d("MessageAdapter", "Dislike post success");
+                                    } else {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        });
-                        tvNumberRec.setText(Integer.toString(lessLikes) + " ");
-                    }
-                }
-            });
-
-
-            dislikeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
-                        ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
-                        int lessLikes = message1.getLikes();
-                        lessLikes = lessLikes - 1;
-                        message1.setLikes(lessLikes);
-                        message1.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("MessageAdapter", "Dislike post success");
-                                } else {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        tvNumberRec.setText(Integer.toString(lessLikes) + " ");
-                    } else {
-                        ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
-                        int moreLikes = message1.getLikes();
-                        moreLikes = moreLikes + 1;
-                        message1.setLikes(moreLikes);
-                        message1.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("MessageAdapter", "Dislike post success");
-                                } else {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        tvNumberRec.setText(Integer.toString(moreLikes) + " ");
-                    }
-                }
-            });
-            dislikeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
-                        ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
-                        int lessLikes = message1.getLikes();
-                        lessLikes = lessLikes - 1;
-                        message1.setLikes(lessLikes);
-                        message1.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("MessageAdapter", "Dislike post success");
-                                } else {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        tvNumberRec.setText(Integer.toString(lessLikes) + " ");
-                    } else {
-                        ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
-                        int moreLikes = message1.getLikes();
-                        moreLikes = moreLikes + 1;
-                        message1.setLikes(moreLikes);
-                        message1.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    Log.d("MessageAdapter", "Dislike post success");
-                                } else {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        tvNumberRec.setText(Integer.toString(moreLikes) + " ");
+                            });
+                            tvNumberRec.setText(Integer.toString(moreLikes) + " ");
+                        }
                     }
                 }
             });
         }
     }
-
-
-
-
 }
