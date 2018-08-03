@@ -1,5 +1,6 @@
 package me.susiel2.locationchat.database;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.EditText;
@@ -33,12 +34,13 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public static void createMessage(String content, Chat chat) {
+    public static void createMessage(String content, ParseFile file, Chat chat) {
         Message newMessage = new Message();
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
         newMessage.setChat(chat);
         newMessage.setLikes(0);
+        newMessage.setFile(file);
         newMessage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

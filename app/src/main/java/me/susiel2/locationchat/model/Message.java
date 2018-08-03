@@ -8,6 +8,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.File;
 import java.util.Date;
 
 @ParseClassName("Message")
@@ -18,7 +19,7 @@ public class Message extends ParseObject{
     private static final String KEY_CONTENT = "content";
 
     @DatabaseField(columnName = "ATTACHMENT")
-    private static final String KEY_ATTACHMENT = "attachment";
+    private static final String KEY_ATTACHMENT = "image";
 
     @DatabaseField(columnName = "GROUP_ID")
     private static final String KEY_GROUP_ID = "groupId";
@@ -39,15 +40,13 @@ public class Message extends ParseObject{
         put(KEY_CONTENT, content);
     }
 
-    // TODO - determine whether attachment is a link or image or video and return something accordingly
-    // TODO contd. - currently this just returns a string for whatever the attachment is.
-    public String getAttachment() {
-        return getString(KEY_ATTACHMENT);
+    public ParseFile getFile() {
+        return getParseFile(KEY_ATTACHMENT);
     }
-    public void setAttachment(String attachment) {
-        put(KEY_ATTACHMENT, attachment);
+
+    public void setFile(ParseFile parseFile) {
+        put(KEY_ATTACHMENT, parseFile);
     }
-    // End TODO
 
     public Chat getChat() {
         return (Chat) getParseObject(KEY_GROUP_ID);

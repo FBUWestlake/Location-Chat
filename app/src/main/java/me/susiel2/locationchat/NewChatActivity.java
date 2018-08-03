@@ -150,10 +150,8 @@ public class NewChatActivity extends AppCompatActivity {
                 bm_chatImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 iv_chatImage.setImageBitmap(bm_chatImage);
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
