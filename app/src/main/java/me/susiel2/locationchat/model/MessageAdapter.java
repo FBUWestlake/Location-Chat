@@ -1,34 +1,25 @@
 package me.susiel2.locationchat.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import com.parse.SaveCallback;
 
+import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
 import me.susiel2.locationchat.database.ParseOperations;
-import me.susiel2.locationchat.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -123,6 +114,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView messageText, timeText, nameText, tvNumberRec;
         Button likeButton;
         ImageView ivHeart;
+        Button dislikeButton;
+        ImageView ivThumbsDown;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -133,6 +126,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvNumberRec = (TextView) itemView.findViewById(R.id.tvNumberRec);
             ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
             likeButton = itemView.findViewById(R.id.likeButton);
+
+            ivThumbsDown = (ImageView) itemView.findViewById(R.id.ivThumbsDown);
+            dislikeButton = itemView.findViewById(R.id.dislikeButton);
 
         }
 
@@ -174,7 +170,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-                                    Log.d("InstaAdapter", "Like post success");
+                                    Log.d("MessageAdapter", "Like post success");
                                 } else {
                                     e.printStackTrace();
                                 }
@@ -190,13 +186,53 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             @Override
                             public void done(ParseException e) {
                                 if (e == null) {
-                                    Log.d("InstaAdapter", "Like post success");
+                                    Log.d("MessageAdapter", "Like post success");
                                 } else {
                                     e.printStackTrace();
                                 }
                             }
                         });
                         tvNumberRec.setText(Integer.toString(lessLikes) + " ");
+                    }
+                }
+            });
+
+
+            dislikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
+                        ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
+                        int lessLikes = message1.getLikes();
+                        lessLikes = lessLikes - 1;
+                        message1.setLikes(lessLikes);
+                        message1.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("MessageAdapter", "Dislike post success");
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        tvNumberRec.setText(Integer.toString(lessLikes) + " ");
+                    } else {
+                        ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
+                        int moreLikes = message1.getLikes();
+                        moreLikes = moreLikes + 1;
+                        message1.setLikes(moreLikes);
+                        message1.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("MessageAdapter", "Dislike post success");
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                     }
                 }
             });
