@@ -22,6 +22,8 @@ import com.parse.ParseUser;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import com.parse.SaveCallback;
+
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
