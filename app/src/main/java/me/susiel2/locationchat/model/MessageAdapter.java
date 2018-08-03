@@ -119,6 +119,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             nameText = (TextView) itemView.findViewById(R.id.text_message_name);
+            tvNumber = (TextView) itemView.findViewById(R.id.tvNumber);
+            ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
+            likeButton = itemView.findViewById(R.id.likeButton);
+
         }
 
         void bind(Message message) {
@@ -144,6 +148,47 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
 //                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
 //                    .into(profileImage);
+            final int numberOfLikes = message.getLikes();
+            tvNumber.setText(numberOfLikes + " ");
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ((ivHeart.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.ufi_heart).getConstantState()))) {
+                        ivHeart.setImageResource(R.drawable.ufi_heart_active);
+                        int moreLikes = message1.getLikes();
+                        moreLikes = moreLikes + 1;
+                        message1.setLikes(moreLikes);
+                        message1.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("InstaAdapter", "Like post success");
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        tvNumber.setText(Integer.toString(moreLikes) + " ");
+                    } else {
+                        ivHeart.setImageResource(R.drawable.ufi_heart);
+                        int lessLikes = message1.getLikes();
+                        lessLikes = lessLikes - 1;
+                        message1.setLikes(lessLikes);
+                        message1.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Log.d("InstaAdapter", "Like post success");
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        tvNumber.setText(Integer.toString(lessLikes) + " ");
+                    }
+                }
+            });
         }
     }
 
