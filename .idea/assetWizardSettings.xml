@@ -19,8 +19,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/baseline-thumb_down-black-18/1x/baseline_thumb_down_black_18dp.png" />
-                                      <entry key="outputName" value="filled_thumb_down" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/outline-thumb_up-black-18/1x/outline_thumb_up_black_18dp.png" />
+                                      <entry key="outputName" value="outline_thumb_up" />
                                     </map>
                                   </option>
                                 </PersistentState>

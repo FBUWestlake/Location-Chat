@@ -15,8 +15,6 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import android.widget.Button;
-
 
 import java.util.List;
 
@@ -38,6 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mMessageList.add(0, message);
         notifyDataSetChanged();
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -89,7 +88,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, tvNumberSent;
-        ImageView ivHeartSent;
+        ImageView ivThumbsUpSent;
 
         SentMessageHolder(View itemView) {
             super(itemView);
@@ -97,7 +96,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             tvNumberSent = (TextView) itemView.findViewById(R.id.tvNumberSent);
-            ivHeartSent = (ImageView) itemView.findViewById(R.id.ivHeartSent);
+            ivThumbsUpSent = (ImageView) itemView.findViewById(R.id.ivThumbsUpSent);
 
         }
 
@@ -115,7 +114,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText, tvNumberRec;
         Button likeButton;
-        ImageView ivHeart;
+        ImageView ivThumbsUp;
         Button dislikeButton;
         ImageView ivThumbsDown;
 
@@ -126,7 +125,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             nameText = (TextView) itemView.findViewById(R.id.text_message_name);
             tvNumberRec = (TextView) itemView.findViewById(R.id.tvNumberRec);
-            ivHeart = (ImageView) itemView.findViewById(R.id.ivHeart);
+            ivThumbsUp = (ImageView) itemView.findViewById(R.id.ivThumbsUp);
             likeButton = itemView.findViewById(R.id.likeButton);
 
             ivThumbsDown = (ImageView) itemView.findViewById(R.id.ivThumbsDown);
@@ -163,8 +162,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ((ivHeart.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.ufi_heart).getConstantState()))) {
-                        ivHeart.setImageResource(R.drawable.ufi_heart_active);
+                    if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.ufi_heart).getConstantState()))) {
+                        ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
                         int moreLikes = message1.getLikes();
                         moreLikes = moreLikes + 1;
                         message1.setLikes(moreLikes);
@@ -180,7 +179,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         });
                         tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                     } else {
-                        ivHeart.setImageResource(R.drawable.ufi_heart);
+                        ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
                         int lessLikes = message1.getLikes();
                         lessLikes = lessLikes - 1;
                         message1.setLikes(lessLikes);
