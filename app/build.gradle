@@ -64,4 +64,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'jp.wasabeef:glide-transformations:3.3.0'
     compile 'com.cardiomood.android:android-data-sync:0.4'
+    implementation 'com.cardiomood.android:android-data-sync:0.4'
 }

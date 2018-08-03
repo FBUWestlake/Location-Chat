@@ -40,6 +40,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.susiel2.locationchat.database.DatabaseHelper;
 import me.susiel2.locationchat.database.ParseApp;
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
@@ -59,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageView ivSendButton;
     ImageView ivLogo;
     TextView tvTitle;
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
 //    SwitchCompat switch_notifications;
 
     private Button gear;
@@ -95,8 +97,9 @@ public class ChatActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Message>() {
             public void done(List<Message> itemList, ParseException e) {
                 if (e == null) {
-                    for(int i = 0; i < itemList.size(); i++)
+                    for(int  i = 0; i < itemList.size(); i++)
                         messages.add(itemList.get(i));
+                    dbHelper.addMessage(messages);
                     mAdapter.notifyDataSetChanged();
                     rvMessages.scrollToPosition(messages.size() - 1);
                 } else {
