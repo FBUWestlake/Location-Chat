@@ -1,32 +1,22 @@
 package me.susiel2.locationchat.database;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
-
-import me.susiel2.locationchat.ChatActivity;
-import me.susiel2.locationchat.model.Chat;
-import me.susiel2.locationchat.model.UsersGroups;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import me.susiel2.locationchat.ChatActivity;
+import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
-import me.susiel2.locationchat.model.MessageAdapter;
+import me.susiel2.locationchat.model.UsersGroups;
 
 public class ParseOperations {
 
@@ -404,4 +394,44 @@ public class ParseOperations {
             }
         });
     }
+
+    //test for badging below
+    public static int getTotalPoints(ParseUser parseUser){
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", parseUser.getObjectId());
+        try {
+            List<ParseUser> result = query.find();
+            return result.get(0).getInt("totalPoints");
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static ParseUser getUserFromId(String userId){
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", userId);
+        try {
+            List<ParseUser> result = query.find();
+            return result.get(0);
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ParseUser getPointsFromId(String userId){
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", userId);
+        try {
+            List<ParseUser> result = query.find();
+            return result.get(0);
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //query.whereEqualTo("read", true);
+    //        query.include("user");
 }

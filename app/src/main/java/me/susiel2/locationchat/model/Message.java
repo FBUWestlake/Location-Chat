@@ -3,12 +3,9 @@ package me.susiel2.locationchat.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.parse.ParseClassName;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.Date;
 
 @ParseClassName("Message")
 @DatabaseTable(tableName = "messages")
@@ -74,7 +71,8 @@ public class Message extends ParseObject{
     public void setLikes(int likes) {
         put(KEY_LIKES, likes);
     }
-    
+
+
     public static class Query extends ParseQuery<Message> {
         public Query() {
             super(Message.class);

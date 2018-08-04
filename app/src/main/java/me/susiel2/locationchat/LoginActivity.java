@@ -150,6 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         // Set core properties
         user.setUsername(phoneNumber);
         user.setPassword(password);
+        user.put("totalPoints", 0);
         user.put("name", name);
 
         // Invoke signUpInBackground

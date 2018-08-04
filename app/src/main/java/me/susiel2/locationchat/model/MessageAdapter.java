@@ -160,6 +160,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final int numberOfLikes = message.getLikes();
             tvNumberRec.setText(numberOfLikes + " ");
 
+
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,6 +170,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             int moreLikes = message1.getLikes();
                             moreLikes = moreLikes + 1;
                             message1.setLikes(moreLikes);
+
                             message1.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
@@ -179,6 +181,65 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     }
                                 }
                             });
+
+                            //user badging test begins here
+
+//user id to fetch user object. once you get user object -get the totalpoints and update
+
+/*
+                            ParseUser msgSender = message1.getCreatedBy();
+                            String userId = msgSender.getObjectId();
+                            //Log.d("This is user ID", userId);
+                            ParseUser actualMsgSender = getUserFromId(userId);
+                            int userMorePoints = getTotalPoints(actualMsgSender);
+                            actualMsgSender.put("totalPoints", userMorePoints + 1);
+                            actualMsgSender.saveInBackground();
+*/
+
+                            //third try
+                            /*
+                            ParseUser msgSender = message1.getCreatedBy();
+                            String userId = msgSender.getObjectId();
+                            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+                            query.whereEqualTo("objectId", userId);
+
+                            query.findInBackground(new FindCallback<ParseUser>() {
+                                public void done(List<ParseUser> objects, ParseException e) {
+                                    if (e == null) {
+                                        ParseUser actualMsgSender = objects.get(0);
+                                        int userMorePoints = getTotalPoints(actualMsgSender);
+                                        actualMsgSender.put("totalPoints", userMorePoints + 1);
+                                        actualMsgSender.saveInBackground();
+                                    } else {
+                                        // Something went wrong.
+                                    }
+                                }
+                            });
+*/
+                            //fourth try
+                            /*
+                            ParseUser msgSender = message1.getCreatedBy();
+                            String userId = msgSender.getObjectId();
+                            ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+                            query.whereEqualTo("objectId", userId);
+                            query.findInBackground(new FindCallback<ParseUser>() {
+                                public void done(List<ParseUser> objects, ParseException e) {
+                                    if (e == null) {
+                                        ParseUser actualMsgSender = objects.get(0);
+
+                                    } else {
+                                        // error
+                                    }
+                                    int userMorePoints = getTotalPoints(actualMsgSender);
+                                    actualMsgSender.put("totalPoints", userMorePoints + 1);
+                                    actualMsgSender.saveInBackground();
+                                }
+                            });*/
+
+
+
+
+
                             tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                         } else {
                             ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
