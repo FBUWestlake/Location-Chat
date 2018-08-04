@@ -69,7 +69,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             query.findInBackground(new FindCallback<UsersGroups>() {
                 public void done(List<UsersGroups> itemList, ParseException e) {
                     if (e == null) {
-                        if(!itemList.get(0).isRead())
+                        if(itemList.size() != 0 && !itemList.get(0).isRead())
                             viewHolder.tv_chat_name.setTypeface(null, Typeface.BOLD);
                         else
                             viewHolder.tv_chat_name.setTypeface(null, Typeface.NORMAL);

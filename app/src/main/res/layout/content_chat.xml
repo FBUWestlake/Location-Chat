@@ -32,6 +32,46 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <LinearLayout
+        android:id="@+id/horizontal_dropdown_icon_menu_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/layout_chat_chatbox"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:padding="3dp"
+        android:background="@drawable/outline_background"
+        android:visibility="invisible">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="menuItemClickTake"
+            android:paddingBottom="5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="5dp"
+            android:tint="@android:color/darker_gray"
+            android:background="#ffffff"
+            app:srcCompat="@drawable/take_photo" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:onClick="menuItemClickUpload"
+            android:paddingBottom="5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="5dp"
+            android:background="#ffffff"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/gallery" />
+
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/layout_chat_chatbox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

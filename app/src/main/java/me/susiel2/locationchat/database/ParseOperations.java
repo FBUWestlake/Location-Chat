@@ -1,5 +1,7 @@
 package me.susiel2.locationchat.database;
 
+import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -23,22 +25,19 @@ public class ParseOperations {
     // Enjoy. :^)
     // ¯\_(ツ)_/¯
 
-    public static void createMessage(String content, Chat chat) {
+    public static void createMessage(String content, ParseFile file, Chat chat) {
         Message newMessage = new Message();
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
         newMessage.setChat(chat);
         newMessage.setLikes(0);
-        newMessage.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("ParseOperations", "Message sent");
-                } else {
-                    Log.e("ParseOperations", e.toString());
-                }
-            }
-        });
+        if(file != null)
+            newMessage.setFile(file);
+        try {
+            newMessage.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     //No longer used. Implemented in-class so as to use global variables
