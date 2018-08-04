@@ -1,7 +1,10 @@
 package me.susiel2.locationchat.database;
 
+<<<<<<< HEAD
+=======
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+>>>>>>> a6c4f47bb414e5452f5267ae4927c2f31f74ed36
 import android.util.Log;
 
 import com.parse.FindCallback;

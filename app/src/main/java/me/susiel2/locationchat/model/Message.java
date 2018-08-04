@@ -7,8 +7,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+<<<<<<< HEAD
+=======
 import java.io.File;
 import java.util.Date;
+
+>>>>>>> a6c4f47bb414e5452f5267ae4927c2f31f74ed36
 @ParseClassName("Message")
 @DatabaseTable(tableName = "messages")
 public class Message extends ParseObject{
