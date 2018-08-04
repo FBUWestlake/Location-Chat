@@ -167,7 +167,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             query.findInBackground(new FindCallback<ParseUser>() {
                 public void done(List<ParseUser> objects, ParseException e) {
                     if (e == null) {
-                        nameText.setText(objects.get(0).getString("name"));
+                        if(objects.size() != 0)
+                            nameText.setText(objects.get(0).getString("name"));
+                        else
+                            nameText.setText("[deleted]");
                     } else {
                         // Something went wrong.
                     }

@@ -42,16 +42,11 @@ public class ParseOperations {
         newMessage.setLikes(0);
         if(file != null)
             newMessage.setFile(file);
-        newMessage.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("ParseOperations", "Message sent");
-                } else {
-                    Log.e("ParseOperations", e.toString());
-                }
-            }
-        });
+        try {
+            newMessage.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     //No longer used. Implemented in-class so as to use global variables
