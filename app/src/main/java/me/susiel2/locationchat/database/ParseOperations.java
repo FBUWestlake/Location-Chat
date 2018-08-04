@@ -40,7 +40,8 @@ public class ParseOperations {
         newMessage.setContent(content);
         newMessage.setChat(chat);
         newMessage.setLikes(0);
-        newMessage.setFile(file);
+        if(file != null)
+            newMessage.setFile(file);
         newMessage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

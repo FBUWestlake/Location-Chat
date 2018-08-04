@@ -1,6 +1,8 @@
 package me.susiel2.locationchat.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +12,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
 import me.susiel2.locationchat.database.ParseOperations;
 
@@ -90,6 +96,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, tvNumberSent;
         ImageView ivThumbsUpSent;
+        ImageView attachedImage;
 
         SentMessageHolder(View itemView) {
             super(itemView);
@@ -98,12 +105,28 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             tvNumberSent = (TextView) itemView.findViewById(R.id.tvNumberSent);
             ivThumbsUpSent = (ImageView) itemView.findViewById(R.id.ivThumbsUpSent);
+            attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
 
         }
 
         void bind(Message message) {
             messageText.setText(message.getContent());
             timeText.setText(message.getCreatedAtString());
+
+            if(message.getFile() != null) {
+                Log.e("MessageAdapter", "binding image to message");
+                Bitmap bm_resized = null;
+                try {
+                    String filePath = message.getFile().getFile().getAbsolutePath();
+                    bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
+                        .into(attachedImage);
+            }
 
             final int numberOfLikes = message.getLikes();
             tvNumberSent.setText(numberOfLikes + " ");
