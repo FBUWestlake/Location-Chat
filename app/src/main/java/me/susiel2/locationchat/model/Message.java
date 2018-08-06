@@ -11,27 +11,40 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
+import java.security.acl.Group;
 import java.util.Date;
 
 @ParseClassName("Message")
-public class Message extends ParseObject {
+public class Message extends ParseObject implements Serializable {
 
-    public String KEY_CONTENT = "content";
+    private static String content = "";
+    private static ParseUser createdBy = null;
+    private static Group group = null;
+    private static Date date = null;
 
-    public final String KEY_ATTACHMENT = "attachment";
+    public Message(String content, ParseUser createdBy, Group group, Date date) {
+        this.content = content;
+        this.createdBy = createdBy;
+        this.group = group;
+        this.date = date;
+    }
+    public Message() {
 
-    public final String KEY_GROUP_ID = "groupId";
+    }
 
-    @DatabaseField(columnName = "CREATED_BY")
+    private static final String KEY_CONTENT = "content";
+
+    private static final String KEY_ATTACHMENT = "attachment";
+
+    private static final String KEY_GROUP_ID = "groupId";
+
     private static final String KEY_CREATED_BY = "createdBy";
-    
-    @DatabaseField(columnName = "LIKES")
+
     private static final String KEY_LIKES = "likes";
-    public final String KEY_CREATED_BY = "createdBy";
 
-    public final String KEY_LIKES = "likes";
-
-    public String getIdString() { return getObjectId(); }
+    public String getIdString() {
+        return getObjectId();
+    }
 
     public String getContent() {
         return getString(KEY_CONTENT);
@@ -46,6 +59,7 @@ public class Message extends ParseObject {
     public String getAttachment() {
         return getString(KEY_ATTACHMENT);
     }
+
     public void setAttachment(String attachment) {
         put(KEY_ATTACHMENT, attachment);
     }
@@ -55,7 +69,9 @@ public class Message extends ParseObject {
         return (Chat) getParseObject(KEY_GROUP_ID);
     }
 
-    public void setChat(Chat chat) { put(KEY_GROUP_ID, chat); }
+    public void setChat(Chat chat) {
+        put(KEY_GROUP_ID, chat);
+    }
 
     public ParseUser getCreatedBy() {
         return getParseUser(KEY_CREATED_BY);
@@ -70,14 +86,6 @@ public class Message extends ParseObject {
     }
     
    public int getLikes() {
-        return getInt(KEY_LIKES);
-    }
-
-    public void setLikes(int likes) {
-        put(KEY_LIKES, likes);
-    }
-    
-    public int getLikes() {
         return getInt(KEY_LIKES);
     }
 

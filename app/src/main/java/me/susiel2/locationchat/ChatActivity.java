@@ -91,15 +91,17 @@ public class ChatActivity extends AppCompatActivity {
         ivLogo.setImageBitmap(chat.getImageBitmap());
         tvTitle = (TextView) findViewById(R.id.tvTitle);
 
+        dbHelper.readLastMessageTime();
 
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo("groupId", chat);
+        //query.whereGreaterThan("createdAt", dbHelper.readLastMessageTime());
         query.findInBackground(new FindCallback<Message>() {
             public void done(List<Message> itemList, ParseException e) {
                 if (e == null) {
                     for(int  i = 0; i < itemList.size(); i++)
                         messages.add(itemList.get(i));
-                    dbHelper.addMessage(messages);
+                    dbHelper.addMessages(messages);
                     mAdapter.notifyDataSetChanged();
                     rvMessages.scrollToPosition(messages.size() - 1);
                 } else {
@@ -191,6 +193,7 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(ParseQuery<Message> query, Message object) {
                         messages.add(object);
+                        dbHelper.addMessage(object);
                         Log.d("livequery", "added");
 
                         // RecyclerView updates need to be run on the UI thread
