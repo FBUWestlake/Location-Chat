@@ -49,6 +49,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SubscriptionHandling;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
@@ -199,7 +200,7 @@ public class ChatActivity extends AppCompatActivity {
                         pFile = null;
                     parseOperations.createMessage(content, pFile, chat);
                     parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
-                    etMessage.setText(null);
+                    etMessage.setText("");
                     bm_chatImage = null;
                     addAttachmentBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
                     addAttachmentBtn.setOnClickListener(new OnOneClickListener() {
@@ -272,16 +273,17 @@ public class ChatActivity extends AppCompatActivity {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
-                    public void onEvent(ParseQuery<Message> query, Message object) {
-                        messages.add(object);
-                        Log.d("livequery", "added");
-
+                    public void onEvent(ParseQuery<Message> query, final Message object) {
+                        
                         // RecyclerView updates need to be run on the UI thread
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                messages.add(object);
+                                Log.d("livequery", "added");
                                 mAdapter.notifyItemInserted(messages.size() - 1);
                                 rvMessages.scrollToPosition(messages.size() - 1);
+//                                mAdapter.notifyDataSetChanged();
                             }
                         });
                     }
@@ -323,11 +325,11 @@ public class ChatActivity extends AppCompatActivity {
         } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             bm_chatImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
             addAttachmentBtn.setImageDrawable(getResources().getDrawable(R.drawable.cancel_document));
-            addAttachmentBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
             addAttachmentBtn.setOnClickListener(new OnOneClickListener() {
                 @Override
                 public void onOneClick(View v) {
                     bm_chatImage = null;
+                    addAttachmentBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
                     addAttachmentBtn.setOnClickListener(new OnOneClickListener() {
                         @Override
                         public void onOneClick(View v) {

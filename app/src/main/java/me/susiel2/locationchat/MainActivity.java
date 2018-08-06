@@ -300,10 +300,24 @@ public class MainActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new OnOneClickListener() {
             @Override
             public void onOneClick(View v) {
-                ParseUser.getCurrentUser().deleteInBackground();
-                ParseUser.logOutInBackground();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);            }
+                // TODO - query all UsersGroups objects for the user and delete them
+                ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
+                query.whereEqualTo("user", ParseUser.getCurrentUser()).addDescendingOrder("updatedAt");
+                query.findInBackground(new FindCallback<UsersGroups>() {
+                    public void done(List<UsersGroups> itemList, ParseException e) {
+                        if (e == null) {
+                            for(int i = 0; i < itemList.size(); i++)
+                                itemList.get(i).deleteInBackground();
+                            ParseUser.getCurrentUser().deleteInBackground();
+                            ParseUser.logOutInBackground();
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Log.d("item", "Error: " + e.getMessage());
+                        }
+                    }
+                });
+            }
         });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);

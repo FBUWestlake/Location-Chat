@@ -3,6 +3,7 @@ package me.susiel2.locationchat.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,11 +17,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -114,7 +119,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             timeText.setText(message.getCreatedAtString());
 
             if(message.getFile() != null) {
-                Log.e("MessageAdapter", "binding image to message");
+                Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
                 Bitmap bm_resized = null;
                 try {
                     String filePath = message.getFile().getFile().getAbsolutePath();
@@ -126,6 +131,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
                 Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
                         .into(attachedImage);
+            }
+            else{
+                Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
+                attachedImage.setImageDrawable(myDrawable);
             }
 
             final int numberOfLikes = message.getLikes();

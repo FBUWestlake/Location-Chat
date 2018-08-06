@@ -11,6 +11,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +40,7 @@ public class ParseOperations {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        Log.e("ParseOperations", "Empty file text: " + newMessage.getFile());
     }
 
     //No longer used. Implemented in-class so as to use global variables
