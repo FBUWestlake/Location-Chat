@@ -260,9 +260,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     void liveQuery() {
+        chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
         parseQuery.whereNotEqualTo("user", ParseUser.getCurrentUser().getObjectId());
+        parseQuery.whereEqualTo("groupId", chat);
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
         // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 
