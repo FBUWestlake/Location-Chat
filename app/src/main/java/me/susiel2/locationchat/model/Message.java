@@ -15,14 +15,14 @@ import java.security.acl.Group;
 import java.util.Date;
 
 @ParseClassName("Message")
-public class Message extends ParseObject implements Serializable {
+public class Message extends ParseObject {
 
     private static String content = "";
-    private static ParseUser createdBy = null;
-    private static Group group = null;
-    private static Date date = null;
+    private static String createdBy = null;
+    private static String group = null;
+    private static String date = null;
 
-    public Message(String content, ParseUser createdBy, Group group, Date date) {
+    public Message(String content, String createdBy, String group, String date) {
         this.content = content;
         this.createdBy = createdBy;
         this.group = group;

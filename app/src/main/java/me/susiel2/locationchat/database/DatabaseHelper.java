@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.telephony.gsm.SmsMessage;
 import android.util.Log;
@@ -188,25 +189,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-//    public List<Message> readAllMessages() {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        String selection = "SELECT * FROM " + TABLE_THREE_NAME;
-//        Cursor cursor = db.rawQuery(selection, null);
-//        List<Message> messages = null;
-//        try {
-//            if (cursor.moveToFirst()) {
-//                while (cursor.moveToNext()) {
-//                    Message message = new Message(
-//                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
-//                            cursor.getString(cursor.getColumnIndex(KEY_MESSAG                            E_CREATEDBY)),
-//                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
-//                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT))
-//                    )
-//                }
-//            }
-//        }
-//    }
+    public List<Message> readAllMessages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selection = "SELECT * FROM " + TABLE_THREE_NAME;
+        Cursor cursor = db.rawQuery(selection, null);
+        List<Message> messages = null;
+        try {
+            if (cursor.moveToFirst()) {
+                while (cursor.moveToNext()) {
+                    Message message = new Message(
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT))
+                    );
+                    messages.add(message);
+                }
+            }
+                db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            Log.d("SQLite error", e.getMessage());
+        }finally {
+            //db.endTransaction();
+        }
+        return messages;
+    }
 
 
 
