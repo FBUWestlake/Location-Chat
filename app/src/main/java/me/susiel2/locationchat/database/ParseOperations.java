@@ -102,7 +102,7 @@ public class ParseOperations {
             public void done(List<UsersGroups> itemList, ParseException e) {
                 if (e == null) {
                     for(int i = 0; i < itemList.size(); i++) {
-                        if(!itemList.get(i).getUser().getUsername().equals(currentUser.getUsername())) {
+                        if(itemList.get(i).getUser() != null && !itemList.get(i).getUser().getUsername().equals(currentUser.getUsername())) {
                             itemList.get(i).setRead(false);
                             itemList.get(i).saveInBackground();
                         }
