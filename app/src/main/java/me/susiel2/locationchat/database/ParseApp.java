@@ -9,6 +9,7 @@ import com.parse.ParseObject;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
+import me.susiel2.locationchat.model.UsersPoints;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
