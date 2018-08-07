@@ -135,26 +135,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 relativeLayout.setBackgroundResource(stateFlags[position]);
-
-/*
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                String selected = state_spinner.getItemAtPosition(spinnerPosition).toString();
-                currentUser.put("location", selected);
-                currentUser.saveInBackground(new SaveCallback() {
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            //success, saved!
-                            Log.d("MyApp", "Successfully saved!");
-                        } else {
-                            //fail to save!
-                            e.printStackTrace();
-                        }
-                    }
-                }); */
-                //Log.d("tag", selected);
-                //String test = getUserLocation(currentUser);
-                //Log.d("tag 2", test);
-
             }
 
 

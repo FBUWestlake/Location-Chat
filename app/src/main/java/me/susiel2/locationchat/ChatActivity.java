@@ -230,8 +230,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 parseOperations.leaveGroup(ParseUser.getCurrentUser(), chat);
-                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
+//                startActivity(intent);
+                finish();
             }
         });
 
@@ -411,6 +412,12 @@ public class ChatActivity extends AppCompatActivity {
     public void menuItemClickUpload(View view) {
         androidDropDownMenuIconItem.setVisibility(View.INVISIBLE);
         startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+    }
+
+    public void menuItemClickLocation(View view) {
+        androidDropDownMenuIconItem.setVisibility(View.INVISIBLE);
+        // TODO - offer either "current location" or "enter an address"
+        //startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
     }
 
 }

@@ -67,6 +67,19 @@
             android:tint="@android:color/darker_gray"
             app:srcCompat="@drawable/gallery" />
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:onClick="menuItemClickLocation"
+            android:paddingBottom="5dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="5dp"
+            android:background="#ffffff"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@drawable/location_on_grey" />
+
         />
 
     </LinearLayout>
