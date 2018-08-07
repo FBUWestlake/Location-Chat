@@ -155,6 +155,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Button dislikeButton;
         ImageView ivThumbsDown;
         ImageView attachedImage;
+        Button viewHiddenMessageButton;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -170,46 +171,59 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             dislikeButton = itemView.findViewById(R.id.dislikeButton);
 
             attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
+            viewHiddenMessageButton= itemView.findViewById(R.id.viewHiddenMessageButton);
 
         }
 
         void bind(Message message) {
             final Message message1 = message;
-            messageText.setText(message.getContent());
-
-            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-            query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
-
-            query.findInBackground(new FindCallback<ParseUser>() {
-                public void done(List<ParseUser> objects, ParseException e) {
-                    if (e == null) {
-                        if(objects.size() != 0)
-                            nameText.setText(objects.get(0).getString("name"));
-                        else
-                            nameText.setText("[deleted]");
-                    } else {
-                        // Something went wrong.
+            if (message.getLikes() < -2) {
+                messageText.setText("Message hidden due to low score. Click to view.");
+                timeText.setText(message1.getCreatedAtString());
+                viewHiddenMessageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        messageText.setText(message1.getContent());
                     }
-                }
-            });
+                });
 
-            if(message.getFile() != null) {
-                Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
-                Bitmap bm_resized = null;
-                try {
-                    String filePath = message.getFile().getFile().getAbsolutePath();
-                    bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-                Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
-                        .into(attachedImage);
             }
-            else{
-                Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
-                attachedImage.setImageDrawable(myDrawable);
+            else {
+                messageText.setText(message.getContent());
+
+                ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+                query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
+
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    public void done(List<ParseUser> objects, ParseException e) {
+                        if (e == null) {
+                            if (objects.size() != 0)
+                                nameText.setText(objects.get(0).getString("name"));
+                            else
+                                nameText.setText("[deleted]");
+                        } else {
+                            // Something went wrong.
+                        }
+                    }
+                });
+
+                if (message.getFile() != null) {
+                    Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
+                    Bitmap bm_resized = null;
+                    try {
+                        String filePath = message.getFile().getFile().getAbsolutePath();
+                        bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                    Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
+                            .into(attachedImage);
+                } else {
+                    Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
+                    attachedImage.setImageDrawable(myDrawable);
+                }
             }
 
             timeText.setText(message.getCreatedAtString());
