@@ -268,7 +268,7 @@ public class ParseOperations {
     public static void addUserToGroup(ParseUser currentUser, Chat chat) {
         final UsersGroups usersGroups = new UsersGroups();
         usersGroups.setUser(currentUser);
-        usersGroups.setNotificationsOn(true);
+        //usersGroups.setNotificationsOn(true);
         usersGroups.setRead(true);
         usersGroups.setChat(chat);
         try {
