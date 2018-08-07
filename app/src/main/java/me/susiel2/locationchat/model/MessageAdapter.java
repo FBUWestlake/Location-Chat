@@ -21,6 +21,7 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.ParseObject;
 
 import org.json.JSONObject;
 
