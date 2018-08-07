@@ -397,8 +397,7 @@ public class ParseOperations {
         });
     }
 
-    //test for badging below
-    public static int getTotalPoints(ParseUser parseUser){
+/*    public static int getTotalPoints(ParseUser parseUser){
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereEqualTo("objectId", parseUser.getObjectId());
         try {
@@ -409,7 +408,7 @@ public class ParseOperations {
         }
         return 0;
     }
-
+*/
     public static ParseUser getUserFromId(String userId){
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereEqualTo("objectId", userId);
@@ -422,6 +421,7 @@ public class ParseOperations {
         return null;
     }
 
+    /*
     public static ParseUser getPointsFromId(String userId){
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereEqualTo("objectId", userId);
@@ -432,7 +432,7 @@ public class ParseOperations {
             e.printStackTrace();
         }
         return null;
-    }
+    } */
 
     //query.whereEqualTo("read", true);
     //        query.include("user");
