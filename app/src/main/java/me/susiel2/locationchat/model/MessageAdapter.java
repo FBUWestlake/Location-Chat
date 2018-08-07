@@ -217,63 +217,27 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 }
                             });
 
-                            //user badging test begins here
-
-//user id to fetch user object. once you get user object -get the totalpoints and update
-
-/*
+                            //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();
                             String userId = msgSender.getObjectId();
-                            //Log.d("This is user ID", userId);
-                            ParseUser actualMsgSender = getUserFromId(userId);
-                            int userMorePoints = getTotalPoints(actualMsgSender);
-                            actualMsgSender.put("totalPoints", userMorePoints + 1);
-                            actualMsgSender.saveInBackground();
-*/
-
-                            //third try
-                            /*
-                            ParseUser msgSender = message1.getCreatedBy();
-                            String userId = msgSender.getObjectId();
-                            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-                            query.whereEqualTo("objectId", userId);
-
-                            query.findInBackground(new FindCallback<ParseUser>() {
-                                public void done(List<ParseUser> objects, ParseException e) {
-                                    if (e == null) {
-                                        ParseUser actualMsgSender = objects.get(0);
-                                        int userMorePoints = getTotalPoints(actualMsgSender);
-                                        actualMsgSender.put("totalPoints", userMorePoints + 1);
-                                        actualMsgSender.saveInBackground();
-                                    } else {
-                                        // Something went wrong.
-                                    }
-                                }
-                            });
-*/
-                            //fourth try
-                            /*
-                            ParseUser msgSender = message1.getCreatedBy();
-                            String userId = msgSender.getObjectId();
-                            ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
-                            query.whereEqualTo("objectId", userId);
-                            query.findInBackground(new FindCallback<ParseUser>() {
-                                public void done(List<ParseUser> objects, ParseException e) {
-                                    if (e == null) {
-                                        ParseUser actualMsgSender = objects.get(0);
-
-                                    } else {
-                                        // error
-                                    }
-                                    int userMorePoints = getTotalPoints(actualMsgSender);
-                                    actualMsgSender.put("totalPoints", userMorePoints + 1);
-                                    actualMsgSender.saveInBackground();
-                                }
-                            });*/
-
-
-
-
+                            Log.d("This is the user ID", userId);
+//query for messages where createdAt is that userId.
+                            //this has error of indexoutofbounds exception
+                            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+                            query.whereEqualTo("userId", userId);
+                            try {
+                                List<UsersPoints> result = query.find();
+                                Log.d("This is result", ""+ result);
+                                ParseObject obj = result.get(0);
+                                int userMorePoints = obj.getInt("totalPoints");
+                                Log.d("totalPoints count", "" +userMorePoints);
+                                //int userMorePoints = result.get(0).getInt("totalPoints");
+                                obj.put("totalPoints", userMorePoints + 1);
+                                obj.saveInBackground();
+                                Log.d("This is parse points", "" + obj.get("totalPoints"));
+                            } catch(ParseException e) {
+                                e.printStackTrace();
+                            }
 
                             tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                         } else {
