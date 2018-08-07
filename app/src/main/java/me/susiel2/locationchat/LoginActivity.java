@@ -131,6 +131,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d("LoginActivity", "Login successful");
                     // Inside a callback, so MainActivity.this
+                    
+                    UsersPoints newUserPoints = new UsersPoints();
+                    newUserPoints.setUser(user.getObjectId());
+                    newUserPoints.setTotalPoints(0);
+                    newUserPoints.saveInBackground();
+                    Log.d("User total points", "" + newUserPoints.getTotalPoints());
+                    
                     final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
