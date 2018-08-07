@@ -1,5 +1,7 @@
 package me.susiel2.locationchat.model;
 
+import android.text.format.DateUtils;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.parse.ParseClassName;
@@ -9,7 +11,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
 @ParseClassName("Message")
 @DatabaseTable(tableName = "messages")
 public class Message extends ParseObject{
@@ -62,7 +67,8 @@ public class Message extends ParseObject{
     }
 
     public String getCreatedAtString() {
-        return getCreatedAt().toString();
+        String rawTime = getCreatedAt().toString();
+        return getRelativeTimeAgo(rawTime);
     }
     
    public int getLikes() {
@@ -81,6 +87,23 @@ public class Message extends ParseObject{
 
         // TODO - add useful Query methods
 
+    }
+
+    public String getRelativeTimeAgo(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss zzz yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
     }
 
 }

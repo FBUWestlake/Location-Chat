@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
@@ -150,6 +153,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView ivThumbsUp;
         Button dislikeButton;
         ImageView ivThumbsDown;
+        ImageView attachedImage;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -163,6 +167,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             ivThumbsDown = (ImageView) itemView.findViewById(R.id.ivThumbsDown);
             dislikeButton = itemView.findViewById(R.id.dislikeButton);
+
+            attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
 
         }
 
@@ -185,6 +191,25 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
+
+            if(message.getFile() != null) {
+                Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
+                Bitmap bm_resized = null;
+                try {
+                    String filePath = message.getFile().getFile().getAbsolutePath();
+                    bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
+                        .into(attachedImage);
+            }
+            else{
+                Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
+                attachedImage.setImageDrawable(myDrawable);
+            }
 
             timeText.setText(message.getCreatedAtString());
 
@@ -340,4 +365,5 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }
     }
+
 }
