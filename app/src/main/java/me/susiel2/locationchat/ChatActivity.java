@@ -80,7 +80,7 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
-        Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId());
+        Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId() + " " + chat.getName());
 //        chatID = chat.getIdString();
 
         messages = new ArrayList<Message>();
@@ -91,52 +91,82 @@ public class ChatActivity extends AppCompatActivity {
         ivLogo.setImageBitmap(chat.getImageBitmap());
         tvTitle = (TextView) findViewById(R.id.tvTitle);
 
-        if (dbHelper.readAllMessages() != null) {
-            messages = dbHelper.readAllMessages();
-            mAdapter.notifyDataSetChanged();
-            rvMessages.scrollToPosition(messages.size() - 1);
-
-            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-            query.whereEqualTo("groupId", chat);
-            query.whereGreaterThan("createdAt", dbHelper.readLastMessageTime());
-            query.findInBackground(new FindCallback<Message>() {
-                public void done(List<Message> itemList, ParseException e) {
-                    if (e == null) {
-                        for(int  i = 0; i < itemList.size(); i++)
-                            messages.add(itemList.get(i));
-                        dbHelper.addMessages(messages);
-                        mAdapter.notifyDataSetChanged();
-                        rvMessages.scrollToPosition(messages.size() - 1);
-                    } else {
-                        Log.d("item", "Error: " + e.getMessage());
-                    }
-                }
-            });
-        } else {
-
-            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-            query.whereEqualTo("groupId", chat);
-            query.findInBackground(new FindCallback<Message>() {
-                public void done(List<Message> itemList, ParseException e) {
-                    if (e == null) {
-                        for (int i = 0; i < itemList.size(); i++)
-                            messages.add(itemList.get(i));
-                        dbHelper.addMessages(messages);
-                        mAdapter.notifyDataSetChanged();
-                        rvMessages.scrollToPosition(messages.size() - 1);
-                    } else {
-                        Log.d("item", "Error: " + e.getMessage());
-                    }
-                }
-            });
-        }
-
-
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setStackFromEnd(true);
         rvMessages.setLayoutManager(manager);
+
+        String lastMessageTime;
+        lastMessageTime = dbHelper.readLastMessageTime();
+        List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+
+        if (localMessages != null) {
+            for (int i = 0; i < localMessages.size(); i++) {
+                messages.add(localMessages.get(i));
+            }
+            mAdapter.notifyDataSetChanged();
+            rvMessages.scrollToPosition(messages.size() - 1);
+        }
+
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        query.whereEqualTo("groupId", chat);
+        if (lastMessageTime != null) {
+            query.whereGreaterThan("createdAt", lastMessageTime);
+        }
+        query.findInBackground(new FindCallback<Message>() {
+            public void done(List<Message> itemList, ParseException e) {
+                if (itemList.size() > 0) {
+                    for (int  i = 0; i < itemList.size(); i++) {
+                        messages.add(itemList.get(i));
+                        dbHelper.addMessages(messages);
+                        mAdapter.notifyDataSetChanged();
+                        rvMessages.scrollToPosition(messages.size() - 1);
+                    }
+                }
+            }
+
+        });
+
+//        List<Message> localMessages = dbHelper.readAllMessages();
+//        if (localMessages.size() != 0) {
+//            Log.d("tryna figure it out", "here we are in if");
+//            messages = localMessages;
+//            mAdapter.notifyDataSetChanged();
+//            rvMessages.scrollToPosition(messages.size() - 1);
+//
+//            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//            query.whereEqualTo("groupId", chat);
+//            query.whereGreaterThan("createdAt", dbHelper.readLastMessageTime());
+//            query.findInBackground(new FindCallback<Message>() {
+//                public void done(List<Message> itemList, ParseException e) {
+//                    if (itemList.size() > 0) {
+//                        for(int  i = 0; i < itemList.size(); i++)
+//                            messages.add(itemList.get(i));
+//                        dbHelper.addMessages(messages);
+//                        mAdapter.notifyDataSetChanged();
+//                        rvMessages.scrollToPosition(messages.size() - 1);
+//                    }
+//                }
+//            });
+//        } else {
+//            Log.d("tryna figure it out", "here we are in else");
+//            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//            query.whereEqualTo("groupId", chat);
+//            query.findInBackground(new FindCallback<Message>() {
+//                public void done(List<Message> itemList, ParseException e) {
+//                    if (e == null) {
+//                        for (int i = 0; i < itemList.size(); i++)
+//                            messages.add(itemList.get(i));
+//                        dbHelper.addMessages(messages);
+//                        mAdapter.notifyDataSetChanged();
+//                        rvMessages.scrollToPosition(messages.size() - 1);
+//                    } else {
+//                        Log.d("item", "Error: " + e.getMessage());
+//                    }
+//                }
+//            });
+//        }
 
         liveQuery();
         rvMessages.scrollToPosition(messages.size() - 1);

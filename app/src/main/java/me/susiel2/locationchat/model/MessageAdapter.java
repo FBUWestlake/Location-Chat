@@ -151,7 +151,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            timeText.setText(message.getCreatedAtString());
+//            timeText.setText(message.getCreatedAtString());
 
 //            Glide.with(context).load(message.getProfileImage())
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())

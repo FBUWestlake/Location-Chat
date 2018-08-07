@@ -12,7 +12,11 @@ import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.security.acl.Group;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import me.susiel2.locationchat.database.ParseOperations;
 
 @ParseClassName("Message")
 public class Message extends ParseObject {
@@ -23,11 +27,17 @@ public class Message extends ParseObject {
     private static String date = null;
 
     public Message(String content, String createdBy, String group, String date) {
-        this.content = content;
-        this.createdBy = createdBy;
-        this.group = group;
-        this.date = date;
+//        this.KEY_CONTENT = content;
+//        this.createdBy = createdBy;
+//        this.group = group;
+//        this.date = date;
+        super();
+        setContent(content);
+        setCreatedByFromUserId(createdBy);
+        setChatFromGroupId(group);
+        setCreatedAt(date);
     }
+
     public Message() {
 
     }
@@ -39,6 +49,8 @@ public class Message extends ParseObject {
     private static final String KEY_GROUP_ID = "groupId";
 
     private static final String KEY_CREATED_BY = "createdBy";
+
+    private static final String KEY_CREATED_AT = "createdAt";
 
     private static final String KEY_LIKES = "likes";
 
@@ -73,6 +85,11 @@ public class Message extends ParseObject {
         put(KEY_GROUP_ID, chat);
     }
 
+    public void setChatFromGroupId(String objectId) {
+        Chat chat = ParseOperations.getGroupFromId(objectId);
+        put(KEY_GROUP_ID, chat);
+    }
+
     public ParseUser getCreatedBy() {
         return getParseUser(KEY_CREATED_BY);
     }
@@ -81,8 +98,29 @@ public class Message extends ParseObject {
         put(KEY_CREATED_BY, user);
     }
 
+    public void setCreatedByFromUserId(String objectId) {
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", objectId);
+        try {
+            put(KEY_CREATED_BY, query.find().get(0));
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getCreatedAtString() {
         return getCreatedAt().toString();
+    }
+
+    public void setCreatedAt(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
+        Date date = null;
+        try {
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        put(KEY_CREATED_AT, date);
     }
     
    public int getLikes() {

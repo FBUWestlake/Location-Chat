@@ -34,7 +34,8 @@ public class ParseOperations {
     // ¯\_(ツ)_/¯
 
     public static void createMessage(String content, Chat chat) {
-        Message newMessage = new Message();
+        Message newMessage =
+                new Message();
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
         newMessage.setChat(chat);

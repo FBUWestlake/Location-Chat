@@ -20,13 +20,14 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import me.susiel2.locationchat.model.Message;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "bounce.db";
+    public static final String DATABASE_NAME = "bouncey.db";
 
     public static final String TABLE_ONE_NAME = "users";
     public static final String TABLE_TWO_NAME = "groups";
@@ -74,20 +75,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table " + TABLE_ONE_NAME + "(" + KEY_USER_ID + " TEXT PRIMARY KEY," + KEY_USER_NAME + " TEXT," + KEY_USER_PHONE + " INTEGER," + KEY_USER_PASSWORD + " TEXT," + KEY_USER_CREATEDAT + " TEXT," + KEY_USER_LOCATION + " TEXT" + ")");
-        sqLiteDatabase.execSQL("create table " + TABLE_TWO_NAME + "(" + KEY_GROUP_ID + " TEXT PRIMARY KEY," + KEY_GROUP_NAME + " TEXT," + KEY_GROUP_DESCRIPTION + " TEXT," + KEY_GROUP_IMAGE + " BLOB," + KEY_GROUP_CREATEDAT + " TEXT, " + KEY_GROUP_CREATEDBY + " TEXT REFERENCES " + TABLE_ONE_NAME + "," + KEY_GROUP_LOCATION + " TEXT," + KEY_GROUP_CATEGORY + " TEXT" + ")");
+//        sqLiteDatabase.execSQL("create table " + TABLE_ONE_NAME + "(" + KEY_USER_ID + " TEXT PRIMARY KEY," + KEY_USER_NAME + " TEXT," + KEY_USER_PHONE + " INTEGER," + KEY_USER_PASSWORD + " TEXT," + KEY_USER_CREATEDAT + " TEXT," + KEY_USER_LOCATION + " TEXT" + ")");
+//        sqLiteDatabase.execSQL("create table " + TABLE_TWO_NAME + "(" + KEY_GROUP_ID + " TEXT PRIMARY KEY," + KEY_GROUP_NAME + " TEXT," + KEY_GROUP_DESCRIPTION + " TEXT," + KEY_GROUP_IMAGE + " BLOB," + KEY_GROUP_CREATEDAT + " TEXT, " + KEY_GROUP_CREATEDBY + " TEXT REFERENCES " + TABLE_ONE_NAME + "," + KEY_GROUP_LOCATION + " TEXT," + KEY_GROUP_CATEGORY + " TEXT" + ")");
         sqLiteDatabase.execSQL("create table " + TABLE_THREE_NAME + "(" + KEY_MESSAGE_ID + " TEXT PRIMARY KEY," + KEY_MESSAGE_CONTENT + " TEXT," + KEY_MESSAGE_CREATEDAT + " TEXT," + KEY_MESSAGE_ATTACHMENT + " BLOB," + KEY_MESSAGE_CREATEDBY + " TEXT REFERENCES " + TABLE_TWO_NAME + "," + KEY_MESSAGE_GROUPID + " TEXT REFERENCES " + TABLE_TWO_NAME + ")");
-        sqLiteDatabase.execSQL("create table " + TABLE_FOUR_NAME + "(USERGROUP_ID TEXT PRIMARY KEY, NOTIFICATIONS INTEGER, READ INTEGER, USER_ID TEXT, GROUP_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES users(USER_ID), FOREIGN KEY(GROUP_ID) REFERENCES groups(GROUP_ID))");
+//        sqLiteDatabase.execSQL("create table " + TABLE_FOUR_NAME + "(USERGROUP_ID TEXT PRIMARY KEY, NOTIFICATIONS INTEGER, READ INTEGER, USER_ID TEXT, GROUP_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES users(USER_ID), FOREIGN KEY(GROUP_ID) REFERENCES groups(GROUP_ID))");
 //        sqLiteDatabase.execSQL("create table " + TABLE_FIVE_NAME + "(" + KEY_MESSAGEOBJECT + " BLOB" + ")");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int j) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ONE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TWO_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ONE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TWO_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_THREE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FOUR_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FOUR_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FIVE_NAME);
 
         onCreate(sqLiteDatabase);
@@ -139,19 +140,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {
+            if (messages == null) {
+                return;
+            } else {
 //            ParseUser user = addOrUpdateUser(message.KEY_CREATED_BY);
-            for (int i = 0; i < messages.size(); i++) {
-                Message currentMessage = messages.get(i);
-                ContentValues values = new ContentValues();
-                values.put(KEY_MESSAGE_ID, currentMessage.getObjectId());
-                values.put(KEY_MESSAGE_CREATEDBY, currentMessage.getCreatedBy().getObjectId());
-                values.put(KEY_MESSAGE_CONTENT, currentMessage.getContent());
-                values.put(KEY_MESSAGE_CREATEDAT, currentMessage.getCreatedAtString());
-                values.put(KEY_MESSAGE_GROUPID, currentMessage.getChat().getObjectId());
-                db.insert(TABLE_THREE_NAME, null, values);
+                for (int i = 0; i < messages.size(); i++) {
+                    Message currentMessage = messages.get(i);
+                    ContentValues values = new ContentValues();
+                    Log.d("uh oh message", currentMessage.getContent());
+                    values.put(KEY_MESSAGE_ID, currentMessage.getObjectId());
+                    values.put(KEY_MESSAGE_CREATEDBY, currentMessage.getCreatedBy().getObjectId());
+                    values.put(KEY_MESSAGE_CONTENT, currentMessage.getContent());
+                    values.put(KEY_MESSAGE_CREATEDAT, currentMessage.getCreatedAtString());
+                    values.put(KEY_MESSAGE_GROUPID, currentMessage.getChat().getObjectId());
+                    db.insert(TABLE_THREE_NAME, null, values);
+                }
+                db.setTransactionSuccessful();
+                Log.d("database", "successfully add messages");
             }
-            db.setTransactionSuccessful();
-            Log.d("database", "successfully add messages");
         } finally {
             db.endTransaction();
         }
@@ -175,7 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String readLastMessageTime() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         String selection = "SELECT * FROM " + TABLE_THREE_NAME + " ORDER BY " + KEY_MESSAGE_CREATEDAT + " DESC LIMIT 1";
         Cursor cursor = db.rawQuery(selection, null);
@@ -189,30 +195,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public List<Message> readAllMessages() {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public List<Message> readAllMessages(String groupId) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
         String selection = "SELECT * FROM " + TABLE_THREE_NAME;
         Cursor cursor = db.rawQuery(selection, null);
-        List<Message> messages = null;
+        List<Message> messages = new ArrayList<>();
         try {
             if (cursor.moveToFirst()) {
                 while (cursor.moveToNext()) {
-                    Message message = new Message(
-                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
-                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
-                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
-                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT))
-                    );
-                    messages.add(message);
+                    Log.d("given groupID", groupId);
+                    Log.d("what is the groupID", cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)));
+                    if (groupId.equals(cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)))){
+                        Log.d("are they equal", "yes they are!");
+                        Message message = new Message(
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT))
+                        );
+                        messages.add(message);
+                    }
                 }
             }
-                db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             Log.d("SQLite error", e.getMessage());
         }finally {
             //db.endTransaction();
         }
+        Log.d("read all messages", String.valueOf(messages.size()));
         return messages;
     }
 
