@@ -36,8 +36,12 @@ public class MessageUserLikes extends ParseObject {
         put(KEY_USER, objectId);
     }
 
-    public String getMessageIdString(Message message) {
+    public String getMessageId(Message message) {
         return message.getIdString();
+    }
+
+    public void setMessageId(String objectId) {
+        put(KEY_MESSAGE, objectId);
     }
 
     public  boolean getLiked() {
@@ -56,9 +60,9 @@ public class MessageUserLikes extends ParseObject {
         put(KEY_DISLIKED, bool);
     }
 
-    public static class Query extends ParseQuery<MessageUserLikes> {
+    public static class Query extends ParseQuery<UsersPoints> {
         public Query() {
-            super(MessageUserLikes.class);
+            super(UsersPoints.class);
         }
 
         // TODO - add useful Query methods
