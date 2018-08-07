@@ -10,6 +10,8 @@ import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
 import me.susiel2.locationchat.model.UsersPoints;
+import me.susiel2.locationchat.model.MessageUserLikes;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -23,6 +25,8 @@ public class ParseApp extends Application {
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(UsersGroups.class);
         ParseObject.registerSubclass(UsersPoints.class);
+        ParseObject.registerSubclass(MessageUserLikes.class);
+
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
