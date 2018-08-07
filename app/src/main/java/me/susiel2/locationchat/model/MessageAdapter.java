@@ -307,6 +307,30 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     }
                                 }
                             });
+                            
+                            //badging test starts here
+                            ParseUser msgSender = message1.getCreatedBy();
+                            String userId = msgSender.getObjectId();
+                            Log.d("This is the user ID", userId);
+//query for messages where createdAt is that userId.
+                            //this has error of indexoutofbounds exception
+                            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+                            query.whereEqualTo("userId", userId);
+                            try {
+                                List<UsersPoints> result = query.find();
+                                Log.d("This is result", ""+ result);
+                                ParseObject obj = result.get(0);
+                                int userMorePoints = obj.getInt("totalPoints");
+                                Log.d("totalPoints count", "" +userMorePoints);
+                                //int userMorePoints = result.get(0).getInt("totalPoints");
+                                obj.put("totalPoints", userMorePoints - 1);
+                                obj.saveInBackground();
+                                Log.d("This is parse points", "" + obj.get("totalPoints"));
+                            } catch(ParseException e) {
+                                e.printStackTrace();
+                            }
+                            
+                            
                             tvNumberRec.setText(Integer.toString(lessLikes) + " ");
                         } else {
                             ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
