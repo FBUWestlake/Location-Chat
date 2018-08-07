@@ -17,6 +17,8 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import me.susiel2.locationchat.model.UsersPoints;
+
 
 
 public class LoginActivity extends AppCompatActivity {
