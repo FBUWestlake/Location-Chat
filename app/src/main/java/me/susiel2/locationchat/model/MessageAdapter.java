@@ -257,6 +257,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 }
                             });
 
+                            ParseUser user = ParseUser.getCurrentUser();
+                            MessageUserLikes messageUserLikes = new MessageUserLikes();
+                            messageUserLikes.setMessageId(message1.getObjectId());
+                            messageUserLikes.setUser(user.getObjectId());
+                            messageUserLikes.setLiked(true);
+                            messageUserLikes.saveInBackground();
+                            
                             //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();
                             String userId = msgSender.getObjectId();
@@ -321,6 +328,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     }
                                 }
                             });
+                            
+                            ParseUser user = ParseUser.getCurrentUser();
+                            MessageUserLikes messageUserLikes = new MessageUserLikes();
+                            messageUserLikes.setMessageId(message1.getObjectId());
+                            messageUserLikes.setUser(user.getObjectId());
+                            messageUserLikes.setDisliked(true);
+                            messageUserLikes.saveInBackground();
                             
                             //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();
