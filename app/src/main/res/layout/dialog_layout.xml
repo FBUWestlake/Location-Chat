@@ -13,5 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Display Name"/>
+    
+    <Spinner
+        android:id="@+id/state_spinner"
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        android:background="#FFF"/>
 
 </LinearLayout>

@@ -206,6 +206,28 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
+                
+                //query to see if the message ID and user Id are together in the MessageUserLikes table.
+                //If they are, then color in whichever value is true.
+                ParseQuery<MessageUserLikes> query1 = ParseQuery.getQuery(MessageUserLikes.class);
+                query1.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+                query1.whereEqualTo("messageId", message1.getObjectId());
+                query1.findInBackground(new FindCallback<MessageUserLikes>() {
+                    public void done(List<MessageUserLikes> objects, ParseException e) {
+                        if (e == null) {
+                            if (objects.size() != 0) {
+                                Log.d("This is first object", "" + objects.get(0));
+                                if (objects.get(0).getLiked()) {
+                                    ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
+                                } else {
+                                    ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
+                                }
+                            }
+                        } else {
+                            // Something went wrong.
+                        }
+                    }
+                });
 
                 if (message.getFile() != null) {
                     Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
@@ -257,6 +279,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 }
                             });
 
+                            ParseUser user = ParseUser.getCurrentUser();
+                            MessageUserLikes messageUserLikes = new MessageUserLikes();
+                            messageUserLikes.setMessageId(message1.getObjectId());
+                            messageUserLikes.setUser(user.getObjectId());
+                            messageUserLikes.setLiked(true);
+                            messageUserLikes.saveInBackground();
+                            
                             //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();
                             String userId = msgSender.getObjectId();
@@ -321,6 +350,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     }
                                 }
                             });
+                            
+                            ParseUser user = ParseUser.getCurrentUser();
+                            MessageUserLikes messageUserLikes = new MessageUserLikes();
+                            messageUserLikes.setMessageId(message1.getObjectId());
+                            messageUserLikes.setUser(user.getObjectId());
+                            messageUserLikes.setDisliked(true);
+                            messageUserLikes.saveInBackground();
                             
                             //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();

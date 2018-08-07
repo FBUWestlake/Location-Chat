@@ -127,6 +127,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
                 i.putExtra("myValue", add);
 
                 startActivity(i);
+                finish();
             }
         });
     }
