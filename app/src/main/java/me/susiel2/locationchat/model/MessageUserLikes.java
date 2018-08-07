@@ -56,9 +56,9 @@ public class MessageUserLikes extends ParseObject {
         put(KEY_DISLIKED, bool);
     }
 
-    public static class Query extends ParseQuery<UsersPoints> {
+    public static class Query extends ParseQuery<MessageUserLikes> {
         public Query() {
-            super(UsersPoints.class);
+            super(MessageUserLikes.class);
         }
 
         // TODO - add useful Query methods
