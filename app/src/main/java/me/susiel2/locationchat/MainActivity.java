@@ -53,16 +53,11 @@ import me.susiel2.locationchat.model.UsersGroups;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private DrawerLayout dl;
     private ImageView hamburger;
     private ImageView plusButton;
     private EditText etSearchMain;
-    private NavigationView nv;
-    final String[] data = {"Help", "About"};
     String[] states = null;
     public DrawerLayout drawer;
-    public ListView navList;
-    public Spinner state_spinner;
     public RelativeLayout item_chat;
 
     private RecyclerView rv_chats;
@@ -73,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper usersDB;
     private int spinnerPosition;
     public RelativeLayout relativeLayout;
-    private Button logoutButton;
+    private TextView logoutButton;
     SwipeRefreshLayout swipeContainer;
     TextView display_name;
-    private Button deleteAccountButton;
+    private TextView deleteAccountButton;
 
 
 
@@ -104,10 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         usersDB = new DatabaseHelper(this);
         states = getResources().getStringArray(R.array.states);
-        state_spinner = findViewById(R.id.state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
-        state_spinner.setAdapter(stateAdapter);
-        state_spinner.setVisibility(View.GONE);
 
 
         Intent i = getIntent();
@@ -115,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (add != null) {
             spinnerPosition = stateAdapter.getPosition(add);
-            state_spinner.setSelection(spinnerPosition);
 
             ParseUser currentUser = ParseUser.getCurrentUser();
 
@@ -128,22 +119,6 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.relativeLayout);
         relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
         relativeLayout.getBackground().setAlpha(120);
-
-
-    //test for spinner change here
-        state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                relativeLayout.setBackgroundResource(stateFlags[position]);
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
@@ -167,22 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Something went wrong.
                 }
-            }
-        });
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
-        navList = findViewById(R.id.drawer);
-        navList.setAdapter(adapter);
-        navList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener(){
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        super.onDrawerClosed(drawerView);
-                    }
-                });
-                drawer.closeDrawer(Gravity.LEFT);
             }
         });
 

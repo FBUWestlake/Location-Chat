@@ -119,14 +119,14 @@
     <!--</android.support.design.widget.NavigationView>-->
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/profileImage"
-            android:layout_width="240dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFF"
             android:paddingTop="16dp"
@@ -134,46 +134,69 @@
 
         <TextView
             android:id="@+id/display_name"
-            android:layout_width="240dp"
-            android:layout_height="40dp"
-            android:text="  Display Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display Name"
+            android:gravity="center"
             android:background="#FFF"
             android:textSize="20sp"
-            android:textColor="@android:color/black" />
-<!--
-        <TextView
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            android:text="   Location:"/> -->
+            android:paddingTop="13dp"
+            android:paddingBottom="18dp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
 
-        <Spinner
-            android:id="@+id/state_spinner"
-            android:layout_width="240dp"
-            android:layout_height="48dp"
-            android:background="#FFF"/>
-        <ListView
-            android:id="@+id/drawer"
-            android:layout_width="240dp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Help"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="@drawable/outline_background_top"
+            android:paddingVertical="15dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="@drawable/outline_background_top"
+            android:paddingVertical="15dp"
+            />
+
+        <TextView
+            android:id="@+id/logoutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/outline_background_top"
+            android:gravity="center"
+            android:text="LOG OUT"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingVertical="15dp"
+            android:textColor="@color/colorPrimary" />
+
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#FFF"
-            android:choiceMode="singleChoice"/>
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            android:text="Log out"
-            android:textColor="@color/colorPrimary" />
-        
-        <Button
+            android:background="@drawable/outline_background_top"
+            />
+
+        <TextView
             android:id="@+id/deleteAccountBtn"
-            android:layout_width="240dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFF"
-            android:text="Delete Account"
-            android:textColor="@android:color/holo_red_dark" />
+            android:background="@drawable/outline_background_top"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            android:text="DELETE ACCOUNT"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

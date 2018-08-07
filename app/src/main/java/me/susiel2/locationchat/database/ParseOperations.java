@@ -81,8 +81,10 @@ public class ParseOperations {
         query.findInBackground(new FindCallback<UsersGroups>() {
             public void done(List<UsersGroups> itemList, ParseException e) {
                 if (e == null) {
-                    if(!itemList.get(0).isRead())
+                    if(itemList.size() > 0 && !itemList.get(0).isRead())
                         setMessageAsReadInGroup(user, chat);
+                    else if(itemList.size() == 0)
+                        Log.e("ParseOperations", "UserGroup not found! " + chat.getName() + " | " + user.getUsername());
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
