@@ -30,6 +30,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button signUpBtn;
     TextView textInfo;
     EditText subEditText;
+    public Spinner state_spinner;
+    private int spinnerPosition;
+    final String[] states = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+            "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"};
+
 
 
 
@@ -83,9 +88,31 @@ public class LoginActivity extends AppCompatActivity {
         View subView = inflater.inflate(R.layout.dialog_layout, null);
         final EditText subEditText = (EditText) subView.findViewById(R.id.dialogEditText);
 
+
+        //add this for potential spinner
+        //states = getResources().getStringArray(R.array.states);
+        state_spinner = subView.findViewById(R.id.state_spinner);
+        Log.d("This is state spinner", ""+ state_spinner);
+        ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
+        state_spinner.setAdapter(stateAdapter);
+        Intent i = getIntent();
+        String add = i.getStringExtra("myValue");
+
+        if (add != null) {
+            spinnerPosition = stateAdapter.getPosition(add);
+            state_spinner.setSelection(spinnerPosition);
+
+            ParseUser currentUser = ParseUser.getCurrentUser();
+
+            //test here for location change, changing groups
+            Log.e("MainActivity", "About to change user location");
+            ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
+
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Please Enter Your Display Name");
-        builder.setMessage("You cannot change this later.");
+        builder.setTitle("Please Enter Your Display Name and Choose Your State");
+        builder.setMessage("You can change location but not display name in the app.");
         builder.setView(subView);
         //AlertDialog alertDialog = builder.create();
 
