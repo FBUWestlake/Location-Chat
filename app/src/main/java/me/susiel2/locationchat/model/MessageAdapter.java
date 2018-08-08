@@ -43,7 +43,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
 
-        if (message.getCreatedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+        if (message.getUserId().equals(ParseUser.getCurrentUser().getObjectId())) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -102,8 +102,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
-            messageText.setText(message.getContent());
-//            timeText.setText(message.getCreatedAtString());
+            if (message.getBody() != null) {
+                messageText.setText(message.getBody());
+            } else {
+                messageText.setText(message.getContent());
+            }
+
+            if (message.getTime() != null) {
+                timeText.setText(message.getTime());
+            } else {
+                timeText.setText(message.getCreatedAtString());
+            }
 
             final int numberOfLikes = message.getLikes();
             tvNumberSent.setText(numberOfLikes + " ");
@@ -136,10 +145,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bind(Message message) {
             final Message message1 = message;
-            messageText.setText(message.getContent());
+            if (message.getBody() != null) {
+                messageText.setText(message.getBody());
+            } else {
+                messageText.setText(message.getContent());
+            }
 
             ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-            query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
+            query.whereEqualTo("objectId", message.getUserId());
 
             query.findInBackground(new FindCallback<ParseUser>() {
                 public void done(List<ParseUser> objects, ParseException e) {
@@ -147,13 +160,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         nameText.setText(objects.get(0).getString("name"));
                     }
                     // query SQL for name. have else for if this is deleted
-//                    else if (){
+                    else {
+                        nameText.setText(message1.getName());
+                    }
 //                        // Something went wrong.
 //                    }
                 }
             });
 
-//            timeText.setText(message.getCreatedAtString());
+            if (message.getTime() != null) {
+                timeText.setText(message.getTime());
+            } else {
+                timeText.setText(message.getCreatedAtString());
+            }
 
 //            Glide.with(context).load(message.getProfileImage())
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())

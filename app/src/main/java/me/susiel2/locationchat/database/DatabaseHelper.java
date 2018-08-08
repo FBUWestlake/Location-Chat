@@ -215,6 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         Log.d("are they equal", "yes they are!");
                         Message message = new Message(
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBYNAME)),
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT))

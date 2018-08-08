@@ -31,16 +31,17 @@ public class Message extends ParseObject {
     private static String group = null;
     private static String date = null;
 
-    public Message(String content, String createdBy, String group, String date) {
+    public Message(String content, String createdByName, String createdByID, String group, String date) {
 //        this.KEY_CONTENT = content;
 //        this.createdBy = createdBy;
 //        this.group = group;
 //        this.date = date;
         super();
-        setContent(content);
-        setCreatedByFromUserId(createdBy);
-        setChatFromGroupId(group);
-        setCreatedAt(date);
+        setBody(content);
+        setName(createdByName);
+        setUserId(createdByID);
+        setGroupId(group);
+        setTime(date);
     }
 
     public Message() {
@@ -58,6 +59,11 @@ public class Message extends ParseObject {
     private static final String KEY_CREATED_AT = "createdAt";
 
     private static final String KEY_LIKES = "likes";
+    private String body;
+    private String groupId;
+    private String time;
+    private String name;
+    private String userId;
 
     public String getIdString() {
         return getObjectId();
@@ -177,4 +183,42 @@ public class Message extends ParseObject {
         return relativeDate;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
 }
