@@ -116,7 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     values.put(KEY_MESSAGE_CONTENT, currentMessage.getContent());
                     values.put(KEY_MESSAGE_CREATEDAT, currentMessage.getCreatedAtString());
                     values.put(KEY_MESSAGE_GROUPID, currentMessage.getChat().getObjectId());
-                    values.put(KEY_MESSAGE_LIKES, currentMessage.getLikes());
+                    values.put(KEY_MESSAGE_LIKES, String.valueOf(currentMessage.getLikes()));
                     db.insert(TABLE_THREE_NAME, null, values);
                 }
                 db.setTransactionSuccessful();
@@ -175,6 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     Log.d("what is the groupID", cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)));
                     if (groupId.equals(cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)))) {
                         Log.d("are they equal", "yes they are!");
+                        Log.d("message likes", cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_LIKES)));
                         Message message = new Message(
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBYNAME)),
