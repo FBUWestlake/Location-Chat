@@ -135,19 +135,6 @@ public class SearchExistingActivity extends AppCompatActivity {
 
     }
 
-//    public void updateChatsUserIsNotInDeprecated(){
-//        List<Chat> currentGroups = ParseOperations.getGroupsUserIsNotIn(ParseUser.getCurrentUser());
-//        Log.e("MainActivity","Number of Chats : " + currentGroups.size());
-//        chats.clear();
-//        masterList.clear();
-//        for(int i = 0; i < currentGroups.size(); i++) {
-//            chats.add(currentGroups.get(i));
-//            masterList.add(currentGroups.get(i));
-//            Log.e("MainActivity","Chat name: " + currentGroups.get(i).getName());
-//        }
-//        adapter.notifyDataSetChanged();
-//    }
-
     public void updateChatsUserIsNotIn(){
 
         //Query for user location

@@ -38,6 +38,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -61,6 +63,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.database.ParseApp;
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.BitmapScaler;
@@ -83,7 +86,10 @@ public class ChatActivity extends AppCompatActivity {
     TextView tvTitle;
     ImageButton addAttachmentBtn;
     LinearLayout androidDropDownMenuIconItem;
-//    SwitchCompat switch_notifications;
+    ImageView drawerGroupImage;
+    TextView drawerGroupName;
+    TextView drawerGroupDescription;
+    TextView leaveGroup;
 
     public static final int GET_FROM_GALLERY = 3;
     public final String APP_TAG = "MyCustomApp";
@@ -137,7 +143,24 @@ public class ChatActivity extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         addAttachmentBtn = (ImageButton) findViewById(R.id.button_chat_upload);
         androidDropDownMenuIconItem = (LinearLayout) findViewById(R.id.horizontal_dropdown_icon_menu_items);
+        drawerGroupImage = (ImageView) findViewById(R.id.groupImagePic);
 
+        Glide.with(getApplicationContext()).load(chat.getImageBitmap()).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
+                .into(drawerGroupImage);
+
+        drawerGroupName = (TextView) findViewById(R.id.drawerChatName);
+        drawerGroupName.setText(chat.getName());
+        drawerGroupDescription = (TextView) findViewById(R.id.drawerChatDescription);
+        drawerGroupDescription.setText(chat.getDescription());
+
+        leaveGroup = (TextView) findViewById(R.id.leaveGroup);
+        leaveGroup.setOnClickListener(new OnOneClickListener() {
+            @Override
+            public void onOneClick(View v) {
+                parseOperations.leaveGroup(ParseUser.getCurrentUser(), chat);
+                finish();
+            }
+        });
 
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo("groupId", chat);
@@ -223,18 +246,6 @@ public class ChatActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listviewData);
         gear = findViewById(R.id.iv_gear);
         drawer = findViewById(R.id.activity_chat);
-        navList2 = findViewById(R.id.drawer2);
-        navList2.setAdapter(adapter2);
-
-        navList2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                parseOperations.leaveGroup(ParseUser.getCurrentUser(), chat);
-//                Intent intent = new Intent(ChatActivity.this, MainActivity.class);
-//                startActivity(intent);
-                finish();
-            }
-        });
 
         addAttachmentBtn.setOnClickListener(new OnOneClickListener() {
             @Override
