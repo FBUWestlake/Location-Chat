@@ -121,13 +121,24 @@ String text = "";
                 text = state_spinner.getSelectedItem().toString();
                 Log.d("This is selected state", text);
 
+                //changing background here now
+                int hold = state_spinner.getSelectedItemPosition();
+                Log.d("Item Position is", "" + hold);
+                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("background_resource", stateFlags[hold]);
+                editor.apply();
 
+                /*
+                relativeLayout = findViewById(R.id.relativeLayout);
+                relativeLayout.setBackgroundResource(stateFlags[hold]);
+                relativeLayout.getBackground().setAlpha(120);
+*/
 
                 dialog.dismiss();
                 signUp(phoneNumber, password, name);
             }
         });
-
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
