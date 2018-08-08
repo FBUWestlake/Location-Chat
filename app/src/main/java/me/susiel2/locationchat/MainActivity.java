@@ -118,12 +118,11 @@ public class MainActivity extends AppCompatActivity {
             //test here for location change, changing groups
             Log.e("MainActivity", "About to change user location");
             ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
-            
-        }
 
-        relativeLayout = findViewById(R.id.relativeLayout);
-        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
-        relativeLayout.getBackground().setAlpha(120);
+            relativeLayout = findViewById(R.id.relativeLayout);
+            relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
+            relativeLayout.getBackground().setAlpha(120);
+        }
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
