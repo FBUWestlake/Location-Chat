@@ -103,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
 
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        int bg = sharedPref.getInt("background_resource", android.R.color.white); // the second parameter will be fallback if the preference is not found
+        getWindow().setBackgroundDrawableResource(bg);
 
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
@@ -115,12 +118,11 @@ public class MainActivity extends AppCompatActivity {
             //test here for location change, changing groups
             Log.e("MainActivity", "About to change user location");
             ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
-            
-        }
 
-        relativeLayout = findViewById(R.id.relativeLayout);
-        relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
-        relativeLayout.getBackground().setAlpha(120);
+            relativeLayout = findViewById(R.id.relativeLayout);
+            relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
+            relativeLayout.getBackground().setAlpha(120);
+        }
 
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
@@ -236,7 +238,8 @@ public class MainActivity extends AppCompatActivity {
             public void onOneClick(View v) {
                 ParseUser.logOut();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);            }
+                startActivity(intent);
+                finish();}
         });
         
         deleteAccountButton.setOnClickListener(new OnOneClickListener() {

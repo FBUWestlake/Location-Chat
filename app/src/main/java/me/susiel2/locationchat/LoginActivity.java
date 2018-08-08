@@ -39,7 +39,18 @@ public class LoginActivity extends AppCompatActivity {
     private int spinnerPosition;
     final String[] states = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
             "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"};
-String text = "";
+    String text = "";
+    public RelativeLayout relativeLayout;
+    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
+            R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_district_of_columbia, R.drawable.ic_fl, R.drawable.ic_georgia,
+            R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
+            R.drawable.ic_kentucky, R.drawable.ic_louisiana, R.drawable.ic_maine, R.drawable.ic_maryland, R.drawable.ic_massachusetts, R.drawable.ic_michigan,
+            R.drawable.ic_mn, R.drawable.ic_mississippi, R.drawable.ic_missouri, R.drawable.ic_montana, R.drawable.ic_nebraska, R.drawable.ic_nv,
+            R.drawable.ic_new_hampshire, R.drawable.ic_new_jersey, R.drawable.ic_new_mexico, R.drawable.ic_new_york, R.drawable.ic_nc, R.drawable.ic_north_dakota,
+            R.drawable.ic_ohio, R.drawable.ic_oklahoma, R.drawable.ic_oregon, R.drawable.ic_pennsylvania, R.drawable.ic_ri, R.drawable.ic_south_carolina,
+            R.drawable.ic_south_dakota, R.drawable.ic_tn, R.drawable.ic_texas, R.drawable.ic_utah, R.drawable.ic_vermont, R.drawable.ic_va, R.drawable.ic_washington,
+            R.drawable.ic_west_virginia, R.drawable.ic_wisconsin, R.drawable.ic_wyoming
+    };
 
 
 
@@ -121,13 +132,24 @@ String text = "";
                 text = state_spinner.getSelectedItem().toString();
                 Log.d("This is selected state", text);
 
+                //changing background here now
+                int hold = state_spinner.getSelectedItemPosition();
+                Log.d("Item Position is", "" + hold);
+                SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("background_resource", stateFlags[hold]);
+                editor.apply();
 
+                /*
+                relativeLayout = findViewById(R.id.relativeLayout);
+                relativeLayout.setBackgroundResource(stateFlags[hold]);
+                relativeLayout.getBackground().setAlpha(120);
+*/
 
                 dialog.dismiss();
                 signUp(phoneNumber, password, name);
             }
         });
-
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
