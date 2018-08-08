@@ -119,8 +119,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity", "About to change user location");
             ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
 
+            getWindow().getDecorView().setBackgroundColor(Color.WHITE);
             relativeLayout = findViewById(R.id.relativeLayout);
-            relativeLayout.setBackgroundResource(stateFlags[spinnerPosition]);
+            int backgroundPhoto = stateFlags[spinnerPosition];
+            relativeLayout.setBackgroundResource(backgroundPhoto);
             relativeLayout.getBackground().setAlpha(120);
         }
 
