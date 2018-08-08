@@ -150,8 +150,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 attachedImage.setImageDrawable(myDrawable);
             }
 
-            final int numberOfLikes = message.getLikes();
-            tvNumberSent.setText(numberOfLikes + " ");
+            if (message.getMessageLikes() != null) {
+                tvNumberSent.setText(message.getMessageLikes() + " ");
+            } else {
+                tvNumberSent.setText(message.getLikes() + " ");
+            }
 
         }
     }
@@ -284,8 +287,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
 //                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
 //                    .into(profileImage);
-                    final int numberOfLikes = message.getLikes();
-                    tvNumberRec.setText(numberOfLikes + " ");
+                    if (message.getMessageLikes() != null) {
+                        tvNumberRec.setText(message.getMessageLikes() + " ");
+                    } else {
+                        tvNumberRec.setText(message.getLikes() + " ");
+                    }
 
 
                     likeButton.setOnClickListener(new View.OnClickListener() {

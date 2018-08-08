@@ -60,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_MESSAGE_CREATEDBY = "createdBy";
     private static final String KEY_MESSAGE_CREATEDBYNAME = "createdByName";
     private static final String KEY_MESSAGE_GROUPID = "groupId";
+    private static final String KEY_MESSAGE_LIKES = "likes";
 
     // UserGroups table items
 
@@ -73,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 //        sqLiteDatabase.execSQL("create table " + TABLE_ONE_NAME + "(" + KEY_USER_ID + " TEXT PRIMARY KEY," + KEY_USER_NAME + " TEXT," + KEY_USER_PHONE + " INTEGER," + KEY_USER_PASSWORD + " TEXT," + KEY_USER_CREATEDAT + " TEXT," + KEY_USER_LOCATION + " TEXT" + ")");
 //        sqLiteDatabase.execSQL("create table " + TABLE_TWO_NAME + "(" + KEY_GROUP_ID + " TEXT PRIMARY KEY," + KEY_GROUP_NAME + " TEXT," + KEY_GROUP_DESCRIPTION + " TEXT," + KEY_GROUP_IMAGE + " BLOB," + KEY_GROUP_CREATEDAT + " TEXT, " + KEY_GROUP_CREATEDBY + " TEXT REFERENCES " + TABLE_ONE_NAME + "," + KEY_GROUP_LOCATION + " TEXT," + KEY_GROUP_CATEGORY + " TEXT" + ")");
-        sqLiteDatabase.execSQL("create table " + TABLE_THREE_NAME + "(" + KEY_MESSAGE_ID + " TEXT PRIMARY KEY," + KEY_MESSAGE_CONTENT + " TEXT," + KEY_MESSAGE_CREATEDAT + " TEXT," + KEY_MESSAGE_ATTACHMENT + " BLOB," + KEY_MESSAGE_CREATEDBY + " TEXT, " + KEY_MESSAGE_CREATEDBYNAME + " TEXT, " + KEY_MESSAGE_GROUPID + " TEXT " + ")");
+        sqLiteDatabase.execSQL("create table " + TABLE_THREE_NAME + "(" + KEY_MESSAGE_ID + " TEXT PRIMARY KEY," + KEY_MESSAGE_CONTENT + " TEXT," + KEY_MESSAGE_CREATEDAT + " TEXT," + KEY_MESSAGE_ATTACHMENT + " BLOB," + KEY_MESSAGE_CREATEDBY + " TEXT, " + KEY_MESSAGE_CREATEDBYNAME + " TEXT, " + KEY_MESSAGE_GROUPID + " TEXT, " + KEY_MESSAGE_LIKES + " TEXT " + ")");
 //        sqLiteDatabase.execSQL("create table " + TABLE_FOUR_NAME + "(USERGROUP_ID TEXT PRIMARY KEY, NOTIFICATIONS INTEGER, READ INTEGER, USER_ID TEXT, GROUP_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES users(USER_ID), FOREIGN KEY(GROUP_ID) REFERENCES groups(GROUP_ID))");
 //        sqLiteDatabase.execSQL("create table " + TABLE_FIVE_NAME + "(" + KEY_MESSAGEOBJECT + " BLOB" + ")");
 
@@ -115,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     values.put(KEY_MESSAGE_CONTENT, currentMessage.getContent());
                     values.put(KEY_MESSAGE_CREATEDAT, currentMessage.getCreatedAtString());
                     values.put(KEY_MESSAGE_GROUPID, currentMessage.getChat().getObjectId());
+                    values.put(KEY_MESSAGE_LIKES, currentMessage.getLikes());
                     db.insert(TABLE_THREE_NAME, null, values);
                 }
                 db.setTransactionSuccessful();
@@ -178,7 +180,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBYNAME)),
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
                                 cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT))
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT)),
+                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_LIKES))
                         );
                         messages.add(message);
                     }

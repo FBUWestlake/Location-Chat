@@ -36,7 +36,7 @@ public class Message extends ParseObject {
     private static String group = null;
     private static String date = null;
 
-    public Message(String content, String createdByName, String createdByID, String group, String date) {
+    public Message(String content, String createdByName, String createdByID, String group, String date, String messageLikes) {
 //        this.KEY_CONTENT = content;
 //        this.createdBy = createdBy;
 //        this.group = group;
@@ -47,6 +47,7 @@ public class Message extends ParseObject {
         setUserId(createdByID);
         setGroupId(group);
         setTime(date);
+        setMessageLikes(messageLikes);
     }
 
     public Message() {
@@ -69,6 +70,7 @@ public class Message extends ParseObject {
     private String time;
     private String name;
     private String userId;
+    private String messageLikes;
 
     public String getIdString() {
         return getObjectId();
@@ -126,32 +128,7 @@ public class Message extends ParseObject {
         return getRelativeTimeAgo(rawTime);
     }
 
-    public void setCreatedAt(String dateString) {
-
-//        SimpleDateFormat formatFrom = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-//        DateFormat formatTo = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-//        Date temp = null;
-//        Date date = null;
-//        try {
-//            temp = formatFrom.parse(dateString);
-//            String formatted = formatTo.format(temp);
-//            date = formatTo.parse(formatted);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        Log.d("Date", date.toString());
-
-        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        try {
-            Date date = format.parse(dateString);
-            put(KEY_CREATED_AT, date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-    }
-    
-   public int getLikes() {
+    public int getLikes() {
         return getInt(KEY_LIKES);
     }
 
@@ -223,5 +200,13 @@ public class Message extends ParseObject {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getMessageLikes() {
+        return messageLikes;
+    }
+
+    public void setMessageLikes(String messageLikes) {
+        this.messageLikes = messageLikes;
     }
 }
