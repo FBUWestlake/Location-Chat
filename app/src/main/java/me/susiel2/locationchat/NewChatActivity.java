@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseFile;
@@ -41,7 +42,7 @@ public class NewChatActivity extends AppCompatActivity {
 
     ImageView iv_takePhoto;
     ImageView iv_selectPhoto;
-    Button btn_newChat;
+    TextView btn_newChat;
     ImageView iv_chatImage;
     Bitmap bm_chatImage;
     EditText et_chatName;
@@ -58,7 +59,7 @@ public class NewChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_chat);
 
-        final String[] categories = {"food", "outdoors", "sports", "art", "music", "tech", "beauty"};
+        final String[] categories = {"Food", "Outdoors", "Sports", "Art", "Music", "Tech", "Beauty"};
         final String[] states = getResources().getStringArray(R.array.states);
 
         getSupportActionBar().setTitle("Create new group");

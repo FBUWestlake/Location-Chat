@@ -17,12 +17,17 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <Button
+    <TextView
         android:id="@+id/btNewGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:paddingVertical="5dp"
+        android:textSize="18sp"
+        android:paddingHorizontal="18dp"
+        android:textColor="@android:color/background_dark"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="Create New Group" />
+        android:layout_marginBottom="10dp"
+        android:text="New Group" />
 </RelativeLayout>

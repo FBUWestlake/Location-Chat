@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -44,7 +45,7 @@ public class SearchExistingActivity extends AppCompatActivity {
     ArrayList<Chat> masterList;
     EditText etSearch;
 
-    Button btNewGroup;
+    TextView btNewGroup;
     Spinner categorySpinner;
     final String[] categories = {"All Categories", "food", "beauty", "tech", "sports", "art", "outdoors", "music"};
 

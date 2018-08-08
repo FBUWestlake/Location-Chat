@@ -6,81 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".NewChatActivity">
 
-    <ImageView
-        android:id="@+id/iv_chatImage"
-        android:layout_width="171dp"
-        android:layout_height="73dp"
-        android:layout_above="@+id/iv_takePhoto"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/ic_menu_camera"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="73dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="40dp">
 
-    <EditText
-        android:id="@+id/et_chatName"
-        android:layout_width="240dp"
-        android:layout_height="56dp"
-        android:layout_above="@+id/et_description"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="Chat Name"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="0dp" />
+        <ImageView
+            android:id="@+id/iv_chatImage"
+            android:layout_width="171dp"
+            android:layout_height="73dp"
+            app:srcCompat="@drawable/ic_menu_camera"
+            android:layout_marginVertical="10dp"/>
 
-    <EditText
-        android:id="@+id/et_description"
-        android:layout_width="240dp"
-        android:layout_height="58dp"
-        android:layout_above="@+id/spinner_title"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="Description"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="0dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="10dp">
+            <ImageView
+                android:id="@+id/iv_takePhoto"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:layout_marginHorizontal="15dp"
+                android:tint="@android:color/darker_gray"
+                app:srcCompat="@drawable/take_photo"/>
 
-    <Spinner
-        android:id="@+id/spinner_category"
-        android:layout_width="254dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_newChat"
-        android:layout_centerHorizontal="true" />
+            <ImageView
+                android:id="@+id/iv_selectPhoto"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:clickable="true"
+                android:layout_marginHorizontal="15dp"
+                android:tint="@android:color/darker_gray"
+                app:srcCompat="@drawable/gallery" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_newChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="68dp"
-        android:text="Create New Chat" />
+        <EditText
+            android:id="@+id/et_chatName"
+            android:layout_width="240dp"
+            android:layout_height="56dp"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="Chat Name"/>
 
-    <TextView
-        android:id="@+id/spinner_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/spinner_category"
-        android:layout_alignStart="@+id/spinner_category"
-        android:text="Category" />
+        <EditText
+            android:id="@+id/et_description"
+            android:layout_width="240dp"
+            android:layout_height="58dp"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="Description" />
 
-    <ImageView
-        android:id="@+id/iv_takePhoto"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/et_chatName"
-        android:layout_alignStart="@+id/btn_newChat"
-        android:clickable="true"
-        android:tint="@android:color/darker_gray"
-        app:srcCompat="@drawable/take_photo"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginVertical="10dp">
+            <TextView
+                android:id="@+id/spinner_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Category" />
 
-    <ImageView
-        android:id="@+id/iv_selectPhoto"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_above="@+id/et_chatName"
-        android:layout_alignEnd="@+id/btn_newChat"
-        android:clickable="true"
-        android:tint="@android:color/darker_gray"
-        app:srcCompat="@drawable/gallery" />
+            <Spinner
+                android:id="@+id/spinner_category"
+                android:layout_width="254dp"
+                android:layout_height="30dp"
+                android:background="@drawable/rounded_spinner"
+                android:paddingHorizontal="5dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_newChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_button"
+            android:paddingVertical="5dp"
+            android:textSize="16sp"
+            android:paddingHorizontal="18dp"
+            android:layout_marginVertical="10dp"
+            android:textColor="@android:color/background_dark"
+            android:text="Create" />
+
+
+
+    </LinearLayout>
+
 </RelativeLayout>
