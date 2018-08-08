@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     String[] states = null;
     public DrawerLayout drawer;
     public RelativeLayout item_chat;
+    String location;
 
     private RecyclerView rv_chats;
     private ArrayList<Chat> chats;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeContainer;
     TextView display_name;
     private TextView deleteAccountButton;
+    private TextView locationChanger;
 
 
 
@@ -126,11 +128,13 @@ public class MainActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logoutBtn);
         etSearchMain = findViewById(R.id.etSearchMain);
         deleteAccountButton = findViewById(R.id.deleteAccountBtn);
+        locationChanger = findViewById(R.id.locationChanger);
 
         
         display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
-        display_name = findViewById(R.id.display_name);
+
+        location = currentUser.getString("location");
 
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
@@ -206,8 +210,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(etSearchMain.getText().toString().equals(""))
-                    return;
                 final String beforeText = etSearchMain.getText().toString();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -219,10 +221,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton btn_maps = findViewById(R.id.mapsBtn);
-        btn_maps.setOnClickListener(new OnOneClickListener() {
+        locationChanger.setText(location);
+        locationChanger.setOnClickListener(new OnOneClickListener() {
             @Override
-            public void onOneClick(View view) {
+            public void onOneClick(View v) {
                 final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
                 startActivity(intent);
                 finish();
@@ -240,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new OnOneClickListener() {
             @Override
             public void onOneClick(View v) {
-                // TODO - query all UsersGroups objects for the user and delete them
                 ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
                 query.whereEqualTo("user", ParseUser.getCurrentUser()).addDescendingOrder("updatedAt");
                 query.findInBackground(new FindCallback<UsersGroups>() {

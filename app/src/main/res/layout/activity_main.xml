@@ -141,9 +141,23 @@
             android:background="#FFF"
             android:textSize="20sp"
             android:paddingTop="13dp"
-            android:paddingBottom="18dp"
+            android:paddingBottom="2dp"
             android:textColor="@android:color/black"
             android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/locationChanger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:gravity="center"
+            android:background="#FFF"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:paddingTop="2dp"
+            android:paddingBottom="18dp"
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -195,7 +209,7 @@
             android:paddingVertical="15dp"
             android:text="DELETE ACCOUNT"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
     </LinearLayout>
