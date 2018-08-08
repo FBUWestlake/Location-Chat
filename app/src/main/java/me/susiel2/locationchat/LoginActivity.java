@@ -95,20 +95,9 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("This is state spinner", ""+ state_spinner);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
-        Intent i = getIntent();
-        String add = i.getStringExtra("myValue");
 
-        if (add != null) {
-            spinnerPosition = stateAdapter.getPosition(add);
-            state_spinner.setSelection(spinnerPosition);
 
-            ParseUser currentUser = ParseUser.getCurrentUser();
 
-            //test here for location change, changing groups
-            Log.e("MainActivity", "About to change user location");
-            ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
-
-        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Your Display Name and Choose Your State");
@@ -124,6 +113,10 @@ public class LoginActivity extends AppCompatActivity {
                 final String phoneNumber = phoneNumberInput.getText().toString();
                 final String password = passwordInput.getText().toString();
                 String name = subEditText.getText().toString();
+                text = state_spinner.getSelectedItem().toString();
+                Log.d("This is selected state", text);
+
+
 
                 dialog.dismiss();
                 signUp(phoneNumber, password, name);
@@ -160,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d("LoginActivity", "Login successful");
                     // Inside a callback, so MainActivity.this
-
+                    
                     final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
@@ -183,6 +176,19 @@ public class LoginActivity extends AppCompatActivity {
         user.put("totalPoints", 0);
         user.put("name", name);
 
+        user.put("location", text);
+        user.saveInBackground(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    //success, saved!
+                    Log.d("MyApp", "Successfully saved!");
+                } else {
+                    //fail to save!
+                    e.printStackTrace();
+                }
+            }
+        });
+
         // Invoke signUpInBackground
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
@@ -196,13 +202,13 @@ public class LoginActivity extends AppCompatActivity {
                             if (e == null) {
                                 Log.d("LoginActivity", "Login successful");
                                 // Inside a callback, so MainActivity.this
+
                                 UsersPoints newUserPoints = new UsersPoints();
                                 newUserPoints.setUser(user.getObjectId());
                                 newUserPoints.setTotalPoints(0);
                                 newUserPoints.saveInBackground();
                                 Log.d("User total points", "" + newUserPoints.getTotalPoints());
 
-                                
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
