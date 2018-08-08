@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,8 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.UsersPoints;
 
 
@@ -149,11 +153,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(String phoneNumber, String password) {
 
-//        final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
-//        finish();
-
-        // TODO - set up parse login
         ParseUser.logInInBackground(phoneNumber, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -175,6 +174,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signUp(final String phoneNumber, final String password, String name) {
+
+        if(name.equals("")) {
+            Toast.makeText(LoginActivity.this, "Please enter a display name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Create the ParseUser
         ParseUser user = new ParseUser();
         // Set core properties
@@ -189,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     // Hooray! Let them use the app now.
                     Log.d("LoginActivity", "Sign up successful");
-                    Toast.makeText(LoginActivity.this, "Successfully signed up", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
                     ParseUser.logInInBackground(phoneNumber, password, new LogInCallback() {
                         @Override
                         public void done(ParseUser user, ParseException e) {
@@ -216,7 +221,16 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
-                    Log.e("SignUpActivity", "Sign up failure.");
+                    if(e.getCode() == ParseException.USERNAME_TAKEN)
+                        Toast.makeText(LoginActivity.this, "This phone number is already registered", Toast.LENGTH_SHORT).show();
+                    else if(e.getCode() == ParseException.USERNAME_MISSING)
+                        Toast.makeText(LoginActivity.this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
+                    else if(e.getCode() == ParseException.PASSWORD_MISSING)
+                        Toast.makeText(LoginActivity.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(LoginActivity.this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+
+                    Log.e("SignUpActivity", "Sign up failure: code " + e.getCode());
                     e.printStackTrace();
                 }
             }
