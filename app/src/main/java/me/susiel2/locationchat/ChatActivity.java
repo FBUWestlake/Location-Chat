@@ -195,9 +195,9 @@ public class ChatActivity extends AppCompatActivity {
             lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
         }
 
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.whereEqualTo("groupId", chat);
-        query.include("createdBy");
+        ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+        query1.whereEqualTo("groupId", chat);
+        query1.include("createdBy");
         if (lastMessageTime != null) {
             query.whereGreaterThan("createdAt", lastMessageTime);
             Log.e("last message exists", "this happens");
@@ -372,13 +372,11 @@ public class ChatActivity extends AppCompatActivity {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
+
                     public void onEvent(ParseQuery<Message> query, final Message object) {
-                        
-                    public void onEvent(ParseQuery<Message> query, Message object) {
                         messages.add(object);
                         dbHelper.addMessage(object);
                         Log.d("livequery", "added");
-
                         // RecyclerView updates need to be run on the UI thread
                         runOnUiThread(new Runnable() {
                             @Override
@@ -387,7 +385,7 @@ public class ChatActivity extends AppCompatActivity {
                                 Log.d("livequery", "added");
                                 mAdapter.notifyItemInserted(messages.size() - 1);
                                 rvMessages.scrollToPosition(messages.size() - 1);
-//                                mAdapter.notifyDataSetChanged();
+//                              mAdapter.notifyDataSetChanged();
                             }
                         });
                     }

@@ -180,7 +180,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             dislikeButton = itemView.findViewById(R.id.dislikeButton);
 
             attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
-            viewHiddenMessageButton= itemView.findViewById(R.id.viewHiddenMessageButton);
+            viewHiddenMessageButton = itemView.findViewById(R.id.viewHiddenMessageButton);
 
         }
 
@@ -196,8 +196,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 });
 
-            }
-            else {
+            } else {
                 messageText.setText(message.getContent());
 
                 ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
@@ -215,7 +214,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
-                
+
                 //query to see if the message ID and user Id are together in the MessageUserLikes table.
                 //If they are, then color in whichever value is true.
                 ParseQuery<MessageUserLikes> query1 = ParseQuery.getQuery(MessageUserLikes.class);
@@ -254,188 +253,187 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 } else {
                     Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
                     attachedImage.setImageDrawable(myDrawable);
-            if (message.getBody() != null) {
-                messageText.setText(message.getBody());
-            } else {
-                messageText.setText(message.getContent());
-            }
-
-            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-            query.whereEqualTo("objectId", message.getUserId());
-
-            query.findInBackground(new FindCallback<ParseUser>() {
-                public void done(List<ParseUser> objects, ParseException e) {
-                    if (objects != null) {
-                        nameText.setText(objects.get(0).getString("name"));
+                    if (message.getBody() != null) {
+                        messageText.setText(message.getBody());
+                    } else {
+                        messageText.setText(message.getContent());
                     }
-                    // query SQL for name. have else for if this is deleted
-                    else {
-                        nameText.setText(message1.getName());
-                    }
-//                        // Something went wrong.
-//                    }
-                }
-            }
 
-            if (message.getTime() != null) {
-                timeText.setText(message.getTime());
-            } else {
-                timeText.setText(message.getCreatedAtString());
-            }
+                    ParseQuery<ParseUser> query2 = ParseQuery.getQuery(ParseUser.class);
+                    query2.whereEqualTo("objectId", message.getUserId());
+
+                    query2.findInBackground(new FindCallback<ParseUser>() {
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            if (objects != null) {
+                                nameText.setText(objects.get(0).getString("name"));
+                            }
+                            // query SQL for name. have else for if this is deleted
+                            else {
+                                nameText.setText(message1.getName());
+                            }
+                        }
+                    });
+
+                    if (message.getTime() != null) {
+                        timeText.setText(message.getTime());
+                    } else {
+                        timeText.setText(message.getCreatedAtString());
+                    }
 
 //            Glide.with(context).load(message.getProfileImage())
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
 //                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
 //                    .into(profileImage);
-            final int numberOfLikes = message.getLikes();
-            tvNumberRec.setText(numberOfLikes + " ");
+                    final int numberOfLikes = message.getLikes();
+                    tvNumberRec.setText(numberOfLikes + " ");
 
 
-            likeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
-                        if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
-                            ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
-                            int moreLikes = message1.getLikes();
-                            moreLikes = moreLikes + 1;
-                            message1.setLikes(moreLikes);
+                    likeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
+                                if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
+                                    ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
+                                    int moreLikes = message1.getLikes();
+                                    moreLikes = moreLikes + 1;
+                                    message1.setLikes(moreLikes);
 
-                            message1.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        Log.d("MessageAdapter", "Like post success");
-                                    } else {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
+                                    message1.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Log.d("MessageAdapter", "Like post success");
+                                            } else {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
 
-                            ParseUser user = ParseUser.getCurrentUser();
-                            MessageUserLikes messageUserLikes = new MessageUserLikes();
-                            messageUserLikes.setMessageId(message1.getObjectId());
-                            messageUserLikes.setUser(user.getObjectId());
-                            messageUserLikes.setLiked(true);
-                            messageUserLikes.saveInBackground();
-                            
-                            //badging test starts here
-                            ParseUser msgSender = message1.getCreatedBy();
-                            String userId = msgSender.getObjectId();
-                            Log.d("This is the user ID", userId);
+                                    ParseUser user = ParseUser.getCurrentUser();
+                                    MessageUserLikes messageUserLikes = new MessageUserLikes();
+                                    messageUserLikes.setMessageId(message1.getObjectId());
+                                    messageUserLikes.setUser(user.getObjectId());
+                                    messageUserLikes.setLiked(true);
+                                    messageUserLikes.saveInBackground();
+
+                                    //badging test starts here
+                                    ParseUser msgSender = message1.getCreatedBy();
+                                    String userId = msgSender.getObjectId();
+                                    Log.d("This is the user ID", userId);
 //query for messages where createdAt is that userId.
-                            //this has error of indexoutofbounds exception
-                            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
-                            query.whereEqualTo("userId", userId);
-                            try {
-                                List<UsersPoints> result = query.find();
-                                Log.d("This is result", ""+ result);
-                                ParseObject obj = result.get(0);
-                                int userMorePoints = obj.getInt("totalPoints");
-                                Log.d("totalPoints count", "" +userMorePoints);
-                                //int userMorePoints = result.get(0).getInt("totalPoints");
-                                obj.put("totalPoints", userMorePoints + 1);
-                                obj.saveInBackground();
-                                Log.d("This is parse points", "" + obj.get("totalPoints"));
-                            } catch(ParseException e) {
-                                e.printStackTrace();
+                                    //this has error of indexoutofbounds exception
+                                    ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+                                    query.whereEqualTo("userId", userId);
+                                    try {
+                                        List<UsersPoints> result = query.find();
+                                        Log.d("This is result", "" + result);
+                                        ParseObject obj = result.get(0);
+                                        int userMorePoints = obj.getInt("totalPoints");
+                                        Log.d("totalPoints count", "" + userMorePoints);
+                                        //int userMorePoints = result.get(0).getInt("totalPoints");
+                                        obj.put("totalPoints", userMorePoints + 1);
+                                        obj.saveInBackground();
+                                        Log.d("This is parse points", "" + obj.get("totalPoints"));
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    tvNumberRec.setText(Integer.toString(moreLikes) + " ");
+                                } else {
+                                    ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
+                                    int lessLikes = message1.getLikes();
+                                    lessLikes = lessLikes - 1;
+                                    message1.setLikes(lessLikes);
+                                    message1.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Log.d("MessageAdapter", "Like post success");
+                                            } else {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                    tvNumberRec.setText(Integer.toString(lessLikes) + " ");
+                                }
                             }
-
-                            tvNumberRec.setText(Integer.toString(moreLikes) + " ");
-                        } else {
-                            ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
-                            int lessLikes = message1.getLikes();
-                            lessLikes = lessLikes - 1;
-                            message1.setLikes(lessLikes);
-                            message1.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        Log.d("MessageAdapter", "Like post success");
-                                    } else {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                            tvNumberRec.setText(Integer.toString(lessLikes) + " ");
                         }
-                    }
-                }
-            });
+                    });
 
 
-            dislikeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
-                        if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
-                            ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
-                            int lessLikes = message1.getLikes();
-                            lessLikes = lessLikes - 1;
-                            message1.setLikes(lessLikes);
-                            message1.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        Log.d("MessageAdapter", "Dislike post success");
-                                    } else {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                            
-                            ParseUser user = ParseUser.getCurrentUser();
-                            MessageUserLikes messageUserLikes = new MessageUserLikes();
-                            messageUserLikes.setMessageId(message1.getObjectId());
-                            messageUserLikes.setUser(user.getObjectId());
-                            messageUserLikes.setDisliked(true);
-                            messageUserLikes.saveInBackground();
-                            
-                            //badging test starts here
-                            ParseUser msgSender = message1.getCreatedBy();
-                            String userId = msgSender.getObjectId();
-                            Log.d("This is the user ID", userId);
+                    dislikeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
+                                if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
+                                    ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
+                                    int lessLikes = message1.getLikes();
+                                    lessLikes = lessLikes - 1;
+                                    message1.setLikes(lessLikes);
+                                    message1.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Log.d("MessageAdapter", "Dislike post success");
+                                            } else {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+
+                                    ParseUser user = ParseUser.getCurrentUser();
+                                    MessageUserLikes messageUserLikes = new MessageUserLikes();
+                                    messageUserLikes.setMessageId(message1.getObjectId());
+                                    messageUserLikes.setUser(user.getObjectId());
+                                    messageUserLikes.setDisliked(true);
+                                    messageUserLikes.saveInBackground();
+
+                                    //badging test starts here
+                                    ParseUser msgSender = message1.getCreatedBy();
+                                    String userId = msgSender.getObjectId();
+                                    Log.d("This is the user ID", userId);
 //query for messages where createdAt is that userId.
-                            //this has error of indexoutofbounds exception
-                            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
-                            query.whereEqualTo("userId", userId);
-                            try {
-                                List<UsersPoints> result = query.find();
-                                Log.d("This is result", ""+ result);
-                                ParseObject obj = result.get(0);
-                                int userMorePoints = obj.getInt("totalPoints");
-                                Log.d("totalPoints count", "" +userMorePoints);
-                                //int userMorePoints = result.get(0).getInt("totalPoints");
-                                obj.put("totalPoints", userMorePoints - 1);
-                                obj.saveInBackground();
-                                Log.d("This is parse points", "" + obj.get("totalPoints"));
-                            } catch(ParseException e) {
-                                e.printStackTrace();
-                            }
-                            
-                            
-                            tvNumberRec.setText(Integer.toString(lessLikes) + " ");
-                        } else {
-                            ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
-                            int moreLikes = message1.getLikes();
-                            moreLikes = moreLikes + 1;
-                            message1.setLikes(moreLikes);
-                            message1.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        Log.d("MessageAdapter", "Dislike post success");
-                                    } else {
+                                    //this has error of indexoutofbounds exception
+                                    ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+                                    query.whereEqualTo("userId", userId);
+                                    try {
+                                        List<UsersPoints> result = query.find();
+                                        Log.d("This is result", "" + result);
+                                        ParseObject obj = result.get(0);
+                                        int userMorePoints = obj.getInt("totalPoints");
+                                        Log.d("totalPoints count", "" + userMorePoints);
+                                        //int userMorePoints = result.get(0).getInt("totalPoints");
+                                        obj.put("totalPoints", userMorePoints - 1);
+                                        obj.saveInBackground();
+                                        Log.d("This is parse points", "" + obj.get("totalPoints"));
+                                    } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
+
+
+                                    tvNumberRec.setText(Integer.toString(lessLikes) + " ");
+                                } else {
+                                    ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
+                                    int moreLikes = message1.getLikes();
+                                    moreLikes = moreLikes + 1;
+                                    message1.setLikes(moreLikes);
+                                    message1.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Log.d("MessageAdapter", "Dislike post success");
+                                            } else {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                    tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                                 }
-                            });
-                            tvNumberRec.setText(Integer.toString(moreLikes) + " ");
+                            }
                         }
-                    }
+                    });
                 }
-            });
+            }
         }
     }
-
 }

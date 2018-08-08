@@ -55,9 +55,7 @@ public class Message extends ParseObject {
 
     private static final String KEY_CONTENT = "content";
 
-    @DatabaseField(columnName = "ATTACHMENT")
     private static final String KEY_ATTACHMENT = "image";
-    private static final String KEY_ATTACHMENT = "attachment";
 
     private static final String KEY_GROUP_ID = "groupId";
 
@@ -90,8 +88,6 @@ public class Message extends ParseObject {
 
     public void setFile(ParseFile parseFile) {
         put(KEY_ATTACHMENT, parseFile);
-    public void setAttachment(String attachment) {
-        put(KEY_ATTACHMENT, attachment);
     }
 
     public Chat getChat() {
@@ -132,6 +128,18 @@ public class Message extends ParseObject {
 
     public void setCreatedAt(String dateString) {
 
+//        SimpleDateFormat formatFrom = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+//        DateFormat formatTo = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+//        Date temp = null;
+//        Date date = null;
+//        try {
+//            temp = formatFrom.parse(dateString);
+//            String formatted = formatTo.format(temp);
+//            date = formatTo.parse(formatted);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        Log.d("Date", date.toString());
 
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         try {
