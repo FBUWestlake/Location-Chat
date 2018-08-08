@@ -239,7 +239,8 @@ public class MainActivity extends AppCompatActivity {
             public void onOneClick(View v) {
                 ParseUser.logOut();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);            }
+                startActivity(intent);
+                finish();}
         });
         
         deleteAccountButton.setOnClickListener(new OnOneClickListener() {
