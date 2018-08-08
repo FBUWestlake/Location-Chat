@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.susiel2.locationchat.database.DatabaseHelper;
 import me.susiel2.locationchat.database.ParseApp;
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.BitmapScaler;
@@ -96,6 +97,8 @@ public class ChatActivity extends AppCompatActivity {
     public String photoFileName = "photo.jpg";
     File resizedFile;
     Bitmap bm_chatImage;
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
+//    SwitchCompat switch_notifications;
 
     private Button gear;
 //    private String chatID;
@@ -133,6 +136,8 @@ public class ChatActivity extends AppCompatActivity {
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
         Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId());
+        Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId() + " " + chat.getName());
+//        chatID = chat.getIdString();
 
         messages = new ArrayList<Message>();
         rvMessages = (RecyclerView) findViewById(R.id.recycler_chat);
@@ -183,6 +188,86 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setStackFromEnd(true);
         rvMessages.setLayoutManager(manager);
+
+        String lastMessageTime = null;
+        if (dbHelper.isMessageTableEmpty() == false) {
+            Log.d("empty table", "table is not empty");
+            lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
+        }
+
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        query.whereEqualTo("groupId", chat);
+        query.include("createdBy");
+        if (lastMessageTime != null) {
+            query.whereGreaterThan("createdAt", lastMessageTime);
+            Log.e("last message exists", "this happens");
+        }
+        try {
+            List<Message> newMessages = query.find();
+            dbHelper.addMessages(newMessages);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        query.findInBackground(new FindCallback<Message>() {
+//            public void done(List<Message> itemList, ParseException e) {
+//                if (itemList.size() > 0) {
+//                    for (int  i = 0; i < itemList.size(); i++) {
+//                        dbHelper.addMessages(messages);
+//                    }
+//                }
+//            }
+//
+//        });
+
+        List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+
+        if (localMessages != null) {
+            for (int i = 0; i < localMessages.size(); i++) {
+                messages.add(localMessages.get(i));
+            }
+            mAdapter.notifyDataSetChanged();
+            rvMessages.scrollToPosition(messages.size() - 1);
+        }
+
+//        List<Message> localMessages = dbHelper.readAllMessages();
+//        if (localMessages.size() != 0) {
+//            Log.d("tryna figure it out", "here we are in if");
+//            messages = localMessages;
+//            mAdapter.notifyDataSetChanged();
+//            rvMessages.scrollToPosition(messages.size() - 1);
+//
+//            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//            query.whereEqualTo("groupId", chat);
+//            query.whereGreaterThan("createdAt", dbHelper.readLastMessageTime());
+//            query.findInBackground(new FindCallback<Message>() {
+//                public void done(List<Message> itemList, ParseException e) {
+//                    if (itemList.size() > 0) {
+//                        for(int  i = 0; i < itemList.size(); i++)
+//                            messages.add(itemList.get(i));
+//                        dbHelper.addMessages(messages);
+//                        mAdapter.notifyDataSetChanged();
+//                        rvMessages.scrollToPosition(messages.size() - 1);
+//                    }
+//                }
+//            });
+//        } else {
+//            Log.d("tryna figure it out", "here we are in else");
+//            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+//            query.whereEqualTo("groupId", chat);
+//            query.findInBackground(new FindCallback<Message>() {
+//                public void done(List<Message> itemList, ParseException e) {
+//                    if (e == null) {
+//                        for (int i = 0; i < itemList.size(); i++)
+//                            messages.add(itemList.get(i));
+//                        dbHelper.addMessages(messages);
+//                        mAdapter.notifyDataSetChanged();
+//                        rvMessages.scrollToPosition(messages.size() - 1);
+//                    } else {
+//                        Log.d("item", "Error: " + e.getMessage());
+//                    }
+//                }
+//            });
+//        }
 
         liveQuery();
         rvMessages.scrollToPosition(messages.size() - 1);
@@ -289,6 +374,11 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(ParseQuery<Message> query, final Message object) {
                         
+                    public void onEvent(ParseQuery<Message> query, Message object) {
+                        messages.add(object);
+                        dbHelper.addMessage(object);
+                        Log.d("livequery", "added");
+
                         // RecyclerView updates need to be run on the UI thread
                         runOnUiThread(new Runnable() {
                             @Override

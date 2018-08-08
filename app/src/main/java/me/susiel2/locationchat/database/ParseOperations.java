@@ -29,6 +29,9 @@ public class ParseOperations {
 
     public static void createMessage(String content, ParseFile file, Chat chat) {
         Message newMessage = new Message();
+    public static void createMessage(String content, Chat chat) {
+        Message newMessage =
+                new Message();
         newMessage.setCreatedBy(ParseUser.getCurrentUser());
         newMessage.setContent(content);
         newMessage.setChat(chat);
