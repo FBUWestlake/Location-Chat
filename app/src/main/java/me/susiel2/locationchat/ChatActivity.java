@@ -97,8 +97,36 @@ public class ChatActivity extends AppCompatActivity {
         manager.setStackFromEnd(true);
         rvMessages.setLayoutManager(manager);
 
-        String lastMessageTime;
-        lastMessageTime = dbHelper.readLastMessageTime();
+        String lastMessageTime = null;
+        if (dbHelper.isMessageTableEmpty() == false) {
+            Log.d("empty table", "table is not empty");
+            lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
+        }
+
+        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        query.whereEqualTo("groupId", chat);
+        query.include("createdBy");
+        if (lastMessageTime != null) {
+            query.whereGreaterThan("createdAt", lastMessageTime);
+            Log.e("last message exists", "this happens");
+        }
+        try {
+            List<Message> newMessages = query.find();
+            dbHelper.addMessages(newMessages);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        query.findInBackground(new FindCallback<Message>() {
+//            public void done(List<Message> itemList, ParseException e) {
+//                if (itemList.size() > 0) {
+//                    for (int  i = 0; i < itemList.size(); i++) {
+//                        dbHelper.addMessages(messages);
+//                    }
+//                }
+//            }
+//
+//        });
+
         List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
 
         if (localMessages != null) {
@@ -108,25 +136,6 @@ public class ChatActivity extends AppCompatActivity {
             mAdapter.notifyDataSetChanged();
             rvMessages.scrollToPosition(messages.size() - 1);
         }
-
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        query.whereEqualTo("groupId", chat);
-        if (lastMessageTime != null) {
-            query.whereGreaterThan("createdAt", lastMessageTime);
-        }
-        query.findInBackground(new FindCallback<Message>() {
-            public void done(List<Message> itemList, ParseException e) {
-                if (itemList.size() > 0) {
-                    for (int  i = 0; i < itemList.size(); i++) {
-                        messages.add(itemList.get(i));
-                        dbHelper.addMessages(messages);
-                        mAdapter.notifyDataSetChanged();
-                        rvMessages.scrollToPosition(messages.size() - 1);
-                    }
-                }
-            }
-
-        });
 
 //        List<Message> localMessages = dbHelper.readAllMessages();
 //        if (localMessages.size() != 0) {

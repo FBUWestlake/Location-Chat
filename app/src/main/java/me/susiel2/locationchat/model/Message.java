@@ -1,5 +1,8 @@
 package me.susiel2.locationchat.model;
 
+import android.text.format.DateUtils;
+import android.util.Log;
+
 import com.cardiomood.android.sync.annotations.ParseField;
 import com.cardiomood.android.sync.ormlite.SyncEntity;
 import com.j256.ormlite.field.DatabaseField;
@@ -12,9 +15,11 @@ import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.security.acl.Group;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import me.susiel2.locationchat.database.ParseOperations;
 
@@ -109,18 +114,33 @@ public class Message extends ParseObject {
     }
 
     public String getCreatedAtString() {
-        return getCreatedAt().toString();
+        String rawTime = getCreatedAt().toString();
+        return getRelativeTimeAgo(rawTime);
     }
 
     public void setCreatedAt(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
-        Date date = null;
+
+//        SimpleDateFormat formatFrom = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+//        DateFormat formatTo = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+//        Date temp = null;
+//        Date date = null;
+//        try {
+//            temp = formatFrom.parse(dateString);
+//            String formatted = formatTo.format(temp);
+//            date = formatTo.parse(formatted);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        Log.d("Date", date.toString());
+
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
         try {
-            date = dateFormat.parse(dateString);
+            Date date = format.parse(dateString);
+            put(KEY_CREATED_AT, date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        put(KEY_CREATED_AT, date);
+
     }
     
    public int getLikes() {
@@ -139,4 +159,22 @@ public class Message extends ParseObject {
         // TODO - add useful Query methods
 
     }
+
+    public String getRelativeTimeAgo(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss zzz yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
+    }
+
 }

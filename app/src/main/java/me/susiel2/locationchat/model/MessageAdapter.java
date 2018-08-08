@@ -103,7 +103,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         void bind(Message message) {
             messageText.setText(message.getContent());
-            timeText.setText(message.getCreatedAtString());
+//            timeText.setText(message.getCreatedAtString());
 
             final int numberOfLikes = message.getLikes();
             tvNumberSent.setText(numberOfLikes + " ");
@@ -143,11 +143,13 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             query.findInBackground(new FindCallback<ParseUser>() {
                 public void done(List<ParseUser> objects, ParseException e) {
-                    if (e == null) {
+                    if (objects != null) {
                         nameText.setText(objects.get(0).getString("name"));
-                    } else {
-                        // Something went wrong.
                     }
+                    // query SQL for name. have else for if this is deleted
+//                    else if (){
+//                        // Something went wrong.
+//                    }
                 }
             });
 
