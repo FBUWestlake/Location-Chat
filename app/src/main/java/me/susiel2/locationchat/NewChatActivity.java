@@ -61,6 +61,8 @@ public class NewChatActivity extends AppCompatActivity {
         final String[] categories = {"food", "outdoors", "sports", "art", "music", "tech", "beauty"};
         final String[] states = getResources().getStringArray(R.array.states);
 
+        getSupportActionBar().setTitle("Create new group");
+
         btn_newChat = findViewById(R.id.btn_newChat);
         iv_takePhoto = findViewById(R.id.iv_takePhoto);
         iv_selectPhoto = findViewById(R.id.iv_selectPhoto);

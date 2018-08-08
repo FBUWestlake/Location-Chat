@@ -95,6 +95,7 @@
             android:layout_height="wrap_content"
             android:background="#FFF"
             android:paddingTop="16dp"
+            android:clickable="true"
             app:srcCompat="@drawable/instagram_user_outline_24"/>
 
         <TextView
@@ -107,6 +108,7 @@
             android:textSize="20sp"
             android:paddingTop="13dp"
             android:paddingBottom="2dp"
+            android:clickable="true"
             android:textColor="@android:color/black"
             android:textStyle="bold"/>
 
@@ -131,6 +133,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:clickable="true"
             android:background="@drawable/outline_background_top"
             android:paddingVertical="15dp"
             />
@@ -142,6 +145,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:clickable="true"
             android:background="@drawable/outline_background_top"
             android:paddingVertical="15dp"
             />
@@ -161,6 +165,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:clickable="true"
             android:layout_weight="1"
             android:background="@drawable/outline_background_top"
             />

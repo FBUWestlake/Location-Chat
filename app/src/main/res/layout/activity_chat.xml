@@ -80,6 +80,7 @@
             android:id="@+id/groupImagePic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:gravity="center"
             android:background="#FFF"
             android:paddingTop="20dp"
@@ -90,6 +91,7 @@
             android:id="@+id/drawerChatName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:text="Chat Name"
             android:gravity="center"
             android:background="#FFF"
@@ -103,6 +105,7 @@
             android:id="@+id/drawerChatDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:text="Chat Description"
             android:gravity="left"
             android:background="#FFF"
@@ -114,6 +117,7 @@
 
         <ImageView
             android:layout_width="match_parent"
+            android:clickable="true"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/outline_background_top"
