@@ -32,7 +32,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_ONE_NAME = "users";
     public static final String TABLE_TWO_NAME = "groups";
     public static final String TABLE_THREE_NAME = "messages";
-//    public static final String TABLE_FIVE_NAME = "messageObjects";
     public static final String TABLE_FOUR_NAME = "user_groups";
 
     // User table items
@@ -62,11 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_MESSAGE_CREATEDBYNAME = "createdByName";
     private static final String KEY_MESSAGE_GROUPID = "groupId";
 
-    // Message object table items
-//    private static final String KEY_MESSAGEOBJECT_ID = "objectId";
-//    private static final String KEY_MESSAGEOBJECT = "messageObject";
-
-    // UserGroups table item
+    // UserGroups table items
 
 
     private static DatabaseHelper sInstance;
@@ -101,41 +96,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return sInstance;
     }
-
-//    public SQLiteDatabase getDb() {
-//        return db;
-//    }
-
-//    public byte[] serializeMessage(Message message) throws IOException {
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        ObjectOutputStream out = null;
-//        byte[] objectBytes;
-//        try {
-//            out = new ObjectOutputStream(bos);
-//            out.writeObject(message);
-//            //out.flush();
-//            objectBytes = bos.toByteArray();
-//        } finally {
-//            bos.close();
-//        }
-//        return objectBytes;
-//    }
-//
-//    public Message deserializeMessage(byte[] messageObject) {
-//        ByteArrayInputStream bis = new ByteArrayInputStream(messageObject);
-//        ObjectInputStream in = null;
-//        Message message = null;
-//        try {
-//            in = new ObjectInputStream(bis);
-//            message = (Message) in.readObject();
-//            in.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return message;
-//    }
 
     public void addMessages(List<Message> messages) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -245,8 +205,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
-
-
-
-
 }

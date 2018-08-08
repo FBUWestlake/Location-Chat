@@ -200,7 +200,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 messageText.setText(message.getContent());
 
                 ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-                query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
+                query.whereEqualTo("objectId", message.getUserId());
 
                 query.findInBackground(new FindCallback<ParseUser>() {
                     public void done(List<ParseUser> objects, ParseException e) {
