@@ -103,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
 
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        int bg = sharedPref.getInt("background_resource", android.R.color.white); // the second parameter will be fallback if the preference is not found
+        getWindow().setBackgroundDrawableResource(bg);
 
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
