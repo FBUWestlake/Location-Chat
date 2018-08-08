@@ -1,13 +1,16 @@
 package me.susiel2.locationchat;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,28 +20,19 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseLiveQueryClient;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SubscriptionHandling;
 
 import org.parceler.Parcels;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +40,6 @@ import me.susiel2.locationchat.database.DatabaseHelper;
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.Chat;
 import me.susiel2.locationchat.model.ChatAdapter;
-import me.susiel2.locationchat.model.Message;
 import me.susiel2.locationchat.model.UsersGroups;
 
 
@@ -238,10 +231,33 @@ public class MainActivity extends AppCompatActivity {
          logoutButton.setOnClickListener(new OnOneClickListener() {
             @Override
             public void onOneClick(View v) {
-                ParseUser.logOut();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();}
+
+                //adding "are you sure you want to log out?" popup
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                ParseUser.logOut();
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("Are you sure you want to logout?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+            }
         });
         
         deleteAccountButton.setOnClickListener(new OnOneClickListener() {
