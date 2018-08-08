@@ -112,9 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
         state_spinner.setAdapter(stateAdapter);
 
-
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Enter Your Display Name and Choose Your State");
         builder.setMessage("You can change location but not display name in the app.");
@@ -150,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                 signUp(phoneNumber, password, name);
             }
         });
+
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -175,7 +173,23 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     Log.d("LoginActivity", "Login successful");
                     // Inside a callback, so MainActivity.this
-                    
+
+                    //adding this right now!!!!!!! see FB workchat mssg
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    Object locationId = currentUser.get("location");
+
+                    int index = -1;
+                    for (int i=0;i<stateFlags.length;i++) {
+                        if (stateFlags[i].equals(locationId.toString())) {
+                            index = i;
+                            relativeLayout = findViewById(R.id.relativeLayout);
+                            relativeLayout.setBackgroundResource(stateFlags[index]);
+                            relativeLayout.getBackground().setAlpha(120);
+                            break;
+                        }
+                    }
+
+
                     final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
