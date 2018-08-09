@@ -1,5 +1,6 @@
 package me.susiel2.locationchat.model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -184,32 +185,33 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             }
 
+            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+            query.whereEqualTo("userId", message.getCreatedBy().getObjectId());
+            query.findInBackground(new FindCallback<UsersPoints>() {
+                @SuppressLint("NewApi")
+                @Override
+                public void done(List<UsersPoints> objects, ParseException e) {
+                    if (objects.size() != 0) {
+                        if (objects.get(0).getTotalPoints() >= 1000)
+                            badge.setImageDrawable(context.getDrawable(R.drawable.gold_badge));
+                        else if (objects.get(0).getTotalPoints() >= 500)
+                            badge.setImageDrawable(context.getDrawable(R.drawable.silver_badge));
+                        else if (objects.get(0).getTotalPoints() >= 100)
+                            badge.setImageDrawable(context.getDrawable(R.drawable.bronze_badge));
+                        else
+                            badge.setImageDrawable(context.getDrawable(R.drawable.asfalt_light));
+                    }
+                }
+            });
 
-            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-            query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
+            ParseQuery<ParseUser> query2 = ParseQuery.getQuery(ParseUser.class);
+            query2.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
 
-            query.findInBackground(new FindCallback<ParseUser>() {
+            query2.findInBackground(new FindCallback<ParseUser>() {
                 public void done(List<ParseUser> objects, ParseException e) {
                     if (e == null) {
                         if (objects.size() != 0) {
                             nameText.setText(objects.get(0).getString("name"));
-                            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
-                            query.whereEqualTo("userId", message.getCreatedBy().getObjectId());
-                            query.findInBackground(new FindCallback<UsersPoints>() {
-                                @Override
-                                public void done(List<UsersPoints> objects, ParseException e) {
-                                    if (objects.size() != 0) {
-                                        if (objects.get(0).getTotalPoints() >= 1000)
-                                            badge.setImageDrawable(context.getDrawable(R.drawable.gold_badge));
-                                        else if (objects.get(0).getTotalPoints() >= 500)
-                                            badge.setImageDrawable(context.getDrawable(R.drawable.silver_badge));
-                                        else if (objects.get(0).getTotalPoints() >= 100)
-                                            badge.setImageDrawable(context.getDrawable(R.drawable.bronze_badge));
-                                        else
-                                            badge.setImageDrawable(context.getDrawable(R.drawable.asfalt_light));
-                                    }
-                                }
-                            });
                         } else
                             nameText.setText("[deleted]");
                     } else {
