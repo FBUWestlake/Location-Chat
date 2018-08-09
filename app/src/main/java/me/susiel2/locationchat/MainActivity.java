@@ -1,12 +1,7 @@
 package me.susiel2.locationchat;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -63,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     DatabaseHelper usersDB;
     private int spinnerPosition;
-    public RelativeLayout relativeLayout;
+    //public RelativeLayout relativeLayout;
     private TextView logoutButton;
     SwipeRefreshLayout swipeContainer;
     TextView display_name;
@@ -77,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     //private Integer[] stateFlags = { R.drawable.bg_img_1, R.drawable.bg_img_2,
      //       R.drawable.bg_img_3, R.drawable.bg_img_4, R.drawable.bg_img_5 };
 
+    /*
     private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
     R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_district_of_columbia, R.drawable.ic_fl, R.drawable.ic_georgia,
             R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
@@ -87,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_south_dakota, R.drawable.ic_tn, R.drawable.ic_texas, R.drawable.ic_utah, R.drawable.ic_vermont, R.drawable.ic_va, R.drawable.ic_washington,
             R.drawable.ic_west_virginia, R.drawable.ic_wisconsin, R.drawable.ic_wyoming
     };
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +95,11 @@ public class MainActivity extends AppCompatActivity {
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
 
+        /*
         SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         int bg = sharedPref.getInt("background_resource", android.R.color.white); // the second parameter will be fallback if the preference is not found
         getWindow().setBackgroundDrawableResource(bg);
-
+*/
         Intent i = getIntent();
         String add = i.getStringExtra("myValue");
 
@@ -114,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity", "About to change user location");
             ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
 
-            getWindow().getDecorView().setBackgroundColor(Color.WHITE);
-            relativeLayout = findViewById(R.id.relativeLayout);
-            int backgroundPhoto = stateFlags[spinnerPosition];
-            relativeLayout.setBackgroundResource(backgroundPhoto);
-            relativeLayout.getBackground().setAlpha(120);
+            //getWindow().getDecorView().setBackgroundColor(Color.WHITE);
+            //relativeLayout = findViewById(R.id.relativeLayout);
+            //int backgroundPhoto = stateFlags[spinnerPosition];
+            //relativeLayout.setBackgroundResource(backgroundPhoto);
+            //relativeLayout.getBackground().setAlpha(120);
         }
 
         hamburger = findViewById(R.id.iv_hamburger);

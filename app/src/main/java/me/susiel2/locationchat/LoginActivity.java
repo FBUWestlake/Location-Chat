@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"};
     String text = "";
     public RelativeLayout relativeLayout;
-    private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
+    /*private Integer[] stateFlags = { R.drawable.ic_alabama, R.drawable.ic_alaska, R.drawable.ic_arizona,
             R.drawable.ic_arkansas, R.drawable.ic_ca, R.drawable.ic_colorado, R.drawable.ic_connecticut, R.drawable.ic_delaware, R.drawable.ic_district_of_columbia, R.drawable.ic_fl, R.drawable.ic_georgia,
             R.drawable.ic_hawaii, R.drawable.ic_idaho, R.drawable.ic_il, R.drawable.ic_indiana, R.drawable.ic_iowa, R.drawable.ic_kansas,
             R.drawable.ic_kentucky, R.drawable.ic_louisiana, R.drawable.ic_maine, R.drawable.ic_maryland, R.drawable.ic_massachusetts, R.drawable.ic_michigan,
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             R.drawable.ic_south_dakota, R.drawable.ic_tn, R.drawable.ic_texas, R.drawable.ic_utah, R.drawable.ic_vermont, R.drawable.ic_va, R.drawable.ic_washington,
             R.drawable.ic_west_virginia, R.drawable.ic_wisconsin, R.drawable.ic_wyoming
     };
-
+*/
 
 
     @Override
@@ -135,12 +135,14 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("This is selected state", text);
 
                 //changing background here now
+                /*
                 int hold = state_spinner.getSelectedItemPosition();
                 Log.d("Item Position is", "" + hold);
                 SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putInt("background_resource", stateFlags[hold]);
                 editor.apply();
+*/
 
                 /*
                 relativeLayout = findViewById(R.id.relativeLayout);
@@ -183,6 +185,7 @@ public class LoginActivity extends AppCompatActivity {
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     Object locationId = currentUser.get("location");
 
+                    /*
                     int index = -1;
                     for (int i=0;i<stateFlags.length;i++) {
                         if (stateFlags[i].equals(locationId.toString())) {
@@ -193,7 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                             break;
                         }
                     }
-
+*/
 
                     final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
