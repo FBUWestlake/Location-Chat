@@ -47,7 +47,7 @@ public class SearchExistingActivity extends AppCompatActivity {
 
     TextView btNewGroup;
     Spinner categorySpinner;
-    final String[] categories = {"All Categories", "food", "beauty", "tech", "sports", "art", "outdoors", "music"};
+    final String[] categories = {"All Categories", "Food", "Beauty", "Tech", "Sports", "Art", "Outdoors", "Music"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,7 +5,7 @@
     android:id="@+id/layout_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/login_background"
     android:gravity="center_horizontal"
     tools:context=".LoginActivity">
 
@@ -28,9 +28,10 @@
             tools:ignore="VectorDrawableCompat" />
 
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp">
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/phoneNumber_et"
@@ -38,14 +39,16 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_phone_number"
                 android:imeOptions="actionNext"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:textColor="@android:color/white"/>
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp">
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/password_et"
@@ -53,38 +56,34 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:imeOptions="actionDone"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@android:color/white"/>
 
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-        
-        <Button
             android:id="@+id/login_btn"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="30dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginTop="44dp"
+            android:textSize="16sp"
+            android:paddingVertical="4dp"
             android:background="@drawable/roundshapebutton"
-            android:stateListAnimator="@null"
-            android:text="Log In"
-            android:layout_marginBottom="16dp"/>
+            android:text="Log In" />
 
-        <Button
+        <TextView
             android:id="@+id/signUp_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_gravity="center"
             android:background="@drawable/roundshapebutton"
-            android:text="Register"
-            android:textColor="@android:color/white" />
+            android:paddingVertical="4dp"
+            android:text="Register" />
 
     </LinearLayout>
 

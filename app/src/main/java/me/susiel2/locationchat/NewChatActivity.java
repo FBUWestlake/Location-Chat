@@ -67,6 +67,7 @@ public class NewChatActivity extends AppCompatActivity {
         final String[] states = getResources().getStringArray(R.array.states);
 
         getSupportActionBar().setTitle("Create new group");
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.primaryAppColor));
 
         btn_newChat = findViewById(R.id.btn_newChat);
         iv_takePhoto = findViewById(R.id.iv_takePhoto);

@@ -34,9 +34,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText phoneNumberInput;
     private EditText passwordInput;
-    private Button loginBtn;
-    private Button signUpBtn;
-    TextView textInfo;
+    private TextView loginBtn;
+    private TextView signUpBtn;
     EditText subEditText;
     public Spinner state_spinner;
     private int spinnerPosition;
@@ -77,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password_et);
         loginBtn = findViewById(R.id.login_btn);
         signUpBtn = findViewById(R.id.signUp_btn);
-        textInfo = (TextView)findViewById(R.id.info);
 
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +98,10 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        getSupportActionBar().setTitle("Bounce");
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.primaryAppColor));
+
     }
     
     private void openDialog(){
