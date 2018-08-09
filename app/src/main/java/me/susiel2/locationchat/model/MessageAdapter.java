@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -35,6 +37,8 @@ import java.util.Locale;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
 import me.susiel2.locationchat.database.ParseOperations;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -262,20 +266,20 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         messageText.setText(message.getContent());
                     }
 
-                    ParseQuery<ParseUser> query2 = ParseQuery.getQuery(ParseUser.class);
-                    query2.whereEqualTo("objectId", message.getUserId());
+                    if (message1.getName() != null) {
+                        nameText.setText(message1.getName());
+                    } else {
+                        ParseQuery<ParseUser> query2 = ParseQuery.getQuery(ParseUser.class);
+                        query2.whereEqualTo("objectId", message.getUserId());
 
-                    query2.findInBackground(new FindCallback<ParseUser>() {
-                        public void done(List<ParseUser> objects, ParseException e) {
-                            if (objects != null) {
-                                nameText.setText(objects.get(0).getString("name"));
+                        query2.findInBackground(new FindCallback<ParseUser>() {
+                            public void done(List<ParseUser> objects, ParseException e) {
+                                if (objects != null) {
+                                    nameText.setText(objects.get(0).getString("name"));
+                                }
                             }
-                            // query SQL for name. have else for if this is deleted
-                            else {
-                                nameText.setText(message1.getName());
-                            }
-                        }
-                    });
+                        });
+                    }
 
                     if (message.getTime() != null) {
                         timeText.setText(message.getTime());
@@ -303,7 +307,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     int moreLikes = message1.getLikes();
                                     moreLikes = moreLikes + 1;
                                     message1.setLikes(moreLikes);
-
                                     message1.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -326,7 +329,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     ParseUser msgSender = message1.getCreatedBy();
                                     String userId = msgSender.getObjectId();
                                     Log.d("This is the user ID", userId);
-//query for messages where createdAt is that userId.
+                                    //query for messages where createdAt is that userId.
                                     //this has error of indexoutofbounds exception
                                     ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
                                     query.whereEqualTo("userId", userId);

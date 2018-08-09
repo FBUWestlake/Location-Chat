@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.telephony.gsm.SmsMessage;
 import android.util.Log;
 
@@ -33,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_TWO_NAME = "groups";
     public static final String TABLE_THREE_NAME = "messages";
     public static final String TABLE_FOUR_NAME = "user_groups";
+    public static final String TABLE_FIVE_NAME = "unsent_messages";
 
     // User table items
     private static final String KEY_USER_ID = "objectId";
@@ -62,7 +65,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_MESSAGE_GROUPID = "groupId";
     private static final String KEY_MESSAGE_LIKES = "likes";
 
-    // UserGroups table items
+    // Unsent message items
+    private static final String KEY_UNSENT_CONTENT = "content";
+    private static final String KEY_UNSENT_GROUPID = "groupId";
+
 
 
     private static DatabaseHelper sInstance;
@@ -77,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table " + TABLE_THREE_NAME + "(" + KEY_MESSAGE_ID + " TEXT PRIMARY KEY," + KEY_MESSAGE_CONTENT + " TEXT," + KEY_MESSAGE_CREATEDAT + " TEXT," + KEY_MESSAGE_ATTACHMENT + " BLOB," + KEY_MESSAGE_CREATEDBY + " TEXT, " + KEY_MESSAGE_CREATEDBYNAME + " TEXT, " + KEY_MESSAGE_GROUPID + " TEXT, " + KEY_MESSAGE_LIKES + " TEXT " + ")");
 //        sqLiteDatabase.execSQL("create table " + TABLE_FOUR_NAME + "(USERGROUP_ID TEXT PRIMARY KEY, NOTIFICATIONS INTEGER, READ INTEGER, USER_ID TEXT, GROUP_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES users(USER_ID), FOREIGN KEY(GROUP_ID) REFERENCES groups(GROUP_ID))");
 //        sqLiteDatabase.execSQL("create table " + TABLE_FIVE_NAME + "(" + KEY_MESSAGEOBJECT + " BLOB" + ")");
-
+        sqLiteDatabase.execSQL("create table " + TABLE_FIVE_NAME + "(" + KEY_UNSENT_CONTENT + " TEXT," + KEY_UNSENT_GROUPID + " TEXT" + ")");
     }
 
     @Override
@@ -86,7 +92,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TWO_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_THREE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FOUR_NAME);
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FIVE_NAME);
 
         onCreate(sqLiteDatabase);
     }
@@ -132,11 +137,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
+            Log.e("messageId", message.getObjectId());
             values.put(KEY_MESSAGE_ID, message.getObjectId());
             values.put(KEY_MESSAGE_CREATEDBY, message.getCreatedBy().getObjectId());
             values.put(KEY_MESSAGE_CONTENT, message.getContent());
             values.put(KEY_MESSAGE_CREATEDAT, message.getCreatedAtString());
             values.put(KEY_MESSAGE_GROUPID, message.getChat().getObjectId());
+            values.put(KEY_MESSAGE_LIKES, message.getLikes());
             db.insert(TABLE_THREE_NAME, null, values);
             db.setTransactionSuccessful();
         } finally{
@@ -170,23 +177,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Message> messages = new ArrayList<>();
         try {
             if (cursor.moveToFirst()) {
-                while (cursor.moveToNext()) {
+                do {
                     Log.d("given groupID", groupId);
                     Log.d("what is the groupID", cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)));
-                    if (groupId.equals(cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)))) {
-                        Log.d("are they equal", "yes they are!");
-                        Log.d("message likes", cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_LIKES)));
-                        Message message = new Message(
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBYNAME)),
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT)),
-                                cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_LIKES))
-                        );
-                        messages.add(message);
-                    }
-                }
+                    Log.d("are they equal", "yes they are!");
+                    Message message = new Message(
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CONTENT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBYNAME)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDBY)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_GROUPID)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_LIKES))
+                    );
+                    messages.add(message);
+                } while (cursor.moveToNext());
             }
         } catch (SQLiteException e) {
             Log.d("SQLite error", e.getMessage());
@@ -194,12 +198,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //db.endTransaction();
         }
         Log.d("read all messages", String.valueOf(messages.size()));
+        cursor.close();
         return messages;
     }
 
-    public boolean isMessageTableEmpty() {
+    public void saveUnsentMessage(String content, String groupId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_UNSENT_CONTENT, content);
+            values.put(KEY_UNSENT_GROUPID, groupId);
+            db.insert(TABLE_FIVE_NAME, null, values);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public List<String> readUnsentMessages(String groupId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = "SELECT count(*) FROM " + TABLE_THREE_NAME;
+        String selection = "SELECT * FROM " + TABLE_FIVE_NAME + " WHERE " + KEY_UNSENT_GROUPID + "= '" + groupId + "'";
+        Cursor cursor = db.rawQuery(selection, null);
+        List<String> contents = new ArrayList<>();
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    Log.e("HELLO", "I'M HERE");
+                    String content = cursor.getString(cursor.getColumnIndex(KEY_UNSENT_CONTENT));
+                    Log.e("READ DATABASE", cursor.getString(cursor.getColumnIndex(KEY_UNSENT_CONTENT)));
+                    contents.add(content);
+                } while(cursor.moveToNext());
+            } else {
+                Log.e("WAWA", "MAMAMA");
+            }
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+        cursor.close();
+        return contents;
+    }
+
+    public boolean isTableEmpty(String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = "SELECT count(*) FROM " + tableName;
         Cursor cursor = db.rawQuery(selection, null);
         cursor.moveToFirst();
         if (cursor.getInt(0) > 0) {
@@ -208,5 +250,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
 
+    }
+
+    public void deleteTable(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(tableName, null, null);
+        db.execSQL("delete from " + tableName);
     }
 }

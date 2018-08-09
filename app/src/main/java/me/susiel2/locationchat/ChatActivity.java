@@ -2,10 +2,14 @@ package me.susiel2.locationchat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -167,21 +171,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-//        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-//        query.whereEqualTo("groupId", chat);
-//        query.findInBackground(new FindCallback<Message>() {
-//            public void done(List<Message> itemList, ParseException e) {
-//                if (e == null) {
-//                    for(int i = 0; i < itemList.size(); i++)
-//                        messages.add(itemList.get(i));
-//                    mAdapter.notifyDataSetChanged();
-//                    rvMessages.scrollToPosition(messages.size() - 1);
-//                } else {
-//                    Log.d("item", "Error: " + e.getMessage());
-//                }
-//            }
-//        });
-
 
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
@@ -190,34 +179,52 @@ public class ChatActivity extends AppCompatActivity {
         rvMessages.setLayoutManager(manager);
 
         String lastMessageTime = null;
-        if (dbHelper.isMessageTableEmpty() == false) {
+        if (dbHelper.isTableEmpty(dbHelper.TABLE_THREE_NAME) == false) {
             Log.d("empty table", "table is not empty");
             lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
         }
 
-        ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
-        query1.whereEqualTo("groupId", chat);
-        query1.include("createdBy");
-        if (lastMessageTime != null) {
-            query1.whereGreaterThan("createdAt", lastMessageTime);
-            Log.e("last message exists", "this happens");
+        // Create unsent message objects.
+        if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
+            List<String> unsentContent = dbHelper.readUnsentMessages(chat.getObjectId());
+            Log.e("size of unsent", String.valueOf(unsentContent.size()));
+            for (int i = 0; i < unsentContent.size(); i++) {
+                Log.e("unsent message sent", "WORKS!!");
+                parseOperations.createMessage(unsentContent.get(i), null, chat);
+            }
+            parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+            dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
+            if (dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME)) {
+                Log.e("deletion", "EMPTY");
+            }
         }
-        try {
-            List<Message> newMessages = query1.find();
-            dbHelper.addMessages(newMessages);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-//        query.findInBackground(new FindCallback<Message>() {
-//            public void done(List<Message> itemList, ParseException e) {
-//                if (itemList.size() > 0) {
-//                    for (int  i = 0; i < itemList.size(); i++) {
-//                        dbHelper.addMessages(messages);
-//                    }
-//                }
+
+        if (isNetworkAvailable()) {
+            ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+            query1.whereEqualTo("groupId", chat);
+            query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
 //            }
+            try {
+                List<Message> newMessages = query1.find();
+                dbHelper.addMessages(newMessages);
+                Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+//        List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
 //
-//        });
+//        if (localMessages != null) {
+//            for (int i = 0; i < localMessages.size(); i++) {
+//                messages.add(localMessages.get(i));
+//            }
+//            mAdapter.notifyDataSetChanged();
+//            rvMessages.scrollToPosition(messages.size() - 1);
+//        }
 
         List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
 
@@ -228,46 +235,6 @@ public class ChatActivity extends AppCompatActivity {
             mAdapter.notifyDataSetChanged();
             rvMessages.scrollToPosition(messages.size() - 1);
         }
-
-//        List<Message> localMessages = dbHelper.readAllMessages();
-//        if (localMessages.size() != 0) {
-//            Log.d("tryna figure it out", "here we are in if");
-//            messages = localMessages;
-//            mAdapter.notifyDataSetChanged();
-//            rvMessages.scrollToPosition(messages.size() - 1);
-//
-//            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-//            query.whereEqualTo("groupId", chat);
-//            query.whereGreaterThan("createdAt", dbHelper.readLastMessageTime());
-//            query.findInBackground(new FindCallback<Message>() {
-//                public void done(List<Message> itemList, ParseException e) {
-//                    if (itemList.size() > 0) {
-//                        for(int  i = 0; i < itemList.size(); i++)
-//                            messages.add(itemList.get(i));
-//                        dbHelper.addMessages(messages);
-//                        mAdapter.notifyDataSetChanged();
-//                        rvMessages.scrollToPosition(messages.size() - 1);
-//                    }
-//                }
-//            });
-//        } else {
-//            Log.d("tryna figure it out", "here we are in else");
-//            ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-//            query.whereEqualTo("groupId", chat);
-//            query.findInBackground(new FindCallback<Message>() {
-//                public void done(List<Message> itemList, ParseException e) {
-//                    if (e == null) {
-//                        for (int i = 0; i < itemList.size(); i++)
-//                            messages.add(itemList.get(i));
-//                        dbHelper.addMessages(messages);
-//                        mAdapter.notifyDataSetChanged();
-//                        rvMessages.scrollToPosition(messages.size() - 1);
-//                    } else {
-//                        Log.d("item", "Error: " + e.getMessage());
-//                    }
-//                }
-//            });
-//        }
 
         liveQuery();
         rvMessages.scrollToPosition(messages.size() - 1);
@@ -306,8 +273,12 @@ public class ChatActivity extends AppCompatActivity {
                         pFile = new ParseFile(resizedFile);
                     else
                         pFile = null;
-                    parseOperations.createMessage(content, pFile, chat);
-                    parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+                    if (isNetworkAvailable()) {
+                        parseOperations.createMessage(content, pFile, chat);
+                        parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+                    } else {
+                        dbHelper.saveUnsentMessage(content, chat.getObjectId());
+                    }
                     etMessage.setText("");
                     bm_chatImage = null;
                     addAttachmentBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
@@ -360,7 +331,7 @@ public class ChatActivity extends AppCompatActivity {
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
-        parseQuery.whereNotEqualTo("user", ParseUser.getCurrentUser().getObjectId());
+        parseQuery.whereNotEqualTo("createdBy", ParseUser.getCurrentUser().getObjectId());
         parseQuery.whereEqualTo("groupId", chat);
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
         // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
@@ -375,14 +346,13 @@ public class ChatActivity extends AppCompatActivity {
 
                     public void onEvent(ParseQuery<Message> query, final Message object) {
                         messages.add(object);
-                        dbHelper.addMessage(object);
-                        Log.d("livequery", "added");
                         // RecyclerView updates need to be run on the UI thread
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 messages.add(object);
-                                Log.d("livequery", "added");
+                                Log.d("livequery", object.getObjectId());
+                                Log.e("livequery", object.getContent());
                                 mAdapter.notifyItemInserted(messages.size() - 1);
                                 rvMessages.scrollToPosition(messages.size() - 1);
 //                              mAdapter.notifyDataSetChanged();
@@ -390,6 +360,12 @@ public class ChatActivity extends AppCompatActivity {
                         });
                     }
                 });
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

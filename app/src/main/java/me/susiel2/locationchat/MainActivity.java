@@ -318,6 +318,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+//    public ArrayList<Chat> autocomplete(String query) {
+//        ArrayList<Chat> results = new ArrayList<>();
+//        for (int i = 0; i < masterList.size(); i++) {
+//            String[] queryWords = query.toUpperCase().split("\\s");
+//            String[] optionWords = masterList.get(i).getName().toUpperCase().split("\\s");
+//            if (queryWords.length >  optionWords.length) {
+//                continue;
+//            }
+//            for (int j = 0; j < queryWords.length; j++) {
+//                if (!optionWords[0].startsWith(queryWords[0])) {
+//                    break;
+//                }
+//                if (j != 0 && !prefixOfWord(queryWords[j], optionWords)) {
+//                    break;
+//                } else {
+//                    results.add(masterList.get(i));
+//                }
+//            }
+//        }
+//        return results;
+//    }
+//
+//    public boolean prefixOfWord(String word, String[] options) {
+//        for (int i = 0; i < options.length; i++) {
+//            if (options[i].startsWith(word)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
     public void updateBySearch(){
         ArrayList<Chat> tempList = new ArrayList<Chat>();
         for(int i = 0; i < masterList.size(); i++){
