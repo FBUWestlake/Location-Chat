@@ -348,13 +348,21 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
                 //add = add + addresses.get(0).getCountryName();
                 //add += addresses.get(0).getAddressLine(0);
                 add = addresses.get(0).getAdminArea();
+                confirmBtn.setEnabled(true);
 
                 /*Intent i = new Intent(this, MainActivity.class);
                 i.putExtra("myValue", add);
                 startActivity(i);*/
+
             }
 
-            Toast.makeText(this, add, Toast.LENGTH_SHORT).show();
+            if(!addresses.get(0).getCountryName().equals("United States")) {
+                Toast.makeText(this, "Please choose a location in the United States", Toast.LENGTH_SHORT).show();
+                confirmBtn.setEnabled(false);
+
+            }else {
+                Toast.makeText(this, add, Toast.LENGTH_SHORT).show();
+            }
         }
         catch (IOException e1) {
             e1.printStackTrace();
