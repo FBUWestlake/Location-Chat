@@ -289,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
                                             ParseUser.logOutInBackground();
                                             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                             startActivity(intent);
+                                            finish();
                                         } else {
                                             Log.d("item", "Error: " + e.getMessage());
                                         }
