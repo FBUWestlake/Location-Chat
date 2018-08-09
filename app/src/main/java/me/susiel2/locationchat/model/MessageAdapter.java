@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -150,9 +151,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Messages sent by others display a profile image and nickname.
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText, tvNumberRec;
-        Button likeButton;
+        ImageButton likeButton;
         ImageView ivThumbsUp;
-        Button dislikeButton;
+        ImageButton dislikeButton;
         ImageView ivThumbsDown;
         ImageView attachedImage;
         Button viewHiddenMessageButton;
@@ -190,8 +191,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 });
 
             }
-            else {
-                messageText.setText(message.getContent());
+
 
                 ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
                 query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
@@ -266,7 +266,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
                     attachedImage.setImageDrawable(myDrawable);
                 }
-            }
+
 
             timeText.setText(message.getCreatedAtString());
 
@@ -276,6 +276,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    .into(profileImage);
             final int numberOfLikes = message.getLikes();
             tvNumberRec.setText(numberOfLikes + " ");
+
+            if(message.getLikes() >= -2)
+                messageText.setText(message.getContent());
+
 
 
             likeButton.setOnClickListener(new View.OnClickListener() {
