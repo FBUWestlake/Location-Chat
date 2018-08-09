@@ -4,13 +4,9 @@
     <color name="colorPrimaryDark">#BA55D3</color>
     <color name="primaryAppColor">#00a478</color>
     <color name="colorBlue">#c0a0e1</color>
-<<<<<<< HEAD
-
     <color name="colorAccent">#90caac</color>
     <color name="white">#ffffff</color>
 
-=======
     <color name="colorAccent">#90caac</color>
     <color name="white">#ffffff</color>
->>>>>>> 36bbb04ae5460709de6e441e1a36752b394fedb4
 </resources>
