@@ -66,4 +66,6 @@ dependencies {
     implementation 'com.cardiomood.android:android-data-sync:0.4'
     implementation 'org.apache.commons:commons-lang3:3.5'
 
+    implementation 'com.github.omadahealth:swipy:1.2.3@aar'
+
 }

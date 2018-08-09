@@ -50,6 +50,13 @@ public class Message extends ParseObject {
         setMessageLikes(messageLikes);
     }
 
+    public Message(String content, String date, String messageLikes) {
+        super();
+        setBody(content);
+        setTime(date);
+        setMessageLikes(messageLikes);
+    }
+
     public Message() {
 
     }
