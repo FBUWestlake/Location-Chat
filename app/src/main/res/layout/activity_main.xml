@@ -175,10 +175,9 @@
             android:textColor="@android:color/holo_blue_dark"
              />
 =======
-            android:textColor="@android:color/holo_blue_dark"/>
 >>>>>>> 36bbb04ae5460709de6e441e1a36752b394fedb4
 
-        <ImageView
+<ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:clickable="true"
