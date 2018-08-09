@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     TextView display_name;
     private TextView deleteAccountButton;
     private TextView locationChanger;
-
+    private TextView displayState;
 
 
 
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         usersDB = new DatabaseHelper(this);
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
+
 
         /*
         SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
@@ -126,12 +127,15 @@ public class MainActivity extends AppCompatActivity {
         etSearchMain = findViewById(R.id.etSearchMain);
         deleteAccountButton = findViewById(R.id.deleteAccountBtn);
         locationChanger = findViewById(R.id.locationChanger);
+        displayState = findViewById(R.id.display_state);
 
-        
+
+
         display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         location = currentUser.getString("location");
+        displayState.setText(location);
 
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
