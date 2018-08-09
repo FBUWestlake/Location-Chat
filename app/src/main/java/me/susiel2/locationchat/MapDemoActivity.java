@@ -356,7 +356,7 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
 
             }
 
-            if(!addresses.get(0).getCountryName().equals("United States")) {
+            if(addresses.size() == 0 || !addresses.get(0).getCountryName().equals("United States")) {
                 Toast.makeText(this, "Please choose a location in the United States", Toast.LENGTH_SHORT).show();
                 confirmBtn.setEnabled(false);
 

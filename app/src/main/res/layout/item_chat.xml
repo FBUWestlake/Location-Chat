@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_chat"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#A6ffffff">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_chat_image"
