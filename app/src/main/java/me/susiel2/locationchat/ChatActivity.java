@@ -98,7 +98,6 @@ public class ChatActivity extends AppCompatActivity {
     Bitmap bm_chatImage;
 
     private Button gear;
-//    private String chatID;
     final String[] listviewData = {"Leave Group"};
     public DrawerLayout drawer;
     public ListView navList2;
