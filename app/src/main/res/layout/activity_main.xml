@@ -177,6 +177,8 @@
 =======
 >>>>>>> 36bbb04ae5460709de6e441e1a36752b394fedb4
 
+            android:textColor="@android:color/holo_blue_dark"/>
+
 <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
