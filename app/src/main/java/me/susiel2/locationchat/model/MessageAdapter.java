@@ -156,6 +156,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView ivThumbsDown;
         ImageView attachedImage;
         Button viewHiddenMessageButton;
+        ImageView badge;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -166,6 +167,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tvNumberRec = (TextView) itemView.findViewById(R.id.tvNumberRec);
             ivThumbsUp = (ImageView) itemView.findViewById(R.id.ivThumbsUp);
             likeButton = itemView.findViewById(R.id.likeButton);
+            badge = itemView.findViewById(R.id.badge);
 
             ivThumbsDown = (ImageView) itemView.findViewById(R.id.ivThumbsDown);
             dislikeButton = itemView.findViewById(R.id.dislikeButton);
@@ -175,7 +177,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         }
 
-        void bind(Message message) {
+        void bind(final Message message) {
             final Message message1 = message;
             if (message.getLikes() < -2) {
                 messageText.setText("Message hidden due to low score. Click to view.");
@@ -197,8 +199,26 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 query.findInBackground(new FindCallback<ParseUser>() {
                     public void done(List<ParseUser> objects, ParseException e) {
                         if (e == null) {
-                            if (objects.size() != 0)
+                            if (objects.size() != 0) {
                                 nameText.setText(objects.get(0).getString("name"));
+                                ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+                                query.whereEqualTo("userId", message.getCreatedBy().getObjectId());
+                                query.findInBackground(new FindCallback<UsersPoints>() {
+                                    @Override
+                                    public void done(List<UsersPoints> objects, ParseException e) {
+                                        if(objects.size() != 0){
+                                            if(objects.get(0).getTotalPoints() >= 1000)
+                                                badge.setImageDrawable(context.getDrawable(R.drawable.gold_badge));
+                                            else if(objects.get(0).getTotalPoints() >= 500)
+                                                badge.setImageDrawable(context.getDrawable(R.drawable.silver_badge));
+                                            else if(objects.get(0).getTotalPoints() >= 100)
+                                                badge.setImageDrawable(context.getDrawable(R.drawable.bronze_badge));
+                                            else
+                                                badge.setImageDrawable(context.getDrawable(R.drawable.asfalt_light));
+                                        }
+                                    }
+                                });
+                            }
                             else
                                 nameText.setText("[deleted]");
                         } else {
