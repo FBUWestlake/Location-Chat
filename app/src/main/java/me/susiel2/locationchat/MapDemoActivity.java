@@ -115,18 +115,15 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
                 }
             });
         } else {
-            Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
         }
 
         confirmBtn = findViewById(R.id.confirm_button);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Intent i = new Intent(MapDemoActivity.this, MainActivity.class);
-                //this is a test line
-                i.putExtra("myValue", add);
-
-                startActivity(i);
+                Intent i = new Intent();
+                i.putExtra("location", add);
+                setResult(RESULT_OK, i);
                 finish();
             }
         });
@@ -136,7 +133,6 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
         map = googleMap;
         if (map != null) {
             // Map is ready
-            Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             MapDemoActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
             MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
 
@@ -155,7 +151,6 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
             });
 
         } else {
-            Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -183,7 +178,6 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
                         e.printStackTrace();
                     }
                 });
@@ -237,12 +231,10 @@ public class MapDemoActivity extends AppCompatActivity implements GoogleMap.OnMa
         // Display the connection status
 
         if (mCurrentLocation != null) {
-            Toast.makeText(this, "GPS location was found!", Toast.LENGTH_SHORT).show();
             LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             map.animateCamera(cameraUpdate);
         } else {
-            Toast.makeText(this, "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
         }
         MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
     }
