@@ -123,7 +123,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             messageText.setText(message.getContent());
             timeText.setText(message.getCreatedAtString());
 
-            if(message.getFile() != null) {
+            if (message.getFile() != null) {
                 Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
                 Bitmap bm_resized = null;
                 try {
@@ -136,8 +136,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
                 Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
                         .into(attachedImage);
-            }
-            else{
+            } else {
                 Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
                 attachedImage.setImageDrawable(myDrawable);
             }
@@ -174,7 +173,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             dislikeButton = itemView.findViewById(R.id.dislikeButton);
 
             attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
-            viewHiddenMessageButton= itemView.findViewById(R.id.viewHiddenMessageButton);
+            viewHiddenMessageButton = itemView.findViewById(R.id.viewHiddenMessageButton);
 
         }
 
@@ -193,79 +192,78 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
 
-                ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-                query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
+            ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+            query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
 
-                query.findInBackground(new FindCallback<ParseUser>() {
-                    public void done(List<ParseUser> objects, ParseException e) {
-                        if (e == null) {
-                            if (objects.size() != 0) {
-                                nameText.setText(objects.get(0).getString("name"));
-                                ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
-                                query.whereEqualTo("userId", message.getCreatedBy().getObjectId());
-                                query.findInBackground(new FindCallback<UsersPoints>() {
-                                    @Override
-                                    public void done(List<UsersPoints> objects, ParseException e) {
-                                        if(objects.size() != 0){
-                                            if(objects.get(0).getTotalPoints() >= 1000)
-                                                badge.setImageDrawable(context.getDrawable(R.drawable.gold_badge));
-                                            else if(objects.get(0).getTotalPoints() >= 500)
-                                                badge.setImageDrawable(context.getDrawable(R.drawable.silver_badge));
-                                            else if(objects.get(0).getTotalPoints() >= 100)
-                                                badge.setImageDrawable(context.getDrawable(R.drawable.bronze_badge));
-                                            else
-                                                badge.setImageDrawable(context.getDrawable(R.drawable.asfalt_light));
-                                        }
+            query.findInBackground(new FindCallback<ParseUser>() {
+                public void done(List<ParseUser> objects, ParseException e) {
+                    if (e == null) {
+                        if (objects.size() != 0) {
+                            nameText.setText(objects.get(0).getString("name"));
+                            ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
+                            query.whereEqualTo("userId", message.getCreatedBy().getObjectId());
+                            query.findInBackground(new FindCallback<UsersPoints>() {
+                                @Override
+                                public void done(List<UsersPoints> objects, ParseException e) {
+                                    if (objects.size() != 0) {
+                                        if (objects.get(0).getTotalPoints() >= 1000)
+                                            badge.setImageDrawable(context.getDrawable(R.drawable.gold_badge));
+                                        else if (objects.get(0).getTotalPoints() >= 500)
+                                            badge.setImageDrawable(context.getDrawable(R.drawable.silver_badge));
+                                        else if (objects.get(0).getTotalPoints() >= 100)
+                                            badge.setImageDrawable(context.getDrawable(R.drawable.bronze_badge));
+                                        else
+                                            badge.setImageDrawable(context.getDrawable(R.drawable.asfalt_light));
                                     }
-                                });
-                            }
-                            else
-                                nameText.setText("[deleted]");
-                        } else {
-                            // Something went wrong.
-                        }
-                    }
-                });
-                
-                //query to see if the message ID and user Id are together in the MessageUserLikes table.
-                //If they are, then color in whichever value is true.
-                ParseQuery<MessageUserLikes> query1 = ParseQuery.getQuery(MessageUserLikes.class);
-                query1.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
-                query1.whereEqualTo("messageId", message1.getObjectId());
-                query1.findInBackground(new FindCallback<MessageUserLikes>() {
-                    public void done(List<MessageUserLikes> objects, ParseException e) {
-                        if (e == null) {
-                            if (objects.size() != 0) {
-                                Log.d("This is first object", "" + objects.get(0));
-                                if (objects.get(0).getLiked()) {
-                                    ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
-                                } else {
-                                    ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
                                 }
-                            }
-                        } else {
-                            // Something went wrong.
-                        }
+                            });
+                        } else
+                            nameText.setText("[deleted]");
+                    } else {
+                        // Something went wrong.
                     }
-                });
-
-                if (message.getFile() != null) {
-                    Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
-                    Bitmap bm_resized = null;
-                    try {
-                        String filePath = message.getFile().getFile().getAbsolutePath();
-                        bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-                    Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
-                            .into(attachedImage);
-                } else {
-                    Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
-                    attachedImage.setImageDrawable(myDrawable);
                 }
+            });
+
+            //query to see if the message ID and user Id are together in the MessageUserLikes table.
+            //If they are, then color in whichever value is true.
+            ParseQuery<MessageUserLikes> query1 = ParseQuery.getQuery(MessageUserLikes.class);
+            query1.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+            query1.whereEqualTo("messageId", message1.getObjectId());
+            query1.findInBackground(new FindCallback<MessageUserLikes>() {
+                public void done(List<MessageUserLikes> objects, ParseException e) {
+                    if (e == null) {
+                        if (objects.size() != 0) {
+                            Log.d("This is first object", "" + objects.get(0));
+                            if (objects.get(0).getLiked()) {
+                                ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
+                            } else {
+                                ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
+                            }
+                        }
+                    } else {
+                        // Something went wrong.
+                    }
+                }
+            });
+
+            if (message.getFile() != null) {
+                Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
+                Bitmap bm_resized = null;
+                try {
+                    String filePath = message.getFile().getFile().getAbsolutePath();
+                    bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
+                        .into(attachedImage);
+            } else {
+                Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
+                attachedImage.setImageDrawable(myDrawable);
+            }
 
 
             timeText.setText(message.getCreatedAtString());
@@ -277,9 +275,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final int numberOfLikes = message.getLikes();
             tvNumberRec.setText(numberOfLikes + " ");
 
-            if(message.getLikes() >= -2)
+            if (message.getLikes() >= -2)
                 messageText.setText(message.getContent());
-
 
 
             likeButton.setOnClickListener(new View.OnClickListener() {
@@ -309,7 +306,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             messageUserLikes.setUser(user.getObjectId());
                             messageUserLikes.setLiked(true);
                             messageUserLikes.saveInBackground();
-                            
+
                             //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();
                             String userId = msgSender.getObjectId();
@@ -320,15 +317,15 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             query.whereEqualTo("userId", userId);
                             try {
                                 List<UsersPoints> result = query.find();
-                                Log.d("This is result", ""+ result);
+                                Log.d("This is result", "" + result);
                                 ParseObject obj = result.get(0);
                                 int userMorePoints = obj.getInt("totalPoints");
-                                Log.d("totalPoints count", "" +userMorePoints);
+                                Log.d("totalPoints count", "" + userMorePoints);
                                 //int userMorePoints = result.get(0).getInt("totalPoints");
                                 obj.put("totalPoints", userMorePoints + 1);
                                 obj.saveInBackground();
                                 Log.d("This is parse points", "" + obj.get("totalPoints"));
-                            } catch(ParseException e) {
+                            } catch (ParseException e) {
                                 e.printStackTrace();
                             }
 
@@ -374,14 +371,14 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     }
                                 }
                             });
-                            
+
                             ParseUser user = ParseUser.getCurrentUser();
                             MessageUserLikes messageUserLikes = new MessageUserLikes();
                             messageUserLikes.setMessageId(message1.getObjectId());
                             messageUserLikes.setUser(user.getObjectId());
                             messageUserLikes.setDisliked(true);
                             messageUserLikes.saveInBackground();
-                            
+
                             //badging test starts here
                             ParseUser msgSender = message1.getCreatedBy();
                             String userId = msgSender.getObjectId();
@@ -392,19 +389,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             query.whereEqualTo("userId", userId);
                             try {
                                 List<UsersPoints> result = query.find();
-                                Log.d("This is result", ""+ result);
+                                Log.d("This is result", "" + result);
                                 ParseObject obj = result.get(0);
                                 int userMorePoints = obj.getInt("totalPoints");
-                                Log.d("totalPoints count", "" +userMorePoints);
+                                Log.d("totalPoints count", "" + userMorePoints);
                                 //int userMorePoints = result.get(0).getInt("totalPoints");
                                 obj.put("totalPoints", userMorePoints - 1);
                                 obj.saveInBackground();
                                 Log.d("This is parse points", "" + obj.get("totalPoints"));
-                            } catch(ParseException e) {
+                            } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            
-                            
+
+
                             tvNumberRec.setText(Integer.toString(lessLikes) + " ");
                         } else {
                             ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);

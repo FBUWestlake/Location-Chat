@@ -29,9 +29,9 @@
         android:id="@+id/badge"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_alignBottom="@+id/text_message_name"
+        android:layout_toRightOf="@+id/text_message_name"
         android:layout_marginLeft="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_message_name"
-        app:layout_constraintLeft_toRightOf="@+id/text_message_name"
         app:srcCompat="@android:drawable/screen_background_light_transparent" />
 
     <TextView
