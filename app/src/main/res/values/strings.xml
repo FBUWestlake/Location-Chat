@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Location Chat</string>
+    <string name="app_name">Bounce</string>
 
     <!-- Strings related to login -->
     <string name="prompt_phone_number">Phone Number</string>
