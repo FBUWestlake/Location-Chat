@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -393,8 +394,11 @@ public class MainActivity extends AppCompatActivity {
         //Detects request codes
         if(requestCode==26 && resultCode == Activity.RESULT_OK) {
             String newLocation = data.getStringExtra("location");
-            ParseOperations.changeUserLocation(ParseUser.getCurrentUser(), newLocation);
-            locationChanger.setText(newLocation);
+            if(!newLocation.equals("")) {
+                Toast.makeText(MainActivity.this, "No new location selected", Toast.LENGTH_SHORT).show();
+                ParseOperations.changeUserLocation(ParseUser.getCurrentUser(), newLocation);
+                locationChanger.setText(newLocation);
+            }
         }
         Log.e("MainActivity", "About to update the chats");
         updateChats();
