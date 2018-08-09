@@ -23,7 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -33,10 +35,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.BitmapScaler;
 import me.susiel2.locationchat.model.Chat;
+import me.susiel2.locationchat.model.Message;
 
 public class NewChatActivity extends AppCompatActivity {
 
@@ -93,6 +97,21 @@ public class NewChatActivity extends AppCompatActivity {
             @Override
             public void onOneClick(View view) {
                 // Call create chat method.
+                ParseQuery<Chat> query = ParseQuery.getQuery(Chat.class);
+                query.whereEqualTo("name", et_chatName.getText().toString());
+                try {
+                    List<Chat> result = query.find();
+                    if(result.size() != 0) {
+                        Toast.makeText(NewChatActivity.this, "Chat already exists", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(et_chatName.getText().toString().equals("")) {
+                    Toast.makeText(NewChatActivity.this, "Please enter a chat name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (bm_chatImage == null) {
                     iv_chatImage.buildDrawingCache();
                     bm_chatImage = iv_chatImage.getDrawingCache();
