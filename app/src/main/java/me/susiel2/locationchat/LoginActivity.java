@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(LoginActivity.this, "Cancel", Toast.LENGTH_LONG).show();
+
             }
         });
 

@@ -1,10 +1,14 @@
 package me.susiel2.locationchat;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,6 +35,8 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -227,8 +234,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOneClick(View v) {
                 final Intent intent = new Intent(MainActivity.this, MapDemoActivity.class);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,26);
             }
         });
         
@@ -287,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                                             ParseUser.logOutInBackground();
                                             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                             startActivity(intent);
+                                            finish();
                                         } else {
                                             Log.d("item", "Error: " + e.getMessage());
                                         }
@@ -387,6 +394,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //Detects request codes
+        if(requestCode==26 && resultCode == Activity.RESULT_OK) {
+            String newLocation = data.getStringExtra("location");
+            if(!newLocation.equals("")) {
+                Toast.makeText(MainActivity.this, "No new location selected", Toast.LENGTH_SHORT).show();
+                ParseOperations.changeUserLocation(ParseUser.getCurrentUser(), newLocation);
+                locationChanger.setText(newLocation);
+            }
+        }
         Log.e("MainActivity", "About to update the chats");
         updateChats();
     }
