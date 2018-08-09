@@ -188,8 +188,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 });
 
             }
-            else {
-                messageText.setText(message.getContent());
+
 
                 ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
                 query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
@@ -246,7 +245,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
                     attachedImage.setImageDrawable(myDrawable);
                 }
-            }
+
 
             timeText.setText(message.getCreatedAtString());
 
@@ -256,6 +255,10 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                    .into(profileImage);
             final int numberOfLikes = message.getLikes();
             tvNumberRec.setText(numberOfLikes + " ");
+
+            if(message.getLikes() >= -2)
+                messageText.setText(message.getContent());
+
 
 
             likeButton.setOnClickListener(new View.OnClickListener() {
