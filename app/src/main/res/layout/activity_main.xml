@@ -22,6 +22,12 @@
             android:minHeight="?attr/actionBarSize"
             android:contentInsetLeft="0dp"
             android:contentInsetStart="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            android:contentInsetRight="0dp"
+            android:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp"
             android:layout_alignParentLeft="true">
 
             <RelativeLayout
@@ -30,34 +36,39 @@
 
                 <ImageView
                     android:id="@+id/iv_hamburger"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    app:srcCompat="@drawable/sharp_menu_black_18dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="10dp"
+                    app:srcCompat="@drawable/hamburger_icon"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="0dp"
                     android:layout_alignParentLeft="true" />
 
                 <EditText
                     android:id="@+id/etSearchMain"
-                    android:layout_width="240dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="56dp"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
+                    android:layout_toRightOf="@+id/iv_hamburger"
+                    android:layout_toLeftOf="@id/iv_addChat"
+                    android:layout_marginHorizontal="10dp"
                     android:ems="10"
                     android:hint="Search"
+                    android:textColor="@android:color/white"
                     android:inputType="textPersonName"
                     tools:layout_editor_absoluteX="72dp"
                     tools:layout_editor_absoluteY="0dp" />
 
                 <ImageView
                     android:id="@+id/iv_addChat"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    app:srcCompat="@android:drawable/ic_menu_add"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerInParent="true"
+                    app:srcCompat="@drawable/user_interface_plus_icon"
                     tools:layout_editor_absoluteX="328dp"
                     tools:layout_editor_absoluteY="0dp"
                     android:layout_alignParentRight="true" />
