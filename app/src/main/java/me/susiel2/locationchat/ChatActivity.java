@@ -188,7 +188,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo("groupId", chat);
         query.addAscendingOrder("createdAt");
@@ -205,8 +204,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-=======
->>>>>>> database-updated
 
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
