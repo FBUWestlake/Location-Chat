@@ -99,8 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setTitle("Bounce");
-        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.primaryAppColor));
+        getSupportActionBar().setTitle("");
 
     }
     

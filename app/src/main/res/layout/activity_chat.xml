@@ -110,7 +110,7 @@
             android:gravity="left"
             android:background="#FFF"
             android:textSize="14sp"
-            android:paddingHorizontal="7dp"
+            android:paddingHorizontal="15dp"
             android:paddingTop="2dp"
             android:paddingBottom="10dp"
             android:textColor="@android:color/black"/>
