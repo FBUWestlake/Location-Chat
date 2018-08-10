@@ -31,11 +31,6 @@ import me.susiel2.locationchat.database.ParseOperations;
 @ParseClassName("Message")
 public class Message extends ParseObject {
 
-    private static String content = "";
-    private static String createdBy = null;
-    private static String group = null;
-    private static String date = null;
-
     public Message(String content, String createdByName, String createdByID, String group, String date, String messageLikes) {
 //        this.KEY_CONTENT = content;
 //        this.createdBy = createdBy;
@@ -131,15 +126,16 @@ public class Message extends ParseObject {
     }
 
     public String getCreatedAtString() {
-//        if (getCreatedAt() != null ) {
-//            String rawTime = getCreatedAt().toString();
-        String rawTime = getCreatedAt().toString();
-        return getRelativeTimeAgo(rawTime);
-//            return getTimeStamp(rawTime);
-//        } else {
-//            String rawTime = getTime();
-//            return getTimeStamp(rawTime);
-//        }
+        if (getCreatedAt() != null ) {
+            String rawTime = getCreatedAt().toString();
+//        String rawTime = getCreatedAt().toString();
+//        return getRelativeTimeAgo(rawTime);
+            return getTimeStamp(rawTime);
+        } else {
+            String rawTime = getTime();
+            Log.e("raw time", rawTime);
+            return getTimeStamp(rawTime);
+        }
     }
 
     public int getLikes() {
@@ -177,18 +173,17 @@ public class Message extends ParseObject {
         return relativeDate;
     }
     public String getTimeStamp(String createdAt) {
-        SimpleDateFormat given = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        SimpleDateFormat newTime = new SimpleDateFormat("dd/MM");
+        SimpleDateFormat given = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat newTime = new SimpleDateFormat("hh:mm");
         String timeStamp = null;
         try {
             Date givenCreatedAt = given.parse(createdAt);
             timeStamp = newTime.format(givenCreatedAt);
+            Log.e("pretty time", timeStamp);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return timeStamp;
-
-
     }
 
 

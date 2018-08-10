@@ -198,7 +198,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final Message message1 = message;
             if (message.getLikes() < -2) {
                 messageText.setText("Message hidden due to low score. Click to view.");
-                timeText.setText(message1.getCreatedAtString());
+//                timeText.setText(message1.getCreatedAtString());
                 viewHiddenMessageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

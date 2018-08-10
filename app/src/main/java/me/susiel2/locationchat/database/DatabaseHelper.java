@@ -151,22 +151,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public String readLastMessageTime(String groupId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String selection = "SELECT * FROM " + TABLE_THREE_NAME + " WHERE " + KEY_MESSAGE_GROUPID + " = '" + groupId + "'" + " ORDER BY " + KEY_MESSAGE_CREATEDAT + " DESC LIMIT 1";
-        Cursor cursor = db.rawQuery(selection, null);
-        String lastMessageTime = null;
-        if (cursor.moveToFirst()) {
-            lastMessageTime = cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT));
-            Log.d("database", lastMessageTime);
-        } else {
-            return null;
-        }
-        cursor.close();
-        return lastMessageTime;
-
-    }
+//    public String readLastMessageTime(String groupId) {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//
+//        String selection = "SELECT * FROM " + TABLE_THREE_NAME + " WHERE " + KEY_MESSAGE_GROUPID + " = '" + groupId + "'" + " ORDER BY " + KEY_MESSAGE_CREATEDAT + " DESC LIMIT 1";
+//        Cursor cursor = db.rawQuery(selection, null);
+//        String lastMessageTime = null;
+//        if (cursor.moveToFirst()) {
+//            lastMessageTime = cursor.getString(cursor.getColumnIndex(KEY_MESSAGE_CREATEDAT));
+//            Log.d("database", lastMessageTime);
+//        } else {
+//            return null;
+//        }
+//        cursor.close();
+//        return lastMessageTime;
+//
+//    }
 
     public List<Message> readAllMessages(String groupId) {
         SQLiteDatabase db = this.getReadableDatabase();

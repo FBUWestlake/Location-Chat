@@ -196,11 +196,11 @@ public class ChatActivity extends AppCompatActivity {
         manager.setStackFromEnd(true);
         rvMessages.setLayoutManager(manager);
 
-        String lastMessageTime = null;
-        if (dbHelper.isTableEmpty(dbHelper.TABLE_THREE_NAME) == false) {
-            Log.d("empty table", "table is not empty");
-            lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
-        }
+//        String lastMessageTime = null;
+//        if (dbHelper.isTableEmpty(dbHelper.TABLE_THREE_NAME) == false) {
+//            Log.d("empty table", "table is not empty");
+//            lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
+//        }
 
         myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
 
