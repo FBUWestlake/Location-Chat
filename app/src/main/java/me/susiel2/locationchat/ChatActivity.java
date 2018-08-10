@@ -163,6 +163,7 @@ public class ChatActivity extends AppCompatActivity {
 
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo("groupId", chat);
+        query.addAscendingOrder("createdAt");
         query.findInBackground(new FindCallback<Message>() {
             public void done(List<Message> itemList, ParseException e) {
                 if (e == null) {
