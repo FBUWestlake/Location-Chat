@@ -43,23 +43,6 @@ public class ParseOperations {
         Log.e("ParseOperations", "Empty file text: " + newMessage.getFile());
     }
 
-    public static Message createMessageReturn(String content, ParseFile file, Chat chat) {
-        Message newMessage = new Message();
-        newMessage.setCreatedBy(ParseUser.getCurrentUser());
-        newMessage.setContent(content);
-        newMessage.setChat(chat);
-        newMessage.setLikes(0);
-        if(file != null)
-            newMessage.setFile(file);
-        try {
-            newMessage.save();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Log.e("ParseOperations", "Empty file text: " + newMessage.getFile());
-        return newMessage;
-    }
-
     //No longer used. Implemented in-class so as to use global variables
     public static List<Message> getGroupMessages(Chat chat) {
         try {

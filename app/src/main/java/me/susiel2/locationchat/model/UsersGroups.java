@@ -1,7 +1,5 @@
 package me.susiel2.locationchat.model;
 
-import com.cardiomood.android.sync.annotations.ParseField;
-import com.cardiomood.android.sync.ormlite.SyncEntity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.parse.ParseClassName;
@@ -9,18 +7,21 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
-
 @ParseClassName("UserGroups")
+@DatabaseTable(tableName = "user_groups")
 public class UsersGroups extends ParseObject {
 
-    public final String KEY_USER = "user";
+    @DatabaseField(columnName = "USER_ID")
+    private static final String KEY_USER = "user";
 
-    public final String KEY_GROUP = "group";
+    @DatabaseField(columnName = "GROUP_ID")
+    private static final String KEY_GROUP = "group";
 
-    public final String KEY_NOTIFICATIONS = "notifications";
+    @DatabaseField(columnName = "NOTIFICATIONS")
+    private static final String KEY_NOTIFICATIONS = "notifications";
 
-    public String KEY_READ = "read";
+    @DatabaseField(columnName = "READ")
+    private static final String KEY_READ = "read";
 
     public String getIdString() {
         return getObjectId();
@@ -68,4 +69,5 @@ public class UsersGroups extends ParseObject {
         // TODO - add useful Query methods
 
     }
+
 }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +29,6 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.susiel2.locationchat.R;
 import me.susiel2.locationchat.database.ParseOperations;
 
-import static android.content.Context.CONNECTIVITY_SERVICE;
-
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
@@ -54,10 +50,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
-        if(message.getUserId() == null) {
-//            Log.e("message adapter", message.getBody());
-            return VIEW_TYPE_MESSAGE_SENT;
-        } else if (message.getUserId().equals(ParseUser.getCurrentUser().getObjectId())) {
+
+        if (message.getCreatedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -118,18 +112,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bind(Message message) {
-            if (message.getBody() != null) {
-                Log.d("messageadapter we go", message.getBody());
-                messageText.setText(message.getBody());
-            } else {
-                messageText.setText(message.getContent());
-            }
-
-            if (message.getTime() != null) {
-                timeText.setText(message.getTime());
-            } else {
-                timeText.setText(message.getCreatedAtString());
-            }
+            messageText.setText(message.getContent());
+            timeText.setText(message.getCreatedAtString());
 
             if (message.getFile() != null) {
                 Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
@@ -149,11 +133,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 attachedImage.setImageDrawable(myDrawable);
             }
 
-            if (message.getMessageLikes() != null) {
-                tvNumberSent.setText(message.getMessageLikes() + " ");
-            } else {
-                tvNumberSent.setText(message.getLikes() + " ");
-            }
+            final int numberOfLikes = message.getLikes();
+            tvNumberSent.setText(numberOfLikes + " ");
 
         }
     }
@@ -219,10 +200,19 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (message.getLikes() < -2) {
                 messageText.setText("Message hidden due to low score. Click to view.");
                 timeText.setText(message1.getCreatedAtString());
+                viewHiddenMessageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        messageText.setText(message1.getContent());
+                    }
+                });
 
-                //just added these lines
+            } else {
+                messageText.setText(message.getContent());
+
                 ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
                 query.whereEqualTo("objectId", message.getCreatedBy().getObjectId());
+
                 query.findInBackground(new FindCallback<ParseUser>() {
                     public void done(List<ParseUser> objects, ParseException e) {
                         if (e == null) {
@@ -235,6 +225,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     }
                 });
+
 
                 if (message.getFile() != null) {
                     Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
@@ -253,97 +244,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
                     attachedImage.setImageDrawable(myDrawable);
                 }
+            }
 
-                viewHiddenMessageButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        messageText.setText(message1.getContent());
-                    }
-                });
-
-            } else {
-                messageText.setText(message.getContent());
-
-                ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-                query.whereEqualTo("objectId", message.getUserId());
-
-                query.findInBackground(new FindCallback<ParseUser>() {
-                    public void done(List<ParseUser> objects, ParseException e) {
-                        if (e == null) {
-                            if (objects.size() != 0)
-                                nameText.setText(objects.get(0).getString("name"));
-                            else
-                                nameText.setText("[deleted]");
-                        } else {
-                            // Something went wrong.
-                        }
-                    }
-                });
-
-                //query to see if the message ID and user Id are together in the MessageUserLikes table.
-                //If they are, then color in whichever value is true.
-                ParseQuery<MessageUserLikes> query1 = ParseQuery.getQuery(MessageUserLikes.class);
-                query1.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
-                query1.whereEqualTo("messageId", message1.getObjectId());
-                query1.findInBackground(new FindCallback<MessageUserLikes>() {
-                    public void done(List<MessageUserLikes> objects, ParseException e) {
-                        if (e == null) {
-                            if (objects.size() != 0) {
-                                Log.d("This is first object", "" + objects.get(0));
-                                if (objects.get(0).getLiked()) {
-                                    ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
-                                } else {
-                                    ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
-                                }
-                            }
-                        } else {
-                            // Something went wrong.
-                        }
-                    }
-                });
-
-                if (message.getFile() != null) {
-                    Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
-                    Bitmap bm_resized = null;
-                    try {
-                        String filePath = message.getFile().getFile().getAbsolutePath();
-                        bm_resized = BitmapScaler.scaleToFitWidth(BitmapFactory.decodeFile(filePath), 500);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bm_resized.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-                    Glide.with(context).load(bm_resized).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
-                            .into(attachedImage);
-                } else {
-                    Drawable myDrawable = context.getResources().getDrawable(R.drawable.asfalt_light);
-                    attachedImage.setImageDrawable(myDrawable);
-                    if (message.getBody() != null) {
-                        messageText.setText(message.getBody());
-                    } else {
-                        messageText.setText(message.getContent());
-                    }
-
-                    if (message1.getName() != null) {
-                        nameText.setText(message1.getName());
-                    } else {
-                        ParseQuery<ParseUser> query2 = ParseQuery.getQuery(ParseUser.class);
-                        query2.whereEqualTo("objectId", message.getUserId());
-
-                        query2.findInBackground(new FindCallback<ParseUser>() {
-                            public void done(List<ParseUser> objects, ParseException e) {
-                                if (objects != null) {
-                                    nameText.setText(objects.get(0).getString("name"));
-                                }
-                            }
-                        });
-                    }
-
-                    if (message.getTime() != null) {
-                        timeText.setText(message.getTime());
-                    } else {
-                        timeText.setText(message.getCreatedAtString());
-                    }
+            timeText.setText(message.getCreatedAtString());
 
 //            Glide.with(context).load(message.getProfileImage())
 //                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
@@ -403,79 +306,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                    if (message.getMessageLikes() != null) {
-                        tvNumberRec.setText(message.getMessageLikes() + " ");
-                    } else {
-                        tvNumberRec.setText(message.getLikes() + " ");
-                    }
 
-
-                    likeButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
-                                if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
-                                    ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
-                                    int moreLikes = message1.getLikes();
-                                    moreLikes = moreLikes + 1;
-                                    message1.setLikes(moreLikes);
-                                    message1.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                Log.d("MessageAdapter", "Like post success");
-                                            } else {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-
-                                    ParseUser user = ParseUser.getCurrentUser();
-                                    MessageUserLikes messageUserLikes = new MessageUserLikes();
-                                    messageUserLikes.setMessageId(message1.getObjectId());
-                                    messageUserLikes.setUser(user.getObjectId());
-                                    messageUserLikes.setLiked(true);
-                                    messageUserLikes.saveInBackground();
-
-                                    //badging test starts here
-                                    ParseUser msgSender = message1.getCreatedBy();
-                                    String userId = msgSender.getObjectId();
-                                    Log.d("This is the user ID", userId);
-                                    //query for messages where createdAt is that userId.
-                                    //this has error of indexoutofbounds exception
-                                    ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
-                                    query.whereEqualTo("userId", userId);
-                                    try {
-                                        List<UsersPoints> result = query.find();
-                                        Log.d("This is result", "" + result);
-                                        ParseObject obj = result.get(0);
-                                        int userMorePoints = obj.getInt("totalPoints");
-                                        Log.d("totalPoints count", "" + userMorePoints);
-                                        //int userMorePoints = result.get(0).getInt("totalPoints");
-                                        obj.put("totalPoints", userMorePoints + 1);
-                                        obj.saveInBackground();
-                                        Log.d("This is parse points", "" + obj.get("totalPoints"));
-                                    } catch (ParseException e) {
+                            tvNumberRec.setText(Integer.toString(moreLikes) + " ");
+                        } else {
+                            ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
+                            int lessLikes = message1.getLikes();
+                            lessLikes = lessLikes - 1;
+                            message1.setLikes(lessLikes);
+                            message1.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d("MessageAdapter", "Like post success");
+                                    } else {
                                         e.printStackTrace();
                                     }
-
-                                    tvNumberRec.setText(Integer.toString(moreLikes) + " ");
-                                } else {
-                                    ivThumbsUp.setImageResource(R.drawable.outline_thumb_up);
-                                    int lessLikes = message1.getLikes();
-                                    lessLikes = lessLikes - 1;
-                                    message1.setLikes(lessLikes);
-                                    message1.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                Log.d("MessageAdapter", "Like post success");
-                                            } else {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-                                    tvNumberRec.setText(Integer.toString(lessLikes) + " ");
                                 }
                             });
 
@@ -561,79 +406,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     if (e == null) {
                                         Log.d("MessageAdapter", "Dislike post success");
                                     } else {
-                            }
-                        }
-                    });
-
-
-                    dislikeButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
-                                if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
-                                    ivThumbsDown.setImageResource(R.drawable.filled_thumb_down);
-                                    int lessLikes = message1.getLikes();
-                                    lessLikes = lessLikes - 1;
-                                    message1.setLikes(lessLikes);
-                                    message1.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                Log.d("MessageAdapter", "Dislike post success");
-                                            } else {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-
-                                    ParseUser user = ParseUser.getCurrentUser();
-                                    MessageUserLikes messageUserLikes = new MessageUserLikes();
-                                    messageUserLikes.setMessageId(message1.getObjectId());
-                                    messageUserLikes.setUser(user.getObjectId());
-                                    messageUserLikes.setDisliked(true);
-                                    messageUserLikes.saveInBackground();
-
-                                    //badging test starts here
-                                    ParseUser msgSender = message1.getCreatedBy();
-                                    String userId = msgSender.getObjectId();
-                                    Log.d("This is the user ID", userId);
-//query for messages where createdAt is that userId.
-                                    //this has error of indexoutofbounds exception
-                                    ParseQuery<UsersPoints> query = ParseQuery.getQuery(UsersPoints.class);
-                                    query.whereEqualTo("userId", userId);
-                                    try {
-                                        List<UsersPoints> result = query.find();
-                                        Log.d("This is result", "" + result);
-                                        ParseObject obj = result.get(0);
-                                        int userMorePoints = obj.getInt("totalPoints");
-                                        Log.d("totalPoints count", "" + userMorePoints);
-                                        //int userMorePoints = result.get(0).getInt("totalPoints");
-                                        obj.put("totalPoints", userMorePoints - 1);
-                                        obj.saveInBackground();
-                                        Log.d("This is parse points", "" + obj.get("totalPoints"));
-                                    } catch (ParseException e) {
->>>>>>> database-updated
                                         e.printStackTrace();
                                     }
-
-
-                                    tvNumberRec.setText(Integer.toString(lessLikes) + " ");
-                                } else {
-                                    ivThumbsDown.setImageResource(R.drawable.outline_thumb_down);
-                                    int moreLikes = message1.getLikes();
-                                    moreLikes = moreLikes + 1;
-                                    message1.setLikes(moreLikes);
-                                    message1.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                Log.d("MessageAdapter", "Dislike post success");
-                                            } else {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
-                                    tvNumberRec.setText(Integer.toString(moreLikes) + " ");
                                 }
                             });
 
@@ -659,11 +433,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             });
 
                             tvNumberRec.setText(Integer.toString(moreLikes) + " ");
-                            }
                         }
-                    });
+                    }
                 }
-            }
+            });
         }
     }
+
 }

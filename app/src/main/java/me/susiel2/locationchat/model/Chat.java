@@ -3,9 +3,6 @@ package me.susiel2.locationchat.model;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.cardiomood.android.sync.annotations.ParseField;
-import com.cardiomood.android.sync.ormlite.SyncEntity;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.parse.ParseClassName;
@@ -15,24 +12,27 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.Serializable;
-import java.util.Date;
-
 @ParseClassName("Group")
 @DatabaseTable(tableName = "groups")
 public class Chat extends ParseObject {
 
-    public String KEY_NAME = "name";
+    @DatabaseField(columnName = "NAME")
+    private static final String KEY_NAME = "name";
 
-    public String KEY_DESCRIPTION = "description";
+    @DatabaseField(columnName = "DESCRIPTION")
+    private static final String KEY_DESCRIPTION = "description";
 
-    public String KEY_IMAGE = "image";
+    @DatabaseField(columnName = "PHOTO")
+    private static final String KEY_IMAGE = "image";
 
-    public String KEY_CATEGORY = "category";
+    @DatabaseField(columnName = "CATEGORY")
+    private static final String KEY_CATEGORY = "category";
 
-    public String KEY_CREATED_BY = "createdBy";
+    @DatabaseField(columnName = "CREATED_BY")
+    private static final String KEY_CREATED_BY = "createdBy";
 
-    public String KEY_LOCATION_ID = "location";
+    @DatabaseField(columnName = "LOCATION")
+    private static final String KEY_LOCATION_ID = "location";
 
     public String getIdString() {
         return getObjectId();
@@ -110,7 +110,7 @@ public class Chat extends ParseObject {
     public int members;
 
     public Chat(String name, String imageUrl,
-                String description, String category, int members) {
+                        String description, String category, int members) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
