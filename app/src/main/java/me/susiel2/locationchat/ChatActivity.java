@@ -2,13 +2,18 @@ package me.susiel2.locationchat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
@@ -40,6 +45,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -64,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.susiel2.locationchat.database.DatabaseHelper;
 import me.susiel2.locationchat.database.ParseApp;
 import me.susiel2.locationchat.database.ParseOperations;
 import me.susiel2.locationchat.model.BitmapScaler;
@@ -90,12 +98,15 @@ public class ChatActivity extends AppCompatActivity {
     TextView drawerGroupName;
     TextView drawerGroupDescription;
     TextView leaveGroup;
+    SwipyRefreshLayout swipeUpRefresh;
 
     public static final int GET_FROM_GALLERY = 3;
     public final String APP_TAG = "MyCustomApp";
     public String photoFileName = "photo.jpg";
     File resizedFile;
     Bitmap bm_chatImage;
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
+//    SwitchCompat switch_notifications;
 
     private Button gear;
     final String[] listviewData = {"Leave Group"};
@@ -132,6 +143,20 @@ public class ChatActivity extends AppCompatActivity {
 
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
         Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId());
+        Log.e("ChatActivity", "Chat object ID: " + chat.getObjectId() + " " + chat.getName());
+//        chatID = chat.getIdString();
+
+//        final Handler handler = new Handler();
+//        final Runnable refresh = new Runnable() {
+//            @Override
+//            public void run() {
+//                Intent intent = new Intent(ChatActivity.this, ChatActivity.class);
+//                finish();
+//                startActivity(intent);
+//                handler.postDelayed(this, 300);
+//            }
+//        };
+//        handler.post(refresh);
 
         messages = new ArrayList<Message>();
         rvMessages = (RecyclerView) findViewById(R.id.recycler_chat);
@@ -143,6 +168,8 @@ public class ChatActivity extends AppCompatActivity {
         addAttachmentBtn = (ImageButton) findViewById(R.id.button_chat_upload);
         androidDropDownMenuIconItem = (LinearLayout) findViewById(R.id.horizontal_dropdown_icon_menu_items);
         drawerGroupImage = (ImageView) findViewById(R.id.groupImagePic);
+        swipeUpRefresh = findViewById(R.id.swipeUpRefresh);
+
 
         Glide.with(getApplicationContext()).load(chat.getImageBitmap()).apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25, 0, RoundedCornersTransformation.CornerType.ALL)))
                 .into(drawerGroupImage);
@@ -161,6 +188,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< HEAD
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         query.whereEqualTo("groupId", chat);
         query.addAscendingOrder("createdAt");
@@ -177,12 +205,63 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+=======
+>>>>>>> database-updated
 
         mAdapter = new MessageAdapter(messages);
         rvMessages.setAdapter(mAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setStackFromEnd(true);
         rvMessages.setLayoutManager(manager);
+
+//        String lastMessageTime = null;
+//        if (dbHelper.isTableEmpty(dbHelper.TABLE_THREE_NAME) == false) {
+//            Log.d("empty table", "table is not empty");
+//            lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
+//        }
+
+        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
+
+
+        if (isNetworkAvailable()) {
+            ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+            query1.whereEqualTo("groupId", chat);
+            query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
+//            }
+            try {
+                List<Message> newMessages = query1.find();
+                if (newMessages.size() != 0) {
+                    dbHelper.addMessages(newMessages);
+                    Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+//        List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+//
+//        if (localMessages != null) {
+//            for (int i = 0; i < localMessages.size(); i++) {
+//                messages.add(localMessages.get(i));
+//            }
+//            mAdapter.notifyDataSetChanged();
+//            rvMessages.scrollToPosition(messages.size() - 1);
+//        }
+
+        List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+
+        if (localMessages != null) {
+            for (int i = 0; i < localMessages.size(); i++) {
+                messages.add(localMessages.get(i));
+                Log.e("adding local messages", localMessages.get(i).getBody());
+            }
+            mAdapter.notifyDataSetChanged();
+            rvMessages.scrollToPosition(messages.size() - 1);
+        }
 
         liveQuery();
         rvMessages.scrollToPosition(messages.size() - 1);
@@ -221,8 +300,20 @@ public class ChatActivity extends AppCompatActivity {
                         pFile = new ParseFile(resizedFile);
                     else
                         pFile = null;
-                    parseOperations.createMessage(content, pFile, chat);
-                    parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+                    if (isNetworkAvailable()) {
+                        Message newMessage = parseOperations.createMessageReturn(content, pFile, chat);
+                        parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+                        messages.add(newMessage);
+                        mAdapter.notifyItemInserted(messages.size() - 1);
+                        rvMessages.scrollToPosition(messages.size() - 1);
+                    } else {
+                        dbHelper.saveUnsentMessage(content, chat.getObjectId());
+                        Message message = new Message(content, "not sent", "0");
+                        Log.e("idgi", content);
+                        messages.add(message);
+                        mAdapter.notifyItemInserted(messages.size() - 1);
+                        rvMessages.scrollToPosition(messages.size() - 1);
+                    }
                     etMessage.setText("");
                     bm_chatImage = null;
                     addAttachmentBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_add));
@@ -271,12 +362,70 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    static final int POLL_INTERVAL = 1000; // milliseconds
+    Handler myHandler = new Handler();  // android.os.Handler
+    Runnable mRefreshMessagesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            sendSavedMessages();
+            myHandler.postDelayed(this, POLL_INTERVAL);
+        }
+    };
+
+
+    public void sendSavedMessages() {
+        if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
+            List<String> unsentContent = dbHelper.readUnsentMessages(chat.getObjectId());
+            Log.e("size of unsent", String.valueOf(unsentContent.size()));
+            for (int i = 0; i < unsentContent.size(); i++) {
+                Log.e("unsent message sent", "WORKS!!");
+                parseOperations.createMessage(unsentContent.get(i), null, chat);
+            }
+            parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+
+            ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+            query1.whereEqualTo("groupId", chat);
+            query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
+//            }
+            try {
+                List<Message> newMessages = query1.find();
+                // Need to add query for time of last message.
+                if (newMessages.size() != 0) {
+                    dbHelper.addMessages(newMessages);
+                    Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+
+            if (localMessages != null) {
+                for (int i = 0; i < localMessages.size(); i++) {
+                    messages.add(localMessages.get(i));
+                    Log.e("adding local messages", localMessages.get(i).getBody());
+                }
+                mAdapter.notifyDataSetChanged();
+                rvMessages.scrollToPosition(messages.size() - 1);
+            }
+            dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
+            if (dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME)) {
+                Log.e("deletion", "EMPTY");
+            }
+        }
+    }
+
     void liveQuery() {
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        stopService(getIntent());
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
-        parseQuery.whereNotEqualTo("user", ParseUser.getCurrentUser().getObjectId());
+//        parseQuery.whereNotEqualTo("createdBy", ParseUser.getCurrentUser()); TODO: figure out why this is not working.
         parseQuery.whereEqualTo("groupId", chat);
+        parseQuery.include("createdBy");
         // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
         // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 
@@ -287,21 +436,33 @@ public class ChatActivity extends AppCompatActivity {
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, new
                 SubscriptionHandling.HandleEventCallback<Message>() {
                     @Override
+
                     public void onEvent(ParseQuery<Message> query, final Message object) {
-                        
-                        // RecyclerView updates need to be run on the UI thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                messages.add(object);
-                                Log.d("livequery", "added");
-                                mAdapter.notifyItemInserted(messages.size() - 1);
-                                rvMessages.scrollToPosition(messages.size() - 1);
-//                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
+                        Log.e("created by livequery", object.getCreatedBy().getObjectId());
+                        Log.e("current user livequery", ParseUser.getCurrentUser().getObjectId());
+                        if (!object.getCreatedBy().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                            messages.add(object);
+                            // RecyclerView updates need to be run on the UI thread
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    messages.add(object);
+                                    Log.d("livequery", object.getCreatedBy().getObjectId());
+                                    Log.e("livequery", object.getContent());
+                                    mAdapter.notifyItemInserted(messages.size() - 1);
+                                    rvMessages.scrollToPosition(messages.size() - 1);
+//                              mAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
                     }
                 });
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override
@@ -430,6 +591,5 @@ public class ChatActivity extends AppCompatActivity {
         // TODO - offer either "current location" or "enter an address"
         //startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
     }
-
 }
 
