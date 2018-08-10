@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/iv_chat_image"
         android:layout_toRightOf="@+id/iv_chat_image"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:layout_marginLeft="5dp"
         android:text=""
         android:textSize="24sp" 

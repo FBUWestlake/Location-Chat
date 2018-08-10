@@ -41,9 +41,13 @@
                         android:id="@+id/tvTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"
+                        android:maxLines="1"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@+id/ivLogo"
+                        android:layout_toLeftOf="@+id/iv_gear"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
