@@ -12,21 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/display_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/outline_background"
-            android:gravity="center"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="5dp"
-            android:text="Location"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -94,8 +79,9 @@
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar"
+            android:layout_above="@+id/bottomBar"
             android:focusableInTouchMode="true">
 
             <android.support.v7.widget.RecyclerView
@@ -106,6 +92,32 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/toolbar" />
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:paddingVertical="3dp"
+            android:background="@color/primaryAppColor"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                app:srcCompat="@drawable/bounce_text_white" />
+            <TextView
+                android:id="@+id/display_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Location"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -122,7 +134,7 @@
             android:background="#FFF"
             android:clickable="true"
             android:paddingTop="16dp"
-            app:srcCompat="@drawable/instagram_user_outline_24" />
+            app:srcCompat="@drawable/bounc" />
 
         <TextView
             android:id="@+id/display_name"
@@ -152,10 +164,10 @@
                 android:id="@+id/locationChanger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="3dp"
                 android:background="@drawable/rounded_spinner"
                 android:gravity="center"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="3dp"
                 android:text="Location"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
