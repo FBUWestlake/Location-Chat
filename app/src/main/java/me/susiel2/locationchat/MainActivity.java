@@ -9,6 +9,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.provider.SyncStateContract;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -29,6 +39,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.cardiomood.android.sync.ormlite.SyncHelper;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -38,6 +51,7 @@ import org.parceler.Parcels;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import me.susiel2.locationchat.database.DatabaseHelper;
@@ -63,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> masterList;
     private ArrayList<Boolean> isChatRead;
     private ChatAdapter chatAdapter;
-    DatabaseHelper usersDB;
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
+    ChatActivity chatActivity = new ChatActivity();
+    ParseOperations parseOperations;
     private int spinnerPosition;
     //public RelativeLayout relativeLayout;
     private TextView logoutButton;
@@ -98,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        usersDB = new DatabaseHelper(this);
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
 
@@ -306,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
 
         updateChats();
+        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
 
     }
 
@@ -351,6 +367,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+//    public ArrayList<Chat> autocomplete(String query) {
+//        ArrayList<Chat> results = new ArrayList<>();
+//        for (int i = 0; i < masterList.size(); i++) {
+//            String[] queryWords = query.toUpperCase().split("\\s");
+//            String[] optionWords = masterList.get(i).getName().toUpperCase().split("\\s");
+//            if (queryWords.length >  optionWords.length) {
+//                continue;
+//            }
+//            for (int j = 0; j < queryWords.length; j++) {
+//                if (!optionWords[0].startsWith(queryWords[0])) {
+//                    break;
+//                }
+//                if (j != 0 && !prefixOfWord(queryWords[j], optionWords)) {
+//                    break;
+//                } else {
+//                    results.add(masterList.get(i));
+//                }
+//            }
+//        }
+//        return results;
+//    }
+//
+//    public boolean prefixOfWord(String word, String[] options) {
+//        for (int i = 0; i < options.length; i++) {
+//            if (options[i].startsWith(word)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
     public void updateBySearch(){
         ArrayList<Chat> tempList = new ArrayList<Chat>();
         for(int i = 0; i < masterList.size(); i++){
@@ -402,6 +448,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public abstract void onOneClick(View v);
+    }
+
+    // For chat activity.
+    static final int POLL_INTERVAL = 1000; // milliseconds
+    Handler myHandler = new Handler();  // android.os.Handler
+    Runnable mRefreshMessagesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            sendSavedMessages();
+            myHandler.postDelayed(this, POLL_INTERVAL);
+        }
+    };
+
+    public void sendSavedMessages() {
+        if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
+            for (int i = 0; i < chats.size(); i++) {
+                List<String> unsentContent = dbHelper.readUnsentMessages(chats.get(i).getObjectId());
+                Log.e("size of unsent", String.valueOf(unsentContent.size()));
+                for (int j = 0; j < unsentContent.size(); j++) {
+                    Log.e("unsent message sent", "WORKS!!");
+                    parseOperations.createMessage(unsentContent.get(j), null, chats.get(i));
+                }
+                parseOperations.setMessagesToUnread(chats.get(i), ParseUser.getCurrentUser());
+            }
+            dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
+
+//                ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+//                query1.whereEqualTo("groupId", chats.get(i));
+//                query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
+//            }
+//                try {
+//                    List<Message> newMessages = query1.find();
+//                    if (newMessages.size() != 0) {
+//                        dbHelper.addMessages(newMessages);
+//                        Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+//                    }
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+
+        }
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

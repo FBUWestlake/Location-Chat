@@ -2,6 +2,10 @@ package me.susiel2.locationchat.model;
 
 import android.text.format.DateUtils;
 
+import android.util.Log;
+
+import com.cardiomood.android.sync.annotations.ParseField;
+import com.cardiomood.android.sync.ormlite.SyncEntity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.parse.ParseClassName;
@@ -14,27 +18,65 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.io.Serializable;
+import java.security.acl.Group;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import me.susiel2.locationchat.database.ParseOperations;
 
 @ParseClassName("Message")
-@DatabaseTable(tableName = "messages")
-public class Message extends ParseObject{
+public class Message extends ParseObject {
 
-    @DatabaseField(columnName = "CONTENT")
+    public Message(String content, String createdByName, String createdByID, String group, String date, String messageLikes) {
+//        this.KEY_CONTENT = content;
+//        this.createdBy = createdBy;
+//        this.group = group;
+//        this.date = date;
+        super();
+        setBody(content);
+        setName(createdByName);
+        setUserId(createdByID);
+        setGroupId(group);
+        setTime(date);
+        setMessageLikes(messageLikes);
+    }
+
+    public Message(String content, String date, String messageLikes) {
+        super();
+        setBody(content);
+        setTime(date);
+        setMessageLikes(messageLikes);
+    }
+
+    public Message() {
+
+    }
+
     private static final String KEY_CONTENT = "content";
 
-    @DatabaseField(columnName = "ATTACHMENT")
     private static final String KEY_ATTACHMENT = "image";
 
-    @DatabaseField(columnName = "GROUP_ID")
     private static final String KEY_GROUP_ID = "groupId";
 
-    @DatabaseField(columnName = "CREATED_BY")
     private static final String KEY_CREATED_BY = "createdBy";
-    
-    @DatabaseField(columnName = "LIKES")
-    private static final String KEY_LIKES = "likes";
 
-    public String getIdString() { return getObjectId(); }
+    private static final String KEY_CREATED_AT = "createdAt";
+
+    private static final String KEY_LIKES = "likes";
+    private String body;
+    private String groupId;
+    private String time;
+    private String name;
+    private String userId;
+    private String messageLikes;
+
+    public String getIdString() {
+        return getObjectId();
+    }
 
     public String getContent() {
         return getString(KEY_CONTENT);
@@ -56,7 +98,14 @@ public class Message extends ParseObject{
         return (Chat) getParseObject(KEY_GROUP_ID);
     }
 
-    public void setChat(Chat chat) { put(KEY_GROUP_ID, chat); }
+    public void setChat(Chat chat) {
+        put(KEY_GROUP_ID, chat);
+    }
+
+    public void setChatFromGroupId(String objectId) {
+        Chat chat = ParseOperations.getGroupFromId(objectId);
+        put(KEY_GROUP_ID, chat);
+    }
 
     public ParseUser getCreatedBy() {
         return getParseUser(KEY_CREATED_BY);
@@ -66,12 +115,30 @@ public class Message extends ParseObject{
         put(KEY_CREATED_BY, user);
     }
 
-    public String getCreatedAtString() {
-        String rawTime = getCreatedAt().toString();
-        return getRelativeTimeAgo(rawTime);
+    public void setCreatedByFromUserId(String objectId) {
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo("objectId", objectId);
+        try {
+            put(KEY_CREATED_BY, query.find().get(0));
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
     }
-    
-   public int getLikes() {
+
+    public String getCreatedAtString() {
+        if (getCreatedAt() != null ) {
+            String rawTime = getCreatedAt().toString();
+//        String rawTime = getCreatedAt().toString();
+//        return getRelativeTimeAgo(rawTime);
+            return getTimeStamp(rawTime);
+        } else {
+            String rawTime = getTime();
+            Log.e("raw time", rawTime);
+            return getTimeStamp(rawTime);
+        }
+    }
+
+    public int getLikes() {
         return getInt(KEY_LIKES);
     }
 
@@ -105,5 +172,66 @@ public class Message extends ParseObject{
 
         return relativeDate;
     }
+    public String getTimeStamp(String createdAt) {
+        SimpleDateFormat given = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat newTime = new SimpleDateFormat("hh:mm");
+        String timeStamp = null;
+        try {
+            Date givenCreatedAt = given.parse(createdAt);
+            timeStamp = newTime.format(givenCreatedAt);
+            Log.e("pretty time", timeStamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeStamp;
+    }
 
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getMessageLikes() {
+        return messageLikes;
+    }
+
+    public void setMessageLikes(String messageLikes) {
+        this.messageLikes = messageLikes;
+    }
 }
