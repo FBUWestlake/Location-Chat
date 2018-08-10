@@ -364,7 +364,7 @@ public class ChatActivity extends AppCompatActivity {
     };
 
 
-    void sendSavedMessages() {
+    public void sendSavedMessages() {
         if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
             List<String> unsentContent = dbHelper.readUnsentMessages(chat.getObjectId());
             Log.e("size of unsent", String.valueOf(unsentContent.size()));
@@ -383,6 +383,7 @@ public class ChatActivity extends AppCompatActivity {
 //            }
             try {
                 List<Message> newMessages = query1.find();
+                // Need to add query for time of last message.
                 if (newMessages.size() != 0) {
                     dbHelper.addMessages(newMessages);
                     Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
@@ -410,6 +411,7 @@ public class ChatActivity extends AppCompatActivity {
 
     void liveQuery() {
         chat = Parcels.unwrap(getIntent().getParcelableExtra("chat"));
+        stopService(getIntent());
         ParseLiveQueryClient parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
 //        parseQuery.whereNotEqualTo("createdBy", ParseUser.getCurrentUser()); TODO: figure out why this is not working.

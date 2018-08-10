@@ -1,6 +1,9 @@
 package me.susiel2.locationchat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -70,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Chat> masterList;
     private ArrayList<Boolean> isChatRead;
     private ChatAdapter chatAdapter;
-    DatabaseHelper usersDB;
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
+    ChatActivity chatActivity = new ChatActivity();
+    ParseOperations parseOperations;
     private int spinnerPosition;
     public RelativeLayout relativeLayout;
     private TextView logoutButton;
@@ -96,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        usersDB = new DatabaseHelper(getApplicationContext());
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
 
@@ -275,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
 
         updateChats();
+        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
 
     }
 
@@ -384,6 +389,57 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public abstract void onOneClick(View v);
+    }
+
+    // For chat activity.
+    static final int POLL_INTERVAL = 1000; // milliseconds
+    Handler myHandler = new Handler();  // android.os.Handler
+    Runnable mRefreshMessagesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            sendSavedMessages();
+            myHandler.postDelayed(this, POLL_INTERVAL);
+        }
+    };
+
+    public void sendSavedMessages() {
+        if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
+            for (int i = 0; i < chats.size(); i++) {
+                List<String> unsentContent = dbHelper.readUnsentMessages(chats.get(i).getObjectId());
+                Log.e("size of unsent", String.valueOf(unsentContent.size()));
+                for (int j = 0; j < unsentContent.size(); j++) {
+                    Log.e("unsent message sent", "WORKS!!");
+                    parseOperations.createMessage(unsentContent.get(j), null, chats.get(i));
+                }
+                parseOperations.setMessagesToUnread(chats.get(i), ParseUser.getCurrentUser());
+
+                dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
+
+//                ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+//                query1.whereEqualTo("groupId", chats.get(i));
+//                query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
+//            }
+//                try {
+//                    List<Message> newMessages = query1.find();
+//                    if (newMessages.size() != 0) {
+//                        dbHelper.addMessages(newMessages);
+//                        Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+//                    }
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+            }
+
+        }
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }
