@@ -202,53 +202,17 @@ public class ChatActivity extends AppCompatActivity {
             lastMessageTime = dbHelper.readLastMessageTime(chat.getObjectId());
         }
 
-        swipeUpRefresh.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
-//                 Create unsent message objects.
-                if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
-                    List<String> unsentContent = dbHelper.readUnsentMessages(chat.getObjectId());
-                    Log.e("size of unsent", String.valueOf(unsentContent.size()));
-                    for (int i = 0; i < unsentContent.size(); i++) {
-                        Log.e("unsent message sent", "WORKS!!");
-                        parseOperations.createMessage(unsentContent.get(i), null, chat);
-                    }
-                    parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
 
-                    ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
-                    query1.whereEqualTo("groupId", chat);
-                    query1.include("createdBy");
-//            if (lastMessageTime != null) {
-//                query1.whereGreaterThan("createdAt", lastMessageTime);
-//                Log.e("last message exists", "this happens");
+
+//        swipeUpRefresh.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+////                 Create unsent message objects.
+//                sendSavedMessages();
 //            }
-                    try {
-                        List<Message> newMessages = query1.find();
-                        if (newMessages.size() != 0) {
-                            dbHelper.addMessages(newMessages);
-                            Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
-                        }
-                    } catch (ParseException e) {
-                            e.printStackTrace();
-                    }
+//        });
 
-                    List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
-
-                    if (localMessages != null) {
-                        for (int i = 0; i < localMessages.size(); i++) {
-                            messages.add(localMessages.get(i));
-                            Log.e("adding local messages", localMessages.get(i).getBody());
-                        }
-                        mAdapter.notifyDataSetChanged();
-                        rvMessages.scrollToPosition(messages.size() - 1);
-                    }
-                    dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
-                    if (dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME)) {
-                        Log.e("deletion", "EMPTY");
-                    }
-                }
-            }
-        });
 
         if (isNetworkAvailable()) {
             ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
@@ -387,6 +351,61 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    static final int POLL_INTERVAL = 1000; // milliseconds
+    Handler myHandler = new Handler();  // android.os.Handler
+    Runnable mRefreshMessagesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            sendSavedMessages();
+            myHandler.postDelayed(this, POLL_INTERVAL);
+        }
+    };
+
+
+    void sendSavedMessages() {
+        if (!dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME) && isNetworkAvailable()) {
+            List<String> unsentContent = dbHelper.readUnsentMessages(chat.getObjectId());
+            Log.e("size of unsent", String.valueOf(unsentContent.size()));
+            for (int i = 0; i < unsentContent.size(); i++) {
+                Log.e("unsent message sent", "WORKS!!");
+                parseOperations.createMessage(unsentContent.get(i), null, chat);
+            }
+            parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+
+            ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+            query1.whereEqualTo("groupId", chat);
+            query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
+//            }
+            try {
+                List<Message> newMessages = query1.find();
+                if (newMessages.size() != 0) {
+                    dbHelper.addMessages(newMessages);
+                    Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+
+            if (localMessages != null) {
+                for (int i = 0; i < localMessages.size(); i++) {
+                    messages.add(localMessages.get(i));
+                    Log.e("adding local messages", localMessages.get(i).getBody());
+                }
+                mAdapter.notifyDataSetChanged();
+                rvMessages.scrollToPosition(messages.size() - 1);
+            }
+            dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
+            if (dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME)) {
+                Log.e("deletion", "EMPTY");
+            }
+        }
     }
 
     void liveQuery() {

@@ -131,8 +131,15 @@ public class Message extends ParseObject {
     }
 
     public String getCreatedAtString() {
+//        if (getCreatedAt() != null ) {
+//            String rawTime = getCreatedAt().toString();
         String rawTime = getCreatedAt().toString();
         return getRelativeTimeAgo(rawTime);
+//            return getTimeStamp(rawTime);
+//        } else {
+//            String rawTime = getTime();
+//            return getTimeStamp(rawTime);
+//        }
     }
 
     public int getLikes() {
@@ -169,6 +176,22 @@ public class Message extends ParseObject {
 
         return relativeDate;
     }
+    public String getTimeStamp(String createdAt) {
+        SimpleDateFormat given = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        SimpleDateFormat newTime = new SimpleDateFormat("dd/MM");
+        String timeStamp = null;
+        try {
+            Date givenCreatedAt = given.parse(createdAt);
+            timeStamp = newTime.format(givenCreatedAt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeStamp;
+
+
+    }
+
+
 
     public String getName() {
         return name;
