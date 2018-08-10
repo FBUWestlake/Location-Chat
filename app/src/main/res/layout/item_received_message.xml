@@ -130,8 +130,8 @@
         android:id="@+id/attachedPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/text_message_body"
-        android:layout_toStartOf="@+id/text_message_body" />
+        android:layout_alignLeft="@+id/text_message_body"
+        android:layout_below="@id/text_message_body"/>
 
     <Button
         android:id="@+id/viewHiddenMessageButton"
