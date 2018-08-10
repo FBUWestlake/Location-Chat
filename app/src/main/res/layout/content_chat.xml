@@ -18,7 +18,8 @@
         app:layout_constraintBottom_toTopOf="@+id/layout_chat_chatbox"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srl_direction="bottom">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_chat"

@@ -212,10 +212,36 @@ public class ChatActivity extends AppCompatActivity {
                     for (int i = 0; i < unsentContent.size(); i++) {
                         Log.e("unsent message sent", "WORKS!!");
                         parseOperations.createMessage(unsentContent.get(i), null, chat);
-//                        messages.add(message);
-
                     }
                     parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
+
+                    ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
+                    query1.whereEqualTo("groupId", chat);
+                    query1.include("createdBy");
+//            if (lastMessageTime != null) {
+//                query1.whereGreaterThan("createdAt", lastMessageTime);
+//                Log.e("last message exists", "this happens");
+//            }
+                    try {
+                        List<Message> newMessages = query1.find();
+                        if (newMessages.size() != 0) {
+                            dbHelper.addMessages(newMessages);
+                            Log.e("Last Message", newMessages.get(newMessages.size() - 1).getContent());
+                        }
+                    } catch (ParseException e) {
+                            e.printStackTrace();
+                    }
+
+                    List<Message> localMessages = dbHelper.readAllMessages(chat.getObjectId());
+
+                    if (localMessages != null) {
+                        for (int i = 0; i < localMessages.size(); i++) {
+                            messages.add(localMessages.get(i));
+                            Log.e("adding local messages", localMessages.get(i).getBody());
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        rvMessages.scrollToPosition(messages.size() - 1);
+                    }
                     dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
                     if (dbHelper.isTableEmpty(dbHelper.TABLE_FIVE_NAME)) {
                         Log.e("deletion", "EMPTY");
@@ -304,7 +330,6 @@ public class ChatActivity extends AppCompatActivity {
                     if (isNetworkAvailable()) {
                         Message newMessage = parseOperations.createMessageReturn(content, pFile, chat);
                         parseOperations.setMessagesToUnread(chat, ParseUser.getCurrentUser());
-                        dbHelper.addMessage(newMessage);
                         messages.add(newMessage);
                         mAdapter.notifyItemInserted(messages.size() - 1);
                         rvMessages.scrollToPosition(messages.size() - 1);
