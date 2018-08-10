@@ -182,8 +182,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     if (e == null) {
                         if (objects.size() != 0) {
                             Log.d("This is first object", "" + objects.get(0));
-                            Log.d("Is it liked?", "" +objects.get(0).getLiked());
-                            Log.d("Is it disliked?", "" +objects.get(0).getDisliked());
+                            Log.d("Is it liked?", "" + objects.get(0).getLiked());
+                            Log.d("Is it disliked?", "" + objects.get(0).getDisliked());
                             if (objects.get(0).getLiked()) {
                                 ivThumbsUp.setImageResource(R.drawable.filled_thumb_up);
                             }
