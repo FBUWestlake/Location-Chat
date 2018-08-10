@@ -10,39 +10,40 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/display_state"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:background="#FFF"
+            android:background="@drawable/outline_background"
             android:gravity="center"
-            android:text="Display State"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="5dp"
+            android:text="Location"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@color/primaryAppColor"
-            android:minHeight="?attr/actionBarSize"
-            android:contentInsetLeft="0dp"
-            android:contentInsetStart="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-            android:contentInsetRight="0dp"
             android:contentInsetEnd="0dp"
-            app:contentInsetRight="0dp"
+            android:contentInsetLeft="0dp"
+            android:contentInsetRight="0dp"
+            android:contentInsetStart="0dp"
+            android:minHeight="?attr/actionBarSize"
             app:contentInsetEnd="0dp"
-            android:layout_alignParentLeft="true">
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -52,26 +53,26 @@
                     android:id="@+id/iv_hamburger"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
+                    android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
                     app:srcCompat="@drawable/hamburger_icon"
                     tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="0dp"
-                    android:layout_alignParentLeft="true" />
+                    tools:layout_editor_absoluteY="0dp" />
 
                 <EditText
                     android:id="@+id/etSearchMain"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
                     android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/iv_hamburger"
-                    android:layout_toLeftOf="@id/iv_addChat"
                     android:layout_marginHorizontal="10dp"
+                    android:layout_toLeftOf="@id/iv_addChat"
+                    android:layout_toRightOf="@+id/iv_hamburger"
                     android:ems="10"
                     android:hint="Search"
-                    android:textColor="@android:color/white"
                     android:inputType="textPersonName"
+                    android:textColor="@android:color/white"
                     tools:layout_editor_absoluteX="72dp"
                     tools:layout_editor_absoluteY="0dp" />
 
@@ -80,31 +81,30 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
+                    android:layout_marginRight="10dp"
                     app:srcCompat="@drawable/user_interface_plus_icon"
                     tools:layout_editor_absoluteX="328dp"
-                    tools:layout_editor_absoluteY="0dp"
-                    android:layout_alignParentRight="true" />
+                    tools:layout_editor_absoluteY="0dp" />
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
             android:focusableInTouchMode="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_chats"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/toolbar"
-            android:layout_alignParentLeft="true" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_chats"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/toolbar" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </RelativeLayout>
@@ -120,61 +120,69 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFF"
-            android:paddingTop="16dp"
             android:clickable="true"
-            app:srcCompat="@drawable/instagram_user_outline_24"/>
+            android:paddingTop="16dp"
+            app:srcCompat="@drawable/instagram_user_outline_24" />
 
         <TextView
             android:id="@+id/display_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Display Name"
-            android:gravity="center"
             android:background="#FFF"
-            android:textSize="20sp"
-            android:paddingTop="13dp"
+            android:clickable="true"
+            android:gravity="center"
             android:paddingBottom="2dp"
-            android:clickable="true"
+            android:paddingTop="13dp"
+            android:text="Display Name"
             android:textColor="@android:color/black"
-            android:textStyle="bold"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/locationChanger"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Location"
-            android:gravity="center"
             android:background="#FFF"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:paddingTop="2dp"
-            android:paddingBottom="18dp"
-            />
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/locationChanger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="3dp"
+                android:background="@drawable/rounded_spinner"
+                android:gravity="center"
+                android:text="Location"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/outline_background_top"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingVertical="15dp"
             android:text="Help"
-            android:gravity="center"
-            android:textStyle="bold"
             android:textSize="16sp"
-            android:clickable="true"
-            android:background="@drawable/outline_background_top"
-            android:paddingVertical="15dp"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:clickable="true"
             android:background="@drawable/outline_background_top"
+            android:clickable="true"
+            android:gravity="center"
             android:paddingVertical="15dp"
-            />
+            android:text="About"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/logoutBtn"
@@ -182,21 +190,19 @@
             android:layout_height="wrap_content"
             android:background="@drawable/outline_background_top"
             android:gravity="center"
-            android:text="Log Out"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:paddingVertical="15dp"
+            android:text="Log Out"
             android:textColor="@android:color/holo_blue_dark"
-             />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
 
-<ImageView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:clickable="true"
             android:layout_weight="1"
             android:background="@drawable/outline_background_top"
-            />
+            android:clickable="true" />
 
         <TextView
             android:id="@+id/deleteAccountBtn"
