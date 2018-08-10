@@ -144,9 +144,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Messages sent by others display a profile image and nickname.
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText, nameText, tvNumberRec;
-        ImageButton likeButton;
+        Button likeButton;
         ImageView ivThumbsUp;
-        ImageButton dislikeButton;
+        Button dislikeButton;
         ImageView ivThumbsDown;
         ImageView attachedImage;
         Button viewHiddenMessageButton;
