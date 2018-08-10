@@ -412,8 +412,8 @@ public class MainActivity extends AppCompatActivity {
                     parseOperations.createMessage(unsentContent.get(j), null, chats.get(i));
                 }
                 parseOperations.setMessagesToUnread(chats.get(i), ParseUser.getCurrentUser());
-
-                dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
+            }
+            dbHelper.deleteTable(dbHelper.TABLE_FIVE_NAME);
 
 //                ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
 //                query1.whereEqualTo("groupId", chats.get(i));
@@ -431,7 +431,6 @@ public class MainActivity extends AppCompatActivity {
 //                } catch (ParseException e) {
 //                    e.printStackTrace();
 //                }
-            }
 
         }
     }

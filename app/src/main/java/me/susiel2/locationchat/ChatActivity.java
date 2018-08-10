@@ -205,15 +205,6 @@ public class ChatActivity extends AppCompatActivity {
         myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
 
 
-//        swipeUpRefresh.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh(SwipyRefreshLayoutDirection direction) {
-////                 Create unsent message objects.
-//                sendSavedMessages();
-//            }
-//        });
-
-
         if (isNetworkAvailable()) {
             ParseQuery<Message> query1 = ParseQuery.getQuery(Message.class);
             query1.whereEqualTo("groupId", chat);
