@@ -97,7 +97,7 @@
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:paddingVertical="3dp"
+            android:paddingTop="3dp"
             android:background="@color/primaryAppColor"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
