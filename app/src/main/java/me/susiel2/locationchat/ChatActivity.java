@@ -19,7 +19,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +45,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -97,7 +98,7 @@ public class ChatActivity extends AppCompatActivity {
     TextView drawerGroupName;
     TextView drawerGroupDescription;
     TextView leaveGroup;
-    SwipeRefreshLayout swipeUpRefresh;
+    SwipyRefreshLayout swipeUpRefresh;
 
     public static final int GET_FROM_GALLERY = 3;
     public final String APP_TAG = "MyCustomApp";
