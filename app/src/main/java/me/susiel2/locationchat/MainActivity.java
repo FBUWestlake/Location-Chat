@@ -102,31 +102,6 @@ public class MainActivity extends AppCompatActivity {
         states = getResources().getStringArray(R.array.states);
         ArrayAdapter<String> stateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, states);
 
-
-        /*
-        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-        int bg = sharedPref.getInt("background_resource", android.R.color.white); // the second parameter will be fallback if the preference is not found
-        getWindow().setBackgroundDrawableResource(bg);
-*/
-        Intent i = getIntent();
-        String add = i.getStringExtra("myValue");
-
-        if (add != null) {
-            spinnerPosition = stateAdapter.getPosition(add);
-
-            ParseUser currentUser = ParseUser.getCurrentUser();
-
-            //test here for location change, changing groups
-            Log.e("MainActivity", "About to change user location");
-            ParseOperations.changeUserLocation(currentUser, states[spinnerPosition]);
-
-            //getWindow().getDecorView().setBackgroundColor(Color.WHITE);
-            //relativeLayout = findViewById(R.id.relativeLayout);
-            //int backgroundPhoto = stateFlags[spinnerPosition];
-            //relativeLayout.setBackgroundResource(backgroundPhoto);
-            //relativeLayout.getBackground().setAlpha(120);
-        }
-
         hamburger = findViewById(R.id.iv_hamburger);
         plusButton = findViewById(R.id.iv_addChat);
         drawer = findViewById(R.id.activity_main);
@@ -135,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
         deleteAccountButton = findViewById(R.id.deleteAccountBtn);
         locationChanger = findViewById(R.id.locationChanger);
         displayState = findViewById(R.id.display_state);
-
-
 
         display_name = findViewById(R.id.display_name);
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -349,12 +322,13 @@ public class MainActivity extends AppCompatActivity {
                     for(int i = 0; i < itemList.size(); i++) {
                         if(refresh)
                             break;
-                        if(!itemList.get(i).getChat().getName().equals(chats.get(i).getName()) || itemList.get(i).isRead() != isChatRead.get(i)) {
+                        if(!itemList.get(i).getChat().getName().equals(chats.get(i).getName()) || itemList.get(i).isRead() != isChatRead.get(i) || !itemList.get(i).getChat().getLocation().equals(chats.get(i).getLocation())) {
                             refresh = true;
                             break;
                         }
                     }
                     if(refresh){
+                        Log.e("MainActivity", "Refreshing chats");
                         chats.clear();
                         masterList.clear();
                         isChatRead.clear();
@@ -365,8 +339,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                         chatAdapter.notifyDataSetChanged();
                     }
+                    else
+                        Log.e("MainActivity", "No need to refresh chats");
                     swipeContainer.setRefreshing(false);
-                    etSearchMain.setText("");
                 } else {
                     Log.d("item", "Error: " + e.getMessage());
                 }
@@ -400,10 +375,14 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==26 && resultCode == Activity.RESULT_OK) {
             String newLocation = data.getStringExtra("location");
             if(!newLocation.equals("")) {
-                Toast.makeText(MainActivity.this, "No new location selected", Toast.LENGTH_SHORT).show();
-                ParseOperations.changeUserLocation(ParseUser.getCurrentUser(), newLocation);
-                locationChanger.setText(newLocation);
+                location = newLocation;
+                Log.e("MainActivity", "About change the location");
+                ParseOperations.changeUserLocation(ParseUser.getCurrentUser(), location);
+                locationChanger.setText(location);
+                displayState.setText(location);
             }
+            else
+                Toast.makeText(MainActivity.this, "No new location selected", Toast.LENGTH_SHORT).show();
         }
         Log.e("MainActivity", "About to update the chats");
         updateChats();

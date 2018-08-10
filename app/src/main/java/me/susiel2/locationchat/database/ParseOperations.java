@@ -282,7 +282,11 @@ public class ParseOperations {
 
     public static void changeUserLocation(final ParseUser user, final String location) {
         user.put("location", location);
-        user.saveInBackground();
+        try {
+            user.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ParseQuery<UsersGroups> query = ParseQuery.getQuery(UsersGroups.class);
         query.include("group");
         query.whereEqualTo("user", user);
