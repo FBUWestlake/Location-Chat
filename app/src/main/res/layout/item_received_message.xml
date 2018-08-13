@@ -67,10 +67,12 @@
 
             <Button
                 android:id="@+id/likeButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivThumbsUp"
+                android:layout_alignLeft="@+id/ivThumbsUp"
+                android:layout_alignRight="@+id/ivThumbsUp"
+                android:layout_alignBottom="@+id/ivThumbsUp"
                 android:background="@android:color/transparent"
                 android:gravity="start" />
 
@@ -98,9 +100,12 @@
 
             <Button
                 android:id="@+id/dislikeButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignEnd="@+id/ivThumbsDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivThumbsDown"
+                android:layout_alignLeft="@+id/ivThumbsDown"
+                android:layout_alignBottom="@+id/ivThumbsDown"
+                android:layout_alignRight="@+id/ivThumbsDown"
                 android:layout_alignParentTop="true"
                 android:background="@android:color/transparent" />
 
@@ -108,7 +113,6 @@
                 android:id="@+id/ivThumbsDown"
                 android:layout_width="40dp"
                 android:layout_height="25dp"
-                android:layout_below="@+id/text_message_name"
                 android:layout_gravity="start"
                 android:layout_toEndOf="@+id/tvNumberRec"
                 app:srcCompat="@drawable/outline_thumb_down" />
@@ -122,7 +126,8 @@
             android:layout_alignBottom="@+id/text_message_body"
             android:layout_toEndOf="@+id/text_message_body"
             android:text="time received"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:layout_marginTop="3dp"/>
     </LinearLayout>
 
 
