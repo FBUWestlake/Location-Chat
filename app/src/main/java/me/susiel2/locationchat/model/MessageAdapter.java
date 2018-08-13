@@ -148,7 +148,6 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Button dislikeButton;
         ImageView ivThumbsDown;
         ImageView attachedImage;
-        Button viewHiddenMessageButton;
         ImageView badge;
 
         ReceivedMessageHolder(View itemView) {
@@ -159,15 +158,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             nameText = (TextView) itemView.findViewById(R.id.text_message_name);
             tvNumberRec = (TextView) itemView.findViewById(R.id.tvNumberRec);
             ivThumbsUp = (ImageView) itemView.findViewById(R.id.ivThumbsUp);
-            likeButton = itemView.findViewById(R.id.likeButton);
-
             ivThumbsDown = (ImageView) itemView.findViewById(R.id.ivThumbsDown);
-            dislikeButton = itemView.findViewById(R.id.dislikeButton);
 
             badge = itemView.findViewById(R.id.badge);
 
             attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
-            viewHiddenMessageButton = itemView.findViewById(R.id.viewHiddenMessageButton);
 
         }
 
@@ -223,10 +218,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (message.getLikes() < -2) {
                 messageText.setText("Message hidden due to low score. Click to view.");
                 timeText.setText(message1.getCreatedAtString());
-                viewHiddenMessageButton.setOnClickListener(new View.OnClickListener() {
+                messageText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         messageText.setText(message1.getContent());
+                        messageText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        });
                     }
                 });
 
@@ -271,15 +272,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             timeText.setText(message.getCreatedAtString());
 
-//            Glide.with(context).load(message.getProfileImage())
-//                    .apply(RequestOptions.placeholderOf(R.mipmap.blank_profile).error(R.mipmap.blank_profile).fitCenter())
-//                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(25,0, RoundedCornersTransformation.CornerType.ALL)))
-//                    .into(profileImage);
             final int numberOfLikes = message.getLikes();
             tvNumberRec.setText(numberOfLikes + " ");
 
 
-            likeButton.setOnClickListener(new View.OnClickListener() {
+            ivThumbsUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if ((ivThumbsDown.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_down).getConstantState()))) {
@@ -366,7 +363,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
 
 
-            dislikeButton.setOnClickListener(new View.OnClickListener() {
+            ivThumbsDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if ((ivThumbsUp.getDrawable().getConstantState().equals(context.getResources().getDrawable(R.drawable.outline_thumb_up).getConstantState()))) {
