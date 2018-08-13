@@ -1,5 +1,6 @@
 package me.susiel2.locationchat.model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -148,6 +149,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ImageView ivThumbsDown;
         ImageView attachedImage;
         Button viewHiddenMessageButton;
+        ImageView badge;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -161,6 +163,8 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             ivThumbsDown = (ImageView) itemView.findViewById(R.id.ivThumbsDown);
             dislikeButton = itemView.findViewById(R.id.dislikeButton);
+
+            badge = itemView.findViewById(R.id.badge);
 
             attachedImage = (ImageView) itemView.findViewById(R.id.attachedPicture);
             viewHiddenMessageButton = itemView.findViewById(R.id.viewHiddenMessageButton);
@@ -193,6 +197,25 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     } else {
                         // Something went wrong.
+                    }
+                }
+            });
+
+            ParseQuery<UsersPoints> queryq = ParseQuery.getQuery(UsersPoints.class);
+            queryq.whereEqualTo("userId", message.getCreatedBy().getObjectId());
+            queryq.findInBackground(new FindCallback<UsersPoints>() {
+                @SuppressLint("NewApi")
+                @Override
+                public void done(List<UsersPoints> objects, ParseException e) {
+                    if (objects.size() != 0) {
+                        if (objects.get(0).getTotalPoints() >= 1000)
+                            badge.setImageDrawable(context.getDrawable(R.drawable.gold_badge));
+                        else if (objects.get(0).getTotalPoints() >= 500)
+                            badge.setImageDrawable(context.getDrawable(R.drawable.silver_badge));
+                        else if (objects.get(0).getTotalPoints() >= 100)
+                            badge.setImageDrawable(context.getDrawable(R.drawable.bronze_badge));
+                        else
+                            badge.setImageDrawable(context.getDrawable(R.drawable.asfalt_light));
                     }
                 }
             });
