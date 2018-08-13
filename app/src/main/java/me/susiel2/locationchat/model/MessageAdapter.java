@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -115,6 +116,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void bind(Message message) {
             messageText.setText(message.getContent());
             timeText.setText(message.getCreatedAtString());
+            timeText.setTypeface(null, Typeface.BOLD);
 
             if (message.getFile() != null) {
                 Log.e("MessageAdapter", "binding image to message " + message.getContent() + " and file " + message.getFile());
@@ -271,6 +273,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             timeText.setText(message.getCreatedAtString());
+            timeText.setTypeface(null, Typeface.BOLD);
 
             final int numberOfLikes = message.getLikes();
             tvNumberRec.setText(numberOfLikes + " ");

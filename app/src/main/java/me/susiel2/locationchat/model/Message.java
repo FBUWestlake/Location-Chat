@@ -1,6 +1,7 @@
 package me.susiel2.locationchat.model;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -11,6 +12,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -68,7 +70,7 @@ public class Message extends ParseObject{
 
     public String getCreatedAtString() {
         String rawTime = getCreatedAt().toString();
-        return getRelativeTimeAgo(rawTime);
+        return getTimeStamp(rawTime);
     }
     
    public int getLikes() {
@@ -89,21 +91,18 @@ public class Message extends ParseObject{
 
     }
 
-    public String getRelativeTimeAgo(String rawJsonDate) {
-        String twitterFormat = "EEE MMM dd HH:mm:ss zzz yyyy";
-        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
-        sf.setLenient(true);
-
-        String relativeDate = "";
+    public String getTimeStamp(String createdAt) {
+        SimpleDateFormat given = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat newTime = new SimpleDateFormat("h:mm a");
+        String timeStamp = null;
         try {
-            long dateMillis = sf.parse(rawJsonDate).getTime();
-            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
-                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-        } catch (java.text.ParseException e) {
+            Date givenCreatedAt = given.parse(createdAt);
+            timeStamp = newTime.format(givenCreatedAt);
+            Log.e("pretty time", timeStamp);
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        return relativeDate;
+        return timeStamp;
     }
 
 }
