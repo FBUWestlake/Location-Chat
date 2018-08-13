@@ -10,8 +10,7 @@
     android:layout_width="match_parent"
 
     android:layout_height="wrap_content"
-
-    android:paddingTop="8dp">
+>
 
     <TextView
         android:id="@+id/text_message_body"
@@ -49,7 +48,7 @@
                 android:layout_height="25dp"
                 android:layout_alignTop="@+id/text_message_body"
                 android:layout_toEndOf="@+id/tvNumberSent"
-                app:srcCompat="@drawable/outline_thumb_down" />
+                app:srcCompat="@drawable/outline_thumb_up" />
 
             <TextView
                 android:id="@+id/tvNumberSent"
@@ -69,7 +68,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/text_message_body"
                 android:layout_gravity="start"
-                app:srcCompat="@drawable/outline_thumb_up" />
+                app:srcCompat="@drawable/outline_thumb_down" />
 
         </LinearLayout>
 
